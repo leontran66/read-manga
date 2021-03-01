@@ -1,9 +1,9 @@
-const request = require('supertest')
-const app = require('../src/app')
+const request = require('supertest');
+const app = require('../app');
 
-describe('Test the user route', () => {
-  test('It should response the GET method', async () => {
-    const response = await request(app).get('/api/users')
-    expect(response.statusCode).toBe(200)
-  })
-})
+describe('test the users route', () => {
+  test("should response the post method", async () => {
+    const res = await request(app).post("/api/users");
+    expect(res.statusCode).toBe(200);
+  });
+});

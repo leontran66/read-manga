@@ -10,8 +10,9 @@ const mangaSchema = new Schema({
     type: String,
     required: true
   },
-  genre: [{
-    type: String
+  genres: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Genre'
   }],
   synopsis: {
     type: String
@@ -20,5 +21,7 @@ const mangaSchema = new Schema({
     type: Number
   }
 });
+
+mangaSchema.index({ title: 1, author: 1 }, { unique: true })
 
 module.exports = mongoose.model('Manga', mangaSchema);
