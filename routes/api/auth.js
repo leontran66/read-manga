@@ -12,7 +12,7 @@ router.get('/', auth, async (req, res) => {
   const { id } = req.user;
 
   try {
-    const user = await User.findById(id).select('-accessLevel').populate('reading')
+    const user = await User.findById(id).select('-accessLevel -reading')
 
     res.status(200).json(user)
   } catch (err) {

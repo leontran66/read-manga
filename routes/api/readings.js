@@ -6,15 +6,46 @@ const Manga = require('../../models/Manga')
 const Reading = require('../../models/Reading')
 const User = require('../../models/User')
 
+// @route GET api/readings
+// @desc Get Reading
+// @access private
+router.get('/', auth, async (req, res) => {
+    const { id } = req.user
+
+    try {
+      const user = await User.findById(id)
+      .select('reading')
+      .populate({
+        path: 'reading',
+        model: 'Reading',
+        populate: {
+          path: 'manga',
+          model: 'Manga'
+        }
+      })
+
+    res.status(200).json(user)
+    } catch (err) {
+      res.status(500).json({ error: 'Reading error' })
+    }
+});
+
 // @route POST api/readings
 // @desc Create Reading
 // @access private
 router.post('/', auth,
+  body('title').not().isEmpty().trim().escape().withMessage('Must have a title'),
+  body('currentChapter').toInt(),
   async (req, res) => {
     const { title, currentChapter } = req.body
     const { id } = req.user
 
     try {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+      }
+
       const manga = await Manga.findOne({ title })
       if (!manga) {
         return res.status(400).json({ error: 'Manga not found' })
@@ -24,7 +55,7 @@ router.post('/', auth,
         return res.status(400).json({ error: 'Current chapter cannot be more than number of chapters in manga' })
       }
 
-      let reading = Reading.findOne({ user: id, title })
+      let reading = await Reading.findOne({ user: id, title })
       if (reading) {
         return res.status(400).json({ error: 'Reading already exists for user' })
       }
@@ -49,6 +80,7 @@ router.post('/', auth,
 // @desc Update Reading
 // @access private
 router.patch('/:id', auth,
+  body('currentChapter').toInt(),
   async (req, res) => {
     const { currentChapter } = req.body
     const { id } = req.params

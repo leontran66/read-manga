@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const bcrypt = require('bcrypt')
 const { body, validationResult } = require('express-validator')
 const auth = require('../../lib/auth')
 const Genre = require('../../models/Genre')
@@ -10,7 +9,7 @@ const User = require('../../models/User')
 // @desc Create Genre
 // @access private
 router.post('/', auth,
-  body('name').not().isEmpty().withMessage('Name must not be empty'),
+  body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty'),
   async (req, res) => {
     const { name } = req.body
     const { id } = req.user
@@ -45,13 +44,18 @@ router.post('/', auth,
 // @desc Update Genre
 // @access private
 router.patch('/:id', auth,
-  body('name').not().isEmpty().withMessage('Name must not be empty'),
+  body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty'),
   async (req, res) => {
     const { name } = req.body
     const { id } = req.params
     const userID = req.user.id
 
     try {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+      }
+
       const user = await User.findById(userID)
       if (user.accessLevel !== 'admin') {
         return res.status(400).json({ error: 'Authorization denied' })

@@ -10,7 +10,7 @@ const User = require('../../models/User')
 // @desc Register User
 // @access public
 router.post('/',
-  body('email').isEmail().withMessage('Invalid email'),
+  body('email').isEmail().normalizeEmail().withMessage('Invalid email'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
   async (req, res) => {
     const { email, password, confirmPW } = req.body
