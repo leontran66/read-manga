@@ -35,7 +35,8 @@ router.post('/',
       const user = new User({
         email,
         password: hash,
-        accessLevel: 'user'
+        accessLevel: 'user',
+        reading: []
       })
 
       user.save()

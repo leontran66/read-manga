@@ -22,6 +22,4 @@ const mangaSchema = new Schema({
   }
 });
 
-mangaSchema.index({ title: 1, author: 1 }, { unique: true })
-
 module.exports = mongoose.model('Manga', mangaSchema);

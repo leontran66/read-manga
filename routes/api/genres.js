@@ -26,7 +26,12 @@ router.post('/', auth,
         return res.status(400).json({ error: 'Authorization denied' })
       }
 
-      const genre = new Genre({ name })
+      let genre = genre.findOne({ name })
+      if (genre) {
+        return res.status(400).json({ error: 'Genre already exists' })
+      }
+
+      genre = new Genre({ name })
 
       genre.save()
 
@@ -52,6 +57,11 @@ router.patch('/:id', auth,
         return res.status(400).json({ error: 'Authorization denied' })
       }
 
+      const genre = await Genre.findById(id)
+      if (!genre) {
+        return res.status(400).json({ error: 'Genre not found' })
+      }
+  
       await Genre.findByIdAndUpdate(id, { name })
 
       res.status(200).json({ msg: 'Genre updated' })
@@ -71,6 +81,11 @@ router.delete('/:id', auth, async (req, res) => {
     const user = await User.findById(userID)
     if (user.accessLevel !== 'admin') {
       return res.status(400).json({ error: 'Authorization denied' })
+    }
+
+    const genre = await Genre.findById(id)
+    if (!genre) {
+      return res.status(400).json({ error: 'Genre not found' })
     }
 
     await Genre.findByIdAndDelete(id)

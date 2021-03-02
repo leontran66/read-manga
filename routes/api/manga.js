@@ -87,6 +87,11 @@ router.patch('/:id', auth, async (req, res) => {
         return res.status(400).json({ error: 'Authorization denied' })
       }
 
+      const manga = await Manga.findById(id)
+      if (!manga) {
+        return res.status(400).json({ error: 'Manga not found' })
+      }
+
       await Manga.findByIdAndUpdate(id, {
         title,
         author,
@@ -112,6 +117,11 @@ router.delete('/:id', auth, async (req, res) => {
     const user = await User.findById(userID)
     if (user.accessLevel !== 'admin') {
       return res.status(400).json({ error: 'Authorization denied' })
+    }
+    
+    const manga = await Manga.findById(id)
+    if (!manga) {
+      return res.status(400).json({ error: 'Manga not found' })
     }
 
     await Manga.findByIdAndDelete(id)
