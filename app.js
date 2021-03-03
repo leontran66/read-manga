@@ -1,11 +1,13 @@
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+  require('dotenv').config()
 }
 
-const express = require('express');
-const app = express();
+const express = require('express')
+const helmet = require('helmet')
 
-const connect = require('./lib/db');
+const app = express()
+
+const connect = require('./lib/db')
 connect();
 
 const authRoutes = require('./routes/api/auth')
@@ -16,6 +18,7 @@ const userRoutes = require('./routes/api/users')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+app.use(helmet())
 
 app.use('/api/auth', authRoutes)
 app.use('/api/genres', genreRoutes)

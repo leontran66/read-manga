@@ -5,6 +5,8 @@
   "main": "./bin/www",
   "scripts": {
     "server": "nodemon main",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "jest --forceExit --detectOpenHandles"
   },
   "author": "Leon Tran",
@@ -13,6 +15,8 @@
     "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "express-validator": "^6.10.0",
+    "helmet": "^4.4.1",
+    "jest": "^26.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.18"
   },
@@ -23,7 +27,6 @@
     "dotenv": "^8.2.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
-    "jest": "^26.6.3",
     "nodemon": "^2.0.7",
     "superagent": "^6.1.0",
     "supertest": "^6.1.3"

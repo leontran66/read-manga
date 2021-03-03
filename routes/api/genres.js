@@ -3,6 +3,7 @@ const router = express.Router()
 const { body, validationResult } = require('express-validator')
 const auth = require('../../lib/auth')
 const Genre = require('../../models/Genre')
+const Manga = require('../../models/Manga')
 const User = require('../../models/User')
 
 // @route POST api/genres
@@ -93,6 +94,11 @@ router.delete('/:id', auth, async (req, res) => {
     }
 
     await Genre.findByIdAndDelete(id)
+
+    const manga = Manga.find({ $in: { genres: id } })
+    manga.forEach(async (item) => {
+      await Manga.findByIdAndUpdate(item._id, { $pull: { genres: id } })
+    })
 
     res.status(200).json({ msg: 'Genre deleted' })
   } catch (err) {

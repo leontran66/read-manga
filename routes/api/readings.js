@@ -20,7 +20,11 @@ router.get('/', auth, async (req, res) => {
         model: 'Reading',
         populate: {
           path: 'manga',
-          model: 'Manga'
+          model: 'Manga',
+          populate : {
+            path: 'genres',
+            model: 'Genre'
+          }
         }
       })
 
