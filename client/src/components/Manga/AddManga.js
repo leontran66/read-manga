@@ -3,7 +3,7 @@ import React from 'react';
 const AddManga = () => {
   return (
     <div>
-      <a href='#'>Back</a>
+      <a href='/manga'>Back</a>
       <form>
         <input type='text' />
         <input type='text' />

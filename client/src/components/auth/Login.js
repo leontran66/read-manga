@@ -8,6 +8,7 @@ const Login = () => {
         <input type='password' />
         <input type='submit' value='Login' />
       </form>
+      <p>Don't have an account? <a href='/register'>Register</a></p>
     </div>
   )
 }
