@@ -1,7 +1,7 @@
-import React from 'React';
+import React from 'react';
 import Filter from './Filter';
 import Manga from './Manga';
-import Search from '../Layout/Search';
+import Search from '../layout/Search';
 
 const Mangas = () => {
   return (

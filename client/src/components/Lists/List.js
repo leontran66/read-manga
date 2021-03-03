@@ -1,4 +1,4 @@
-import React from 'React';
+import React from 'react';
 import Listing from './Listing';
 
 const List = () => {
