@@ -12,38 +12,38 @@ router.get('/', auth, async (req, res) => {
   const { id } = req.user;
 
   try {
-    const user = await User.findById(id).select('-accessLevel -reading')
+    const user = await User.findById(id).select('-accessLevel -reading');
 
-    res.status(200).json(user)
+    res.status(200).json({ user });
   } catch (err) {
-    res.status(500).json({ error: 'Authentication error' })
+    res.status(500).json({ errors: 'Authentication error' });
   }
-})
+});
 
 // @route POST api/auth
 // @desc Login User
 // @access public
 router.post('/', async (req, res) => {
-  const { email, password } = req.body
+  const { email, password } = req.body;
 
   try {
     // check if user exists
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials '})
+      return res.status(401).json({ errors: 'Invalid credentials '});
     }
 
     // check if password is correct
-    const isMatch = await bcrypt.compare(password, user.password)
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' })
+      return res.status(401).json({ errors: 'Invalid credentials' });
     }
 
     const payload = {
       user: {
         id: user._id
       }
-    }
+    };
     
     jwt.sign(
       payload,
@@ -51,12 +51,12 @@ router.post('/', async (req, res) => {
       { expiresIn: '7d' },
       (error, token) => {
         if (error) throw error;
-        res.status(200).json({ token })
+        res.status(200).json({ token });
       }
-    )
+    );
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    res.status(500).json({ errors: err.message });
   }
 })
 
-module.exports = router
+module.exports = router;

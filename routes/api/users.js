@@ -23,11 +23,11 @@ router.post('/',
 
       const userExists = await User.findOne({ email })
       if (userExists) {
-        return res.status(400).json({ error: 'User already exists' })
+        return res.status(400).json({ errors: 'User already exists' })
       }
 
       if (password !== confirmPW) {
-        return res.status(400).json({ error: 'Passwords do not match' })
+        return res.status(400).json({ errors: 'Passwords do not match' })
       }
 
       const hash = await bcrypt.hash(password, 12)
@@ -57,7 +57,7 @@ router.post('/',
         }
       )
     } catch (err) {
-      res.status(500).json({ error: 'User error' })
+      res.status(500).json({ errors: 'User error' })
     }
 });
 
@@ -71,22 +71,22 @@ router.patch('/', auth,
     const { id } = req.user;
 
     try {
+      // check if password is correct
+      const user = await User.findById(id).select('-email -accessLevel')
+      const isMatch = await bcrypt.compare(currentPW, user.password)
+      if (!isMatch) {
+        return res.status(400).json({ errors: 'Incorrect password' })
+      }
+
       // check if form data is valid
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      // check if password is correct
-      const user = await User.findById(id).select('-email -accessLevel')
-      const isMatch = await bcrypt.compare(currentPW, user.password)
-      if (!isMatch) {
-        return res.status(400).json({ error: 'Incorrect password' })
-      }
-
       // check if passwords match
       if (password !== confirmPW) {
-        return res.status(400).json({ error: 'Passwords do not match' })
+        return res.status(400).json({ errors: 'Passwords do not match' })
       }
 
       const hash = await bcrypt.hash(password, 12)
@@ -95,7 +95,7 @@ router.patch('/', auth,
 
       res.status(200).json({ msg: 'User updated' })
     } catch (err) {
-      res.status(500).json({ error: 'User error' })
+      res.status(500).json({ errors: 'User error' })
     }
 })
 
