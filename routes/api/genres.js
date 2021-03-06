@@ -33,7 +33,7 @@ router.post('/', auth,
 
       genre = new Genre({ name });
 
-      genre.save();
+      await genre.save();
 
       res.status(200).json({ msg: 'Genre created' });
     } catch (err) {

@@ -70,7 +70,7 @@ router.post('/', auth,
         currentChapter
       })
 
-      reading.save()
+      await reading.save()
 
       await User.findByIdAndUpdate(id, { $push: { reading } })
 

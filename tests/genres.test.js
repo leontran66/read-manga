@@ -107,7 +107,7 @@ describe('POST /api/genres', () => {
   });
 });
 
-describe('PATCH /api/genres', () => {
+describe('PATCH /api/genres/:id', () => {
   let genreID;
 
   beforeAll(async () => {
@@ -216,7 +216,7 @@ describe('PATCH /api/genres', () => {
   });
 });
 
-describe('PATCH /api/genres', () => {
+describe('DELETE /api/genres/:id', () => {
   let genreID;
 
   beforeAll(async () => {

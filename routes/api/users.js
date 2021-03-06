@@ -39,7 +39,7 @@ router.post('/',
         reading: []
       })
 
-      user.save()
+      await user.save()
       
       const payload = {
         user: {

@@ -12,12 +12,12 @@ router.get('/', async (req, res) => {
   try {
     const manga = await Manga.find({}).populate('genre')
     if (!manga.length) {
-      return res.status(400).json({ error: 'Couldn\'t find any manga' })
+      return res.status(400).json({ errors: 'Couldn\'t find any manga' })
     }
 
     res.status(200).json({ manga })
   } catch (err) {
-    res.status(500).json({ error: 'Manga error' })
+    res.status(500).json({ errors: 'Manga error' })
   }
 })
 
@@ -30,12 +30,12 @@ router.get('/:id', async (req, res) => {
   try {
     const manga = await Manga.findById(id).populate('genre')
     if (!manga) {
-      return res.status(400).json({ error: 'Manga not found' })
+      return res.status(400).json({ errors: 'Manga not found' })
     }
 
     res.status(200).json({ manga })
   } catch (err) {
-    res.status(500).json({ error: 'Manga error' })
+    res.status(500).json({ errors: 'Manga error' })
   }
 })
 
@@ -59,12 +59,12 @@ router.post('/', auth,
 
       const user = await User.findById(id)
       if (user.accessLevel !== 'admin') {
-        return res.status(400).json({ error: 'Authorization denied' })
+        return res.status(400).json({ errors: 'Authorization denied' })
       }
 
       let manga = await Manga.findOne({ title, author })
       if (manga) {
-        return res.status(400).json({ error: 'Manga already exists' })
+        return res.status(400).json({ errors: 'Manga already exists' })
       }
 
       manga = new Manga({
@@ -74,11 +74,11 @@ router.post('/', auth,
         chapters
       })
 
-      manga.save()
+      await manga.save()
 
       res.status(200).json({ msg: 'Manga created' })
     } catch (err) {
-      res.status(500).json({ error: 'Manga error' })
+      res.status(500).json({ errors: 'Manga error' })
     }
 })
 
@@ -103,12 +103,12 @@ router.patch('/:id', auth,
 
       const user = await User.findById(userID)
       if (user.accessLevel !== 'admin') {
-        return res.status(400).json({ error: 'Authorization denied' })
+        return res.status(400).json({ errors: 'Authorization denied' })
       }
 
       const manga = await Manga.findById(id)
       if (!manga) {
-        return res.status(400).json({ error: 'Manga not found' })
+        return res.status(400).json({ errors: 'Manga not found' })
       }
 
       await Manga.findByIdAndUpdate(id, {
@@ -121,7 +121,7 @@ router.patch('/:id', auth,
 
       res.status(200).json({ msg: 'Manga updated' })
     } catch (err) {
-      res.status(500).json({ error: 'Manga error' })
+      res.status(500).json({ errors: 'Manga error' })
     }
 })
 
@@ -135,19 +135,19 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     const user = await User.findById(userID)
     if (user.accessLevel !== 'admin') {
-      return res.status(400).json({ error: 'Authorization denied' })
+      return res.status(400).json({ errors: 'Authorization denied' })
     }
     
     const manga = await Manga.findById(id)
     if (!manga) {
-      return res.status(400).json({ error: 'Manga not found' })
+      return res.status(400).json({ errors: 'Manga not found' })
     }
 
     await Manga.findByIdAndDelete(id)
 
     res.status(200).json({ msg: 'Manga deleted' })
   } catch (err) {
-    res.status(500).json({ error: 'Manga error' })
+    res.status(500).json({ errors: 'Manga error' })
   }
 })
 
