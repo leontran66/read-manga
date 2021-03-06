@@ -18,7 +18,8 @@ const mangaSchema = new Schema({
     type: String
   },
   chapters: {
-    type: Number
+    type: Number,
+    min: 0
   }
 });
 

@@ -85,7 +85,7 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     const user = await User.findById(userID);
     if (user.accessLevel !== 'admin') {
-      return res.status(400).json({ errors: 'Authorization denied' });
+      return res.status(401).json({ errors: 'Authorization denied' });
     }
 
     const genre = await Genre.findById(id);
@@ -96,9 +96,11 @@ router.delete('/:id', auth, async (req, res) => {
     await Genre.findByIdAndDelete(id);
 
     const manga = Manga.find({ $in: { genres: id } });
-    manga.forEach(async (item) => {
-      await Manga.findByIdAndUpdate(item._id, { $pull: { genres: id } });
-    });
+    if (manga.length > 0) {
+      manga.forEach(async (item) => {
+        await Manga.findByIdAndUpdate(item._id, { $pull: { genres: id } });
+      });
+    }
 
     res.status(200).json({ msg: 'Genre deleted' });
   } catch (err) {

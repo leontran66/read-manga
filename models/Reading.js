@@ -11,7 +11,8 @@ const readingSchema = new Schema({
     required: true
   },
   currentChapter: {
-    type: Number
+    type: Number,
+    min: 0
   }
 });
 
