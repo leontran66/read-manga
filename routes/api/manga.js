@@ -52,14 +52,14 @@ router.post('/', auth,
     const { id } = req.user
 
     try {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
-      }
-
       const user = await User.findById(id)
       if (user.accessLevel !== 'admin') {
         return res.status(400).json({ errors: 'Authorization denied' })
+      }
+
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
       }
 
       let manga = await Manga.findOne({ title, author })
@@ -96,14 +96,14 @@ router.patch('/:id', auth,
     const userID = req.user.id
 
     try {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
-      }
-
       const user = await User.findById(userID)
       if (user.accessLevel !== 'admin') {
         return res.status(400).json({ errors: 'Authorization denied' })
+      }
+
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
       }
 
       const manga = await Manga.findById(id)

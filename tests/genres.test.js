@@ -23,10 +23,12 @@ describe('POST /api/genres', () => {
     });
   
     await admin.save();
-  });
 
-  afterEach(async () => {
-    await Genre.deleteMany({}).exec();
+    const genre = new Genre({
+      name: 'Adventure'
+    });
+
+    await genre.save();
   });
 
   afterAll(async () => {
@@ -40,8 +42,8 @@ describe('POST /api/genres', () => {
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
       .send({
-        'email': 'testgenreuser@gmail.com',
-        'password': 'testing'
+        email: 'testgenreuser@gmail.com',
+        password: 'testing'
       });
 
       token = response.body.token;
@@ -51,7 +53,7 @@ describe('POST /api/genres', () => {
       const res = await request(app).post('/api/genres')
         .set('x-auth-token', token)
         .send({
-          'name': 'adventure'
+          name: 'Action'
         });
       expect(res.statusCode).toBe(401);
       expect(res.body.errors).toBeDefined();
@@ -64,8 +66,8 @@ describe('POST /api/genres', () => {
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
       .send({
-        'email': 'testgenreadmin@gmail.com',
-        'password': 'testing'
+        email: 'testgenreadmin@gmail.com',
+        password: 'testing'
       });
       
       token = response.body.token;
@@ -75,7 +77,31 @@ describe('POST /api/genres', () => {
       const res = await request(app).post('/api/genres')
         .set('x-auth-token', token)
         .send({
-          'name': ''
+          name: ''
+        });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.errors).toBeDefined();
+    });
+  });
+  
+  describe('genre already exists', () => {
+    let token, response;
+
+    beforeAll(async () => {
+      response = await request(app).post('/api/auth')
+      .send({
+        email: 'testgenreadmin@gmail.com',
+        password: 'testing'
+      });
+      
+      token = response.body.token;
+    });
+
+    it("should return 400 Bad Request", async () => {
+      const res = await request(app).post('/api/genres')
+        .set('x-auth-token', token)
+        .send({
+          name: 'Adventure'
         });
       expect(res.statusCode).toBe(400);
       expect(res.body.errors).toBeDefined();
@@ -88,8 +114,8 @@ describe('POST /api/genres', () => {
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
       .send({
-        'email': 'testgenreadmin@gmail.com',
-        'password': 'testing'
+        email: 'testgenreadmin@gmail.com',
+        password: 'testing'
       });
       
       token = response.body.token;
@@ -99,7 +125,7 @@ describe('POST /api/genres', () => {
       const res = await request(app).post('/api/genres')
         .set('x-auth-token', token)
         .send({
-          'name': 'action'
+          name: 'Action'
         });
       expect(res.statusCode).toBe(200);
       expect(res.body.msg).toBeDefined();
@@ -108,7 +134,7 @@ describe('POST /api/genres', () => {
 });
 
 describe('PATCH /api/genres/:id', () => {
-  let genreID;
+  let genreID, userID;
 
   beforeAll(async () => {
     const user = new User({
@@ -119,6 +145,8 @@ describe('PATCH /api/genres/:id', () => {
     });
   
     await user.save();
+
+    userID = user._id;
   
     const admin = new User({
       email: 'testgenreadmin@gmail.com',
@@ -130,7 +158,7 @@ describe('PATCH /api/genres/:id', () => {
     await admin.save();
 
     const genre = new Genre({
-      name: 'action'
+      name: 'Action'
     });
 
     await genre.save();
@@ -149,8 +177,8 @@ describe('PATCH /api/genres/:id', () => {
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
       .send({
-        'email': 'testgenreuser@gmail.com',
-        'password': 'testing'
+        email: 'testgenreuser@gmail.com',
+        password: 'testing'
       });
 
       token = response.body.token;
@@ -160,7 +188,7 @@ describe('PATCH /api/genres/:id', () => {
       const res = await request(app).patch('/api/genres/' + genreID)
         .set('x-auth-token', token)
         .send({
-          'name': 'adventure'
+          name: 'Adventure'
         });
       expect(res.statusCode).toBe(401);
       expect(res.body.errors).toBeDefined();
@@ -173,8 +201,8 @@ describe('PATCH /api/genres/:id', () => {
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
       .send({
-        'email': 'testgenreadmin@gmail.com',
-        'password': 'testing'
+        email: 'testgenreadmin@gmail.com',
+        password: 'testing'
       });
       
       token = response.body.token;
@@ -184,7 +212,31 @@ describe('PATCH /api/genres/:id', () => {
       const res = await request(app).patch('/api/genres/' + genreID)
         .set('x-auth-token', token)
         .send({
-          'name': ''
+          name: ''
+        });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.errors).toBeDefined();
+    });
+  });
+  
+  describe('non-existent genre', () => {
+    let token, response;
+
+    beforeAll(async () => {
+      response = await request(app).post('/api/auth')
+      .send({
+        email: 'testgenreadmin@gmail.com',
+        password: 'testing'
+      });
+      
+      token = response.body.token;
+    });
+
+    it("should return 400 Bad Request", async () => {
+      const res = await request(app).patch('/api/genres/' +  userID)
+        .set('x-auth-token', token)
+        .send({
+          name: 'Adventure'
         });
       expect(res.statusCode).toBe(400);
       expect(res.body.errors).toBeDefined();
@@ -197,8 +249,8 @@ describe('PATCH /api/genres/:id', () => {
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
       .send({
-        'email': 'testgenreadmin@gmail.com',
-        'password': 'testing'
+        email: 'testgenreadmin@gmail.com',
+        password: 'testing'
       });
       
       token = response.body.token;
@@ -208,7 +260,7 @@ describe('PATCH /api/genres/:id', () => {
       const res = await request(app).patch('/api/genres/' + genreID)
         .set('x-auth-token', token)
         .send({
-          'name': 'adventure'
+          name: 'Adventure'
         });
       expect(res.statusCode).toBe(200);
       expect(res.body.msg).toBeDefined();
@@ -217,7 +269,7 @@ describe('PATCH /api/genres/:id', () => {
 });
 
 describe('DELETE /api/genres/:id', () => {
-  let genreID;
+  let genreID, userID;
 
   beforeAll(async () => {
     const user = new User({
@@ -228,6 +280,8 @@ describe('DELETE /api/genres/:id', () => {
     });
   
     await user.save();
+
+    userID = user._id;
   
     const admin = new User({
       email: 'testgenreadmin@gmail.com',
@@ -239,7 +293,7 @@ describe('DELETE /api/genres/:id', () => {
     await admin.save();
 
     const genre = new Genre({
-      name: 'action'
+      name: 'Action'
     });
 
     await genre.save();
@@ -258,8 +312,8 @@ describe('DELETE /api/genres/:id', () => {
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
       .send({
-        'email': 'testgenreuser@gmail.com',
-        'password': 'testing'
+        email: 'testgenreuser@gmail.com',
+        password: 'testing'
       });
 
       token = response.body.token;
@@ -273,14 +327,35 @@ describe('DELETE /api/genres/:id', () => {
     });
   });
   
+  describe('non-existent genre', () => {
+    let token, response;
+
+    beforeAll(async () => {
+      response = await request(app).post('/api/auth')
+      .send({
+        email: 'testgenreadmin@gmail.com',
+        password: 'testing'
+      });
+
+      token = response.body.token;
+    });
+
+    it("should return 401 Unauthorized", async () => {
+      const res = await request(app).delete('/api/genres/' + userID)
+        .set('x-auth-token', token);
+      expect(res.statusCode).toBe(400);
+      expect(res.body.errors).toBeDefined();
+    });
+  });
+  
   describe('correct input', () => {
     let token, response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
       .send({
-        'email': 'testgenreadmin@gmail.com',
-        'password': 'testing'
+        email: 'testgenreadmin@gmail.com',
+        password: 'testing'
       });
       
       token = response.body.token;

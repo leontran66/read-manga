@@ -26,9 +26,9 @@ router.get('/', auth, async (req, res) => {
             model: 'Genre'
           }
         }
-      })
+      });
 
-    res.status(200).json(user)
+      res.status(200).json({ user })
     } catch (err) {
       res.status(500).json({ error: 'Reading error' })
     }
@@ -52,16 +52,16 @@ router.post('/', auth,
 
       const manga = await Manga.findOne({ title })
       if (!manga) {
-        return res.status(400).json({ error: 'Manga not found' })
+        return res.status(400).json({ errors: 'Manga not found' })
       }
 
       if (manga.chapters < currentChapter) {
-        return res.status(400).json({ error: 'Current chapter cannot be more than number of chapters in manga' })
+        return res.status(400).json({ errors: 'Current chapter cannot be more than number of chapters in manga' })
       }
 
-      let reading = await Reading.findOne({ user: id, title })
+      let reading = await Reading.findOne({ user: id, manga: manga._id })
       if (reading) {
-        return res.status(400).json({ error: 'Reading already exists for user' })
+        return res.status(400).json({ errors: 'Reading already exists for user' })
       }
 
       reading = new Reading({
@@ -76,7 +76,7 @@ router.post('/', auth,
 
       res.status(200).json({ msg: 'Reading created' })
     } catch (err) {
-      res.status(500).json({ error: 'Reading error' })
+      res.status(500).json({ errors: 'Reading error' })
     }
 });
 
@@ -93,14 +93,14 @@ router.patch('/:id', auth,
       const reading = await Reading.findById(id)
       const manga = await Manga.findById(reading.manga)
       if (manga.chapters < currentChapter) {
-        return res.status(400).json({ error: 'Current chapter cannot be more than number of chapters in manga' })
+        return res.status(400).json({ errors: 'Current chapter cannot be more than number of chapters in manga' })
       }
 
       await Reading.findByIdAndUpdate(id, { currentChapter })
 
       res.status(200).json({ msg: 'Reading updated' })
     } catch (err) {
-      res.status(500).json({ error: 'Reading error' })
+      res.status(500).json({ errors: 'Reading error' })
     }
 })
 
@@ -114,12 +114,12 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     const reading = await Reading.findById(id)
     if (!reading) {
-      return res.status(400).json({ error: 'Reading not found' })
+      return res.status(400).json({ errors: 'Reading not found' })
     }
 
     const user = await User.findById(userID)
     if (!user.reading.includes(reading._id)) {
-      return res.status(400).json({ error: 'Reading does not belong to user' })
+      return res.status(400).json({ errors: 'Reading does not belong to user' })
     }
 
     await Reading.findByIdAndDelete(id)
@@ -127,7 +127,7 @@ router.delete('/:id', auth, async (req, res) => {
 
     res.status(200).json({ msg: 'Reading deleted' })
   } catch (err) {
-    res.status(500).json({ error: 'Reading error' })
+    res.status(500).json({ errors: 'Reading error' })
   }
 })
 

@@ -18,8 +18,8 @@ describe('GET /api/auth', () => {
 
     response = await request(app).post('/api/auth')
       .send({
-        'email': 'testauth@gmail.com',
-        'password': 'testing'
+        email: 'testauth@gmail.com',
+        password: 'testing'
       });
 
     token = response.body.token;
@@ -57,8 +57,8 @@ describe('POST /api/auth', () => {
     it("should return 401 Unauthorized", async () => {
       const res = await request(app).post('/api/auth')
         .send({
-          'email': '',
-          'password': ''
+          email: '',
+          password: ''
         });
       expect(res.statusCode).toBe(401);
       expect(res.body.errors).toBeDefined();
@@ -69,8 +69,8 @@ describe('POST /api/auth', () => {
     it("should return 401 Unauthorized", async () => {
       const res = await request(app).post('/api/auth')
         .send({
-          'email': 'testauthuser@gmail.com',
-          'password': 'testing'
+          email: 'testauthuser@gmail.com',
+          password: 'testing'
         });
       expect(res.statusCode).toBe(401);
       expect(res.body.errors).toBeDefined();
@@ -81,8 +81,8 @@ describe('POST /api/auth', () => {
     it("should return 401 Unauthorized", async () => {
       const res = await request(app).post('/api/auth')
         .send({
-          'email': 'testauth@gmail.com',
-          'password': 'newtest'
+          email: 'testauth@gmail.com',
+          password: 'newtest'
         });
       expect(res.statusCode).toBe(401);
       expect(res.body.errors).toBeDefined();
@@ -93,8 +93,8 @@ describe('POST /api/auth', () => {
     it("should return 200 OK", async () => {
       const res = await request(app).post('/api/auth')
         .send({
-          'email': 'testauth@gmail.com',
-          'password': 'testing'
+          email: 'testauth@gmail.com',
+          password: 'testing'
         });
       expect(res.statusCode).toBe(200);
       expect(res.body.token).toBeDefined();
