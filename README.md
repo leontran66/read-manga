@@ -2,8 +2,6 @@
 
 ### An app that helps you keep track of manga you are currently reading
 
----
-
 ## Stack
 
 - NodeJS/Express
@@ -14,19 +12,23 @@
 
 ### Server
 
-Express | Node web app framework
-Mongoose | ODM for MongoDB
-Bcrypt | Hashes passwords for safe storage
-JSONWebToken | Encodes/signs information in order to authorize requests
-Express-validator | Validates and sanitizes form inputs for express
-Helmet | Sets various headers for security
+| Dependency        | Usage                                                    |
+| ----------------- | -------------------------------------------------------- |
+| Express           | Node web app framework                                   |
+| Mongoose          | ODM for MongoDB                                          |
+| Bcrypt            | Hashes passwords for safe storage                        |
+| JSONWebToken      | Encodes/signs information in order to authorize requests |
+| Express-validator | Validates and sanitizes form inputs for express          |
+| Helmet            | Sets various headers for security                        |
 
 ### Client
 
-Axios | Library to make requests to the API
-React | Library for creating the user interface
-Redux | Library to manage state for React
-Uuid | Creates id
+| Dependency | Usage                                   |
+| ---------- | --------------------------------------- |
+| Axios      | Library to make requests to the API     |
+| React      | Library for creating the user interface |
+| Redux      | Library to manage state for React       |
+| Uuid       | Creates id                              |
 
 ## Database Structure
 
@@ -66,14 +68,14 @@ Uuid | Creates id
 
 ### /auth
 
-| Route              |
+| Route              |         |
 | ------------------ | ------- |
 | / GET current user | Private |
 | / POST login user  | Public  |
 
 ### /users
 
-| Route                |
+| Route                |         |
 | -------------------- | ------- |
 | / POST register user | Public  |
 | / PATCH update user  | Private |
@@ -81,7 +83,7 @@ Uuid | Creates id
 
 ### /manga
 
-| Route                    |
+| Route                    |                |
 | ------------------------ | -------------- |
 | / GET all manga          | Public         |
 | /:id GET manga           | Public         |
@@ -91,7 +93,7 @@ Uuid | Creates id
 
 ### /readings
 
-| Route                       |
+| Route                       |         |
 | --------------------------- | ------- |
 | / GET get readings for user | Private |
 | / POST create reading       | Private |
@@ -100,7 +102,7 @@ Uuid | Creates id
 
 ### /genres
 
-| Route                    |
+| Route                    |                |
 | ------------------------ | -------------- |
 | / POST create genre      | Private, Admin |
 | /:id PATCH update genre  | Private, Admin |
