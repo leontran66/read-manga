@@ -7,7 +7,7 @@ const Genre = () => {
       <a href='#'>Edit</a>
       <a href='#'>Delete</a>
     </div>
-  )
-}
+  );
+};
 
 export default Genre;

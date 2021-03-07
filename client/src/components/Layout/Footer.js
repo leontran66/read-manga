@@ -5,7 +5,7 @@ const Footer = () => {
     <div>
       Leon Tran 2021
     </div>
-  )
-}
+  );
+};
 
 export default Footer;

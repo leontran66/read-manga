@@ -9,7 +9,7 @@ const List = () => {
       <Listing />
       <Listing />
     </div>
-  )
-}
+  );
+};
 
 export default List;

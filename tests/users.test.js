@@ -12,9 +12,9 @@ describe('POST /api/users', () => {
     it("should return 400 Bad Request", async () => {
       const res = await request(app).post('/api/users')
         .send({
-          'email': '',
-          'password': '',
-          'confirmPW': ''
+          email: '',
+          password: '',
+          confirmPW: ''
         });
       expect(res.statusCode).toBe(400);
       expect(res.body.errors).toBeDefined();
@@ -40,9 +40,9 @@ describe('POST /api/users', () => {
     it("should return 400 Bad Request", async () => {
       const res = await request(app).post('/api/users')
         .send({
-          'email': 'testuser@gmail.com',
-          'password': 'testing',
-          'confirmPW': 'testing'
+          email: 'testuser@gmail.com',
+          password: 'testing',
+          confirmPW: 'testing'
         });
       
       expect(res.statusCode).toBe(400);
@@ -54,9 +54,9 @@ describe('POST /api/users', () => {
     it("should return 400 Bad Request", async () => {
       const res = await request(app).post('/api/users')
         .send({
-          'email': 'testuser@gmail.com',
-          'password': 'testing',
-          'confirmPW': 'test'
+          email: 'testuser@gmail.com',
+          password: 'testing',
+          confirmPW: 'test'
         });
       expect(res.statusCode).toBe(400);
       expect(res.body.errors).toBeDefined();
@@ -67,9 +67,9 @@ describe('POST /api/users', () => {
     it("should return 200 OK", async () => {
       const res = await request(app).post('/api/users')
         .send({
-          'email': 'testuser@gmail.com',
-          'password': 'testing',
-          'confirmPW': 'testing'
+          email: 'testuser@gmail.com',
+          password: 'testing',
+          confirmPW: 'testing'
         });
       expect(res.statusCode).toBe(200);
       expect(res.body.token).toBeDefined();
@@ -92,8 +92,8 @@ describe('PATCH /api/users', () => {
 
     response = await request(app).post('/api/auth')
       .send({
-        'email': 'testuser@gmail.com',
-        'password': 'testing'
+        email: 'testuser@gmail.com',
+        password: 'testing'
       });
 
     token = response.body.token;
@@ -115,9 +115,9 @@ describe('PATCH /api/users', () => {
       const res = await request(app).patch('/api/users')
         .set('x-auth-token', token)
         .send({
-          'currentPW': '',
-          'password': '',
-          'confirmPW': ''
+          currentPW: '',
+          password: '',
+          confirmPW: ''
         });
       expect(res.statusCode).toBe(400);
       expect(res.body.errors).toBeDefined();
@@ -129,9 +129,9 @@ describe('PATCH /api/users', () => {
       const res = await request(app).patch('/api/users')
         .set('x-auth-token', token)
         .send({
-          'currentPW': 'test',
-          'password': '',
-          'confirmPW': ''
+          currentPW: 'test',
+          password: '',
+          confirmPW: ''
         });
       expect(res.statusCode).toBe(400);
       expect(res.body.errors).toBeDefined();
@@ -143,9 +143,9 @@ describe('PATCH /api/users', () => {
       const res = await request(app).patch('/api/users')
         .set('x-auth-token', token)
         .send({
-          'currentPW': 'testing',
-          'password': 'test',
-          'confirmPW': 'test'
+          currentPW: 'testing',
+          password: 'test',
+          confirmPW: 'test'
         });
       expect(res.statusCode).toBe(400);
       expect(res.body.errors).toBeDefined();
@@ -157,9 +157,9 @@ describe('PATCH /api/users', () => {
       const res = await request(app).patch('/api/users')
         .set('x-auth-token', token)
         .send({
-          'currentPW': 'testing',
-          'password': 'testing',
-          'confirmPW': 'test'
+          currentPW: 'testing',
+          password: 'testing',
+          confirmPW: 'test'
         });
       expect(res.statusCode).toBe(400);
       expect(res.body.errors).toBeDefined();
@@ -171,9 +171,9 @@ describe('PATCH /api/users', () => {
       const res = await request(app).patch('/api/users')
         .set('x-auth-token', token)
         .send({
-          'currentPW': 'testing',
-          'password': 'newtest',
-          'confirmPW': 'newtest'
+          currentPW: 'testing',
+          password: 'newtest',
+          confirmPW: 'newtest'
         });
       expect(res.statusCode).toBe(200);
       expect(res.body.msg).toBeDefined();
@@ -196,8 +196,8 @@ describe('DELETE /api/users', () => {
 
     response = await request(app).post('/api/auth')
       .send({
-        'email': 'testuser@gmail.com',
-        'password': 'testing'
+        email: 'testuser@gmail.com',
+        password: 'testing'
       });
 
     token = response.body.token;

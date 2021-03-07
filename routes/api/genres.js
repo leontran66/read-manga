@@ -1,10 +1,10 @@
-const express = require('express')
-const router = express.Router()
-const { body, validationResult } = require('express-validator')
-const auth = require('../../lib/auth')
-const Genre = require('../../models/Genre')
-const Manga = require('../../models/Manga')
-const User = require('../../models/User')
+const express = require('express');
+const { body, validationResult } = require('express-validator');
+const router = express.Router();
+const auth = require('../../lib/auth');
+const Genre = require('../../models/Genre');
+const Manga = require('../../models/Manga');
+const User = require('../../models/User');
 
 // @route POST api/genres
 // @desc Create Genre

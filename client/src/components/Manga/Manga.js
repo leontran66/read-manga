@@ -16,7 +16,7 @@ const Manga = () => {
       </div>
       <p>Synopsis</p>
     </div>
-  )
-}
+  );
+};
 
 export default Manga;

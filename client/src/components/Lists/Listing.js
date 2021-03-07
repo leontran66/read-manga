@@ -8,7 +8,7 @@ const Listing = () => {
       <a href='#'>Edit</a>
       <a href='#'>Delete</a>
     </div>
-  )
-}
+  );
+};
 
 export default Listing;

@@ -10,7 +10,7 @@ const Filter = () => {
         <input type='submit' value='Filter' />
       </form>
     </div>
-  )
-}
+  );
+};
 
 export default Filter;

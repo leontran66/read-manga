@@ -1,16 +1,16 @@
-const express = require('express')
-const router = express.Router()
-const { body, validationResult } = require('express-validator')
-const auth = require('../../lib/auth')
-const Manga = require('../../models/Manga')
-const Reading = require('../../models/Reading')
-const User = require('../../models/User')
+const express = require('express');
+const { body, validationResult } = require('express-validator');
+const router = express.Router();
+const auth = require('../../lib/auth');
+const Manga = require('../../models/Manga');
+const Reading = require('../../models/Reading');
+const User = require('../../models/User');
 
 // @route GET api/readings
 // @desc Get Reading
 // @access private
 router.get('/', auth, async (req, res) => {
-    const { id } = req.user
+    const { id } = req.user;
 
     try {
       const user = await User.findById(id)
@@ -28,9 +28,9 @@ router.get('/', auth, async (req, res) => {
         }
       });
 
-      res.status(200).json({ user })
+      res.status(200).json({ user });
     } catch (err) {
-      res.status(500).json({ error: 'Reading error' })
+      res.status(500).json({ error: 'Reading error' });
     }
 });
 
@@ -41,42 +41,42 @@ router.post('/', auth,
   body('title').not().isEmpty().trim().escape().withMessage('Must have a title'),
   body('currentChapter').toInt(),
   async (req, res) => {
-    const { title, currentChapter } = req.body
-    const { id } = req.user
+    const { title, currentChapter } = req.body;
+    const { id } = req.user;
 
     try {
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return res.status(400).json({ errors: errors.array() });
       }
 
-      const manga = await Manga.findOne({ title })
+      const manga = await Manga.findOne({ title });
       if (!manga) {
-        return res.status(400).json({ errors: 'Manga not found' })
+        return res.status(400).json({ errors: 'Manga not found' });
       }
 
       if (manga.chapters < currentChapter) {
-        return res.status(400).json({ errors: 'Current chapter cannot be more than number of chapters in manga' })
+        return res.status(400).json({ errors: 'Current chapter cannot be more than number of chapters in manga' });
       }
 
-      let reading = await Reading.findOne({ user: id, manga: manga._id })
+      let reading = await Reading.findOne({ user: id, manga: manga._id });
       if (reading) {
-        return res.status(400).json({ errors: 'Reading already exists for user' })
+        return res.status(400).json({ errors: 'Reading already exists for user' });
       }
 
       reading = new Reading({
         user: id,
         manga: manga._id,
         currentChapter
-      })
+      });
 
-      await reading.save()
+      await reading.save();
 
-      await User.findByIdAndUpdate(id, { $push: { reading } })
+      await User.findByIdAndUpdate(id, { $push: { reading } });
 
-      res.status(200).json({ msg: 'Reading created' })
+      res.status(200).json({ msg: 'Reading created' });
     } catch (err) {
-      res.status(500).json({ errors: 'Reading error' })
+      res.status(500).json({ errors: 'Reading error' });
     }
 });
 
@@ -86,49 +86,49 @@ router.post('/', auth,
 router.patch('/:id', auth,
   body('currentChapter').toInt(),
   async (req, res) => {
-    const { currentChapter } = req.body
-    const { id } = req.params
+    const { currentChapter } = req.body;
+    const { id } = req.params;
 
     try {
-      const reading = await Reading.findById(id)
-      const manga = await Manga.findById(reading.manga)
+      const reading = await Reading.findById(id);
+      const manga = await Manga.findById(reading.manga);
       if (manga.chapters < currentChapter) {
-        return res.status(400).json({ errors: 'Current chapter cannot be more than number of chapters in manga' })
+        return res.status(400).json({ errors: 'Current chapter cannot be more than number of chapters in manga' });
       }
 
-      await Reading.findByIdAndUpdate(id, { currentChapter })
+      await Reading.findByIdAndUpdate(id, { currentChapter });
 
-      res.status(200).json({ msg: 'Reading updated' })
+      res.status(200).json({ msg: 'Reading updated' });
     } catch (err) {
-      res.status(500).json({ errors: 'Reading error' })
+      res.status(500).json({ errors: 'Reading error' });
     }
-})
+});
 
 // @route DELETE api/readings/:id
 // @desc Delete Reading
 // @access private
 router.delete('/:id', auth, async (req, res) => {
-  const { id } = req.params
-  const userID = req.user.id
+  const { id } = req.params;
+  const userID = req.user.id;
 
   try {
-    const reading = await Reading.findById(id)
+    const reading = await Reading.findById(id);
     if (!reading) {
-      return res.status(400).json({ errors: 'Reading not found' })
+      return res.status(400).json({ errors: 'Reading not found' });
     }
 
-    const user = await User.findById(userID)
+    const user = await User.findById(userID);
     if (!user.reading.includes(reading._id)) {
-      return res.status(400).json({ errors: 'Reading does not belong to user' })
+      return res.status(400).json({ errors: 'Reading does not belong to user' });
     }
 
-    await Reading.findByIdAndDelete(id)
-    await User.findByIdAndUpdate(userID, { $pull: { reading: id } })
+    await Reading.findByIdAndDelete(id);
+    await User.findByIdAndUpdate(userID, { $pull: { reading: id } });
 
-    res.status(200).json({ msg: 'Reading deleted' })
+    res.status(200).json({ msg: 'Reading deleted' });
   } catch (err) {
-    res.status(500).json({ errors: 'Reading error' })
+    res.status(500).json({ errors: 'Reading error' });
   }
-})
+});
 
-module.exports = router
+module.exports = router;

@@ -9,7 +9,7 @@ const Mangas = () => {
       <Genre />
       <Genre />
     </div>
-  )
-}
+  );
+};
 
 export default Mangas;

@@ -16,7 +16,7 @@ const AddManga = () => {
         </textarea>
       </form>
     </div>
-  )
-}
+  );
+};
 
 export default AddManga;

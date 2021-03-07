@@ -9,7 +9,7 @@ const Landing = () => {
       <a href='#'>Login</a>
       <a href='#'>Register</a>
     </div>
-  )
-}
+  );
+};
 
 export default Landing;

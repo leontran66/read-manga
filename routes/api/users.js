@@ -1,10 +1,10 @@
-const express = require('express')
-const router = express.Router()
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const { body, validationResult } = require('express-validator')
-const auth = require('../../lib/auth')
-const User = require('../../models/User')
+const express = require('express');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { body, validationResult } = require('express-validator');
+const router = express.Router();
+const auth = require('../../lib/auth');
+const User = require('../../models/User');
 
 // @route POST api/users
 // @desc Register User
@@ -13,39 +13,39 @@ router.post('/',
   body('email').isEmail().normalizeEmail().withMessage('Invalid email'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
   async (req, res) => {
-    const { email, password, confirmPW } = req.body
+    const { email, password, confirmPW } = req.body;
 
     try {
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return res.status(400).json({ errors: errors.array() });
       }
 
-      const userExists = await User.findOne({ email })
+      const userExists = await User.findOne({ email });
       if (userExists) {
-        return res.status(400).json({ errors: 'User already exists' })
+        return res.status(400).json({ errors: 'User already exists' });
       }
 
       if (password !== confirmPW) {
-        return res.status(400).json({ errors: 'Passwords do not match' })
+        return res.status(400).json({ errors: 'Passwords do not match' });
       }
 
-      const hash = await bcrypt.hash(password, 12)
+      const hash = await bcrypt.hash(password, 12);
 
       const user = new User({
         email,
         password: hash,
         accessLevel: 'user',
         reading: []
-      })
+      });
 
-      await user.save()
+      await user.save();
       
       const payload = {
         user: {
           id: user._id
         }
-      }
+      };
 
       jwt.sign(
         payload,
@@ -53,9 +53,9 @@ router.post('/',
         { expiresIn: '7d' },
         (error, token) => {
           if (error) throw error;
-          res.status(200).json({ token })
+          res.status(200).json({ token });
         }
-      )
+      );
     } catch (err) {
       res.status(500).json({ errors: 'User error' })
     }
@@ -72,10 +72,10 @@ router.patch('/', auth,
 
     try {
       // check if password is correct
-      const user = await User.findById(id).select('-email -accessLevel')
-      const isMatch = await bcrypt.compare(currentPW, user.password)
+      const user = await User.findById(id).select('-email -accessLevel');
+      const isMatch = await bcrypt.compare(currentPW, user.password);
       if (!isMatch) {
-        return res.status(400).json({ errors: 'Incorrect password' })
+        return res.status(400).json({ errors: 'Incorrect password' });
       }
 
       // check if form data is valid
@@ -86,32 +86,32 @@ router.patch('/', auth,
 
       // check if passwords match
       if (password !== confirmPW) {
-        return res.status(400).json({ errors: 'Passwords do not match' })
+        return res.status(400).json({ errors: 'Passwords do not match' });
       }
 
-      const hash = await bcrypt.hash(password, 12)
+      const hash = await bcrypt.hash(password, 12);
 
-      await User.findByIdAndUpdate(id, { password: hash })
+      await User.findByIdAndUpdate(id, { password: hash });
 
-      res.status(200).json({ msg: 'User updated' })
+      res.status(200).json({ msg: 'User updated' });
     } catch (err) {
-      res.status(500).json({ errors: 'User error' })
+      res.status(500).json({ errors: 'User error' });
     }
-})
+});
 
 // @route DELETE api/users
 // @desc Delete User
 // @access private
 router.delete('/', auth, async (req, res) => {
-  const { id } = req.user
+  const { id } = req.user;
 
   try {
-    await User.findByIdAndDelete(id)
+    await User.findByIdAndDelete(id);
 
-    res.status(200).json({ msg: 'User deleted' })
+    res.status(200).json({ msg: 'User deleted' });
   } catch (err) {
-    res.status(500).json({ error: 'User error' })
+    res.status(500).json({ error: 'User error' });
   }
-})
+});
 
-module.exports = router
+module.exports = router;

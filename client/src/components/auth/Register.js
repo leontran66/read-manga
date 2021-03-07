@@ -11,7 +11,7 @@ const Register = () => {
         <input type='submit' value='Register' />
       </form>
     </div>
-  )
-}
+  );
+};
 
 export default Register;

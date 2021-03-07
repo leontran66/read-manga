@@ -8,7 +8,7 @@ const Search = () => {
         <input type='submit' value='Search' />
       </form>
     </div>
-  )
-}
+  );
+};
 
 export default Search;

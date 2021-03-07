@@ -1,9 +1,9 @@
-const express = require('express')
-const router = express.Router()
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const auth = require('../../lib/auth')
-const User = require('../../models/User')
+const express = require('express');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const router = express.Router();
+const auth = require('../../lib/auth');
+const User = require('../../models/User');
 
 // @route GET api/auth
 // @desc Get Current User
@@ -57,6 +57,6 @@ router.post('/', async (req, res) => {
   } catch (err) {
     res.status(500).json({ errors: err.message });
   }
-})
+});
 
 module.exports = router;

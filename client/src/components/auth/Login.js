@@ -10,7 +10,7 @@ const Login = () => {
       </form>
       <p>Don't have an account? <a href='/register'>Register</a></p>
     </div>
-  )
-}
+  );
+};
 
 export default Login;

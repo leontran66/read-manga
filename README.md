@@ -1,6 +1,6 @@
 # Read Manga
 
-### An app that helps you keep track of manga you are currently reading
+### An app that keeps track of manga you are currently reading
 
 ## Stack
 
