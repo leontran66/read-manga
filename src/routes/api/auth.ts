@@ -1,14 +1,17 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const router = express.Router();
-const auth = require('../../lib/auth');
-const User = require('../../models/User');
+import bcrypt from 'bcrypt';
+import { Router, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+
+import { auth } from '../../lib/auth';
+import { User } from '../../models/User';
+import { AuthRequest } from '../../types/authRequest';
+
+const router = Router();
 
 // @route GET api/auth
 // @desc Get Current User
 // @access private
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, async (req: AuthRequest, res: Response) => {
   const { id } = req.user;
 
   try {
@@ -23,7 +26,7 @@ router.get('/', auth, async (req, res) => {
 // @route POST api/auth
 // @desc Login User
 // @access public
-router.post('/', async (req, res) => {
+router.post('/', async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
@@ -41,7 +44,8 @@ router.post('/', async (req, res) => {
 
     const payload = {
       user: {
-        id: user._id
+        id: user._id,
+        accessLevel: user.accessLevel
       }
     };
     

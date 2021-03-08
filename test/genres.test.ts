@@ -1,8 +1,9 @@
-const request = require('supertest');
-const bcrypt = require('bcrypt');
-const app = require('../app');
-const Genre = require('../models/Genre');
-const User = require('../models/User');
+import bcrypt from 'bcrypt';
+import request from 'supertest';
+
+import app from '../src/app';
+import { Genre } from '../src/models/Genre';
+import { User } from '../src/models/User';
 
 describe('POST /api/genres', () => {
   beforeAll(async () => {
@@ -37,7 +38,7 @@ describe('POST /api/genres', () => {
   })
   
   describe('user adds genre', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -55,13 +56,13 @@ describe('POST /api/genres', () => {
         .send({
           name: 'Action'
         });
-      expect(res.statusCode).toBe(401);
+      expect(res.status).toBe(401);
       expect(res.body.errors).toBeDefined();
     });
   });
   
   describe('no name', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -79,13 +80,13 @@ describe('POST /api/genres', () => {
         .send({
           name: ''
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
   
   describe('genre already exists', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -103,13 +104,13 @@ describe('POST /api/genres', () => {
         .send({
           name: 'Adventure'
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
   
   describe('correct input', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -127,14 +128,14 @@ describe('POST /api/genres', () => {
         .send({
           name: 'Action'
         });
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });
 });
 
 describe('PATCH /api/genres/:id', () => {
-  let genreID, userID;
+  let genreID: string, userID: string;
 
   beforeAll(async () => {
     const user = new User({
@@ -172,7 +173,7 @@ describe('PATCH /api/genres/:id', () => {
   })
   
   describe('user updates genre', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -190,13 +191,13 @@ describe('PATCH /api/genres/:id', () => {
         .send({
           name: 'Adventure'
         });
-      expect(res.statusCode).toBe(401);
+      expect(res.status).toBe(401);
       expect(res.body.errors).toBeDefined();
     });
   });
   
   describe('no name', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -214,13 +215,13 @@ describe('PATCH /api/genres/:id', () => {
         .send({
           name: ''
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
   
   describe('non-existent genre', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -238,13 +239,13 @@ describe('PATCH /api/genres/:id', () => {
         .send({
           name: 'Adventure'
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
   
   describe('correct input', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -262,14 +263,14 @@ describe('PATCH /api/genres/:id', () => {
         .send({
           name: 'Adventure'
         });
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });
 });
 
 describe('DELETE /api/genres/:id', () => {
-  let genreID, userID;
+  let genreID: string, userID: string;
 
   beforeAll(async () => {
     const user = new User({
@@ -307,7 +308,7 @@ describe('DELETE /api/genres/:id', () => {
   })
   
   describe('user deletes genre', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -322,13 +323,13 @@ describe('DELETE /api/genres/:id', () => {
     it("should return 401 Unauthorized", async () => {
       const res = await request(app).delete('/api/genres/' + genreID)
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(401);
+      expect(res.status).toBe(401);
       expect(res.body.errors).toBeDefined();
     });
   });
   
   describe('non-existent genre', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -343,13 +344,13 @@ describe('DELETE /api/genres/:id', () => {
     it("should return 401 Unauthorized", async () => {
       const res = await request(app).delete('/api/genres/' + userID)
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
   
   describe('correct input', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -364,7 +365,7 @@ describe('DELETE /api/genres/:id', () => {
     it("should return 200 OK", async () => {
       const res = await request(app).delete('/api/genres/' + genreID)
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });

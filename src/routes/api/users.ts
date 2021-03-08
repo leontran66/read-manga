@@ -1,10 +1,13 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { body, validationResult } = require('express-validator');
-const router = express.Router();
-const auth = require('../../lib/auth');
-const User = require('../../models/User');
+import bcrypt from 'bcrypt';
+import { Router, Request, Response } from 'express';
+import { body, validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
+
+import { auth } from '../../lib/auth';
+import { User } from '../../models/User';
+import { AuthRequest } from '../../types/authRequest';
+
+const router = Router();
 
 // @route POST api/users
 // @desc Register User
@@ -12,7 +15,7 @@ const User = require('../../models/User');
 router.post('/',
   body('email').isEmail().normalizeEmail().withMessage('Invalid email'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     const { email, password, confirmPW } = req.body;
 
     try {
@@ -43,7 +46,8 @@ router.post('/',
       
       const payload = {
         user: {
-          id: user._id
+          id: user._id,
+          accessLevel: user.accessLevel
         }
       };
 
@@ -57,7 +61,7 @@ router.post('/',
         }
       );
     } catch (err) {
-      res.status(500).json({ errors: 'User error' })
+      res.status(500).json({ errors: 'User error' });
     }
 });
 
@@ -66,7 +70,7 @@ router.post('/',
 // @access private
 router.patch('/', auth,
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-  async (req, res) => {
+  async (req: AuthRequest, res: Response) => {
     const { currentPW, password, confirmPW } = req.body;
     const { id } = req.user;
 
@@ -102,7 +106,7 @@ router.patch('/', auth,
 // @route DELETE api/users
 // @desc Delete User
 // @access private
-router.delete('/', auth, async (req, res) => {
+router.delete('/', auth, async (req: AuthRequest, res: Response) => {
   const { id } = req.user;
 
   try {

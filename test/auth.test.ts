@@ -1,10 +1,11 @@
-const request = require('supertest');
-const bcrypt = require('bcrypt');
-const app = require('../app');
-const User = require('../models/User');
+import bcrypt from 'bcrypt';
+import request from 'supertest';
+
+import app from '../src/app';
+import { User } from '../src/models/User';
 
 describe('GET /api/auth', () => {
-  let token, response;
+  let token: string, response: request.Response;
 
   beforeAll(async () => {
     const user = new User({
@@ -32,7 +33,7 @@ describe('GET /api/auth', () => {
   it("should return 200 OK", async () => {
     const res = await request(app).get('/api/auth')
       .set('x-auth-token', token);
-    expect(res.statusCode).toBe(200);
+    expect(res.status).toBe(200);
     expect(res.body.user).toBeDefined();
   });
 });
@@ -60,7 +61,7 @@ describe('POST /api/auth', () => {
           email: '',
           password: ''
         });
-      expect(res.statusCode).toBe(401);
+      expect(res.status).toBe(401);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -72,7 +73,7 @@ describe('POST /api/auth', () => {
           email: 'testauthuser@gmail.com',
           password: 'testing'
         });
-      expect(res.statusCode).toBe(401);
+      expect(res.status).toBe(401);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -84,7 +85,7 @@ describe('POST /api/auth', () => {
           email: 'testauth@gmail.com',
           password: 'newtest'
         });
-      expect(res.statusCode).toBe(401);
+      expect(res.status).toBe(401);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -96,7 +97,7 @@ describe('POST /api/auth', () => {
           email: 'testauth@gmail.com',
           password: 'testing'
         });
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.token).toBeDefined();
     });
   });

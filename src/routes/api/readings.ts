@@ -1,15 +1,18 @@
-const express = require('express');
-const { body, validationResult } = require('express-validator');
-const router = express.Router();
-const auth = require('../../lib/auth');
-const Manga = require('../../models/Manga');
-const Reading = require('../../models/Reading');
-const User = require('../../models/User');
+import { Router, Request, Response } from 'express';
+import { body, validationResult } from 'express-validator';
+
+import { auth } from '../../lib/auth';
+import { Manga } from '../../models/Manga';
+import { Reading } from '../../models/Reading';
+import { User } from '../../models/User';
+import { AuthRequest } from '../../types/authRequest';
+
+const router = Router();
 
 // @route GET api/readings
 // @desc Get Reading
 // @access private
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, async (req: AuthRequest, res: Response) => {
     const { id } = req.user;
 
     try {
@@ -39,9 +42,9 @@ router.get('/', auth, async (req, res) => {
 // @access private
 router.post('/', auth,
   body('title').not().isEmpty().trim().escape().withMessage('Must have a title'),
-  body('currentChapter').toInt(),
-  async (req, res) => {
-    const { title, currentChapter } = req.body;
+  body('chapter').toInt(),
+  async (req: AuthRequest, res: Response) => {
+    const { title, chapter } = req.body;
     const { id } = req.user;
 
     try {
@@ -55,7 +58,7 @@ router.post('/', auth,
         return res.status(400).json({ errors: 'Manga not found' });
       }
 
-      if (manga.chapters < currentChapter) {
+      if (manga.chapters < chapter) {
         return res.status(400).json({ errors: 'Current chapter cannot be more than number of chapters in manga' });
       }
 
@@ -67,7 +70,7 @@ router.post('/', auth,
       reading = new Reading({
         user: id,
         manga: manga._id,
-        currentChapter
+        chapter
       });
 
       await reading.save();
@@ -84,19 +87,19 @@ router.post('/', auth,
 // @desc Update Reading
 // @access private
 router.patch('/:id', auth,
-  body('currentChapter').toInt(),
-  async (req, res) => {
-    const { currentChapter } = req.body;
+  body('chapter').toInt(),
+  async (req: Request, res: Response) => {
+    const { chapter } = req.body;
     const { id } = req.params;
 
     try {
       const reading = await Reading.findById(id);
       const manga = await Manga.findById(reading.manga);
-      if (manga.chapters < currentChapter) {
+      if (manga.chapters < chapter) {
         return res.status(400).json({ errors: 'Current chapter cannot be more than number of chapters in manga' });
       }
 
-      await Reading.findByIdAndUpdate(id, { currentChapter });
+      await Reading.findByIdAndUpdate(id, { chapter });
 
       res.status(200).json({ msg: 'Reading updated' });
     } catch (err) {
@@ -107,7 +110,7 @@ router.patch('/:id', auth,
 // @route DELETE api/readings/:id
 // @desc Delete Reading
 // @access private
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth, async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
   const userID = req.user.id;
 

@@ -1,7 +1,8 @@
-const request = require('supertest');
-const bcrypt = require('bcrypt');
-const app = require('../app');
-const User = require('../models/User');
+import bcrypt from 'bcrypt';
+import request from 'supertest';
+
+import app from '../src/app';
+import { User } from '../src/models/User';
 
 describe('POST /api/users', () => {
   afterEach(async () => {
@@ -16,7 +17,7 @@ describe('POST /api/users', () => {
           password: '',
           confirmPW: ''
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -45,7 +46,7 @@ describe('POST /api/users', () => {
           confirmPW: 'testing'
         });
       
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -58,7 +59,7 @@ describe('POST /api/users', () => {
           password: 'testing',
           confirmPW: 'test'
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -71,14 +72,14 @@ describe('POST /api/users', () => {
           password: 'testing',
           confirmPW: 'testing'
         });
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.token).toBeDefined();
     });
   });
 });
 
 describe('PATCH /api/users', () => {
-  let token, response;
+  let token: string, response: request.Response;
 
   beforeAll(async () => {
     const user = new User({
@@ -119,7 +120,7 @@ describe('PATCH /api/users', () => {
           password: '',
           confirmPW: ''
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -133,7 +134,7 @@ describe('PATCH /api/users', () => {
           password: '',
           confirmPW: ''
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -147,7 +148,7 @@ describe('PATCH /api/users', () => {
           password: 'test',
           confirmPW: 'test'
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -161,7 +162,7 @@ describe('PATCH /api/users', () => {
           password: 'testing',
           confirmPW: 'test'
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -175,14 +176,14 @@ describe('PATCH /api/users', () => {
           password: 'newtest',
           confirmPW: 'newtest'
         });
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });
 });
 
 describe('DELETE /api/users', () => {
-  let token, response;
+  let token: string, response: request.Response;
 
   beforeAll(async () => {
     const user = new User({
@@ -211,7 +212,7 @@ describe('DELETE /api/users', () => {
     it("should return 200 OK", async () => {
       const res = await request(app).delete('/api/users')
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });

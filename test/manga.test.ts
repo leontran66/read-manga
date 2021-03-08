@@ -1,9 +1,10 @@
-const request = require('supertest');
-const bcrypt = require('bcrypt');
-const app = require('../app');
-const Genre = require('../models/Genre');
-const Manga = require('../models/Manga');
-const User = require('../models/User');
+import bcrypt from 'bcrypt';
+import request from 'supertest';
+
+import app from '../src/app';
+import { Genre } from '../src/models/Genre';
+import { Manga } from '../src/models/Manga';
+import { User } from '../src/models/User';
 
 describe('GET /api/manga', () => {
   afterAll(async () => {
@@ -13,7 +14,7 @@ describe('GET /api/manga', () => {
   describe('empty manga collection', () => {
     it("should return 400 Bad Request", async () => {
       const res = await request(app).get('/api/manga');
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -33,14 +34,14 @@ describe('GET /api/manga', () => {
 
     it("should return 200 OK", async () => {
       const res = await request(app).get('/api/manga');
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.manga).toBeDefined();
     });
   });
 });
 
 describe('GET /api/manga/:id', () => {
-  let genreID, mangaID;
+  let genreID: string, mangaID: string;
 
   beforeAll(async () => {
     const manga = new Manga({
@@ -71,7 +72,7 @@ describe('GET /api/manga/:id', () => {
   describe('invalid manga id', () => {
     it("should return 400 Bad Request", async () => {
       const res = await request(app).get('/api/manga/' + genreID);
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
@@ -79,7 +80,7 @@ describe('GET /api/manga/:id', () => {
   describe('get manga', () => {
     it("should return 200 OK", async () => {
       const res = await request(app).get('/api/manga/' + mangaID);
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.manga).toBeDefined();
     });
   });
@@ -122,7 +123,7 @@ describe('POST /api/manga/', () => {
   });
 
   describe('user inserts manga', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -144,13 +145,13 @@ describe('POST /api/manga/', () => {
           synopsis: 'Gold Roger, a man referred to as the "Pirate King," is set t...',
           chapters: 1006
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('inserting with no inputs', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -172,13 +173,13 @@ describe('POST /api/manga/', () => {
           synopsis: '',
           chapters: 0
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('inserting existing manga', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -200,13 +201,13 @@ describe('POST /api/manga/', () => {
           synopsis: 'Guts, a former mercenary now known as the "Black Swordsman," i...',
           chapters: 357
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('correct inputs', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -228,14 +229,14 @@ describe('POST /api/manga/', () => {
           synopsis: 'Gold Roger, a man referred to as the "Pirate King," is set t...',
           chapters: 1006
         });
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });
 });
 
 describe('PATCH /api/manga/:id', () => {
-  let mangaID;
+  let mangaID: string;
 
   beforeAll(async () => {
     const user = new User({
@@ -276,7 +277,7 @@ describe('PATCH /api/manga/:id', () => {
   });
 
   describe('user updates manga', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -298,13 +299,13 @@ describe('PATCH /api/manga/:id', () => {
           synopsis: 'Guts, a former mercenary now known as the "Black Swordsman," i...',
           chapters: 358
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('updates with no inputs', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -326,13 +327,13 @@ describe('PATCH /api/manga/:id', () => {
           synopsis: '',
           chapters: 0
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('manga not found', () => {
-    let token, response, genreID;
+    let token: string, response: request.Response, genreID: string;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -362,13 +363,13 @@ describe('PATCH /api/manga/:id', () => {
           synopsis: 'Guts, a former mercenary now known as the "Black Swordsman," i...',
           chapters: 358
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('correct inputs', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -390,14 +391,14 @@ describe('PATCH /api/manga/:id', () => {
           synopsis: 'Guts, a former mercenary now known as the "Black Swordsman," i...',
           chapters: 358
         });
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });
 });
 
 describe('DELETE /api/manga/:id', () => {
-  let mangaID;
+  let mangaID: string;
 
   beforeAll(async () => {
     const user = new User({
@@ -438,7 +439,7 @@ describe('DELETE /api/manga/:id', () => {
   });
 
   describe('user deletes manga', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -453,13 +454,13 @@ describe('DELETE /api/manga/:id', () => {
     it("should return 400 Bad Request", async () => {
       const res = await request(app).delete('/api/manga/' + mangaID)
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('manga not found', () => {
-    let token, response, genreID;
+    let token: string, response: request.Response, genreID: string;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -482,13 +483,13 @@ describe('DELETE /api/manga/:id', () => {
     it("should return 400 Bad Request", async () => {
       const res = await request(app).delete('/api/manga/' + genreID)
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('correct inputs', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -503,7 +504,7 @@ describe('DELETE /api/manga/:id', () => {
     it("should return 200 OK", async () => {
       const res = await request(app).delete('/api/manga/' + mangaID)
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });

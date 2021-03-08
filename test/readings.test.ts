@@ -1,9 +1,10 @@
-const request = require('supertest');
-const bcrypt = require('bcrypt');
-const app = require('../app');
-const Manga = require('../models/Manga');
-const Reading = require('../models/Reading');
-const User = require('../models/User');
+import bcrypt from 'bcrypt';
+import request from 'supertest';
+
+import app from '../src/app';
+import { Manga } from '../src/models/Manga';
+import { Reading } from '../src/models/Reading';
+import { User } from '../src/models/User';
 
 describe('GET /api/readings', () => {
   beforeAll(async () => {
@@ -29,7 +30,7 @@ describe('GET /api/readings', () => {
     const reading = new Reading({
       user: user._id,
       manga: manga._id,
-      currentChapter: 350
+      chapter: 350
     });
 
     await reading.save();
@@ -42,7 +43,7 @@ describe('GET /api/readings', () => {
   });
 
   describe('get user readings', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -57,14 +58,14 @@ describe('GET /api/readings', () => {
     it("should return 200 OK", async () => {
       const res = await request(app).get('/api/readings')
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.user).toBeDefined();
     });
   });
 });
 
 describe('POST /api/readings', () => {
-  let userID, mangaID;
+  let userID: string, mangaID: string;
 
   beforeAll(async () => {
     const user = new User({
@@ -101,7 +102,7 @@ describe('POST /api/readings', () => {
   });
 
   describe('invalid input', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -118,15 +119,15 @@ describe('POST /api/readings', () => {
         .set('x-auth-token', token)
         .send({
           title: '',
-          currentChapter: 0.5
+          chapter: 0.5
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('non-existent manga', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -143,15 +144,15 @@ describe('POST /api/readings', () => {
         .set('x-auth-token', token)
         .send({
           title: 'One Piece',
-          currentChapter: 1005
+          chapter: 1005
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('current chapter greater than manga chapters', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -168,21 +169,21 @@ describe('POST /api/readings', () => {
         .set('x-auth-token', token)
         .send({
           title: 'Berserk',
-          currentChapter: 400
+          chapter: 400
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('reading for same title already exists', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       const reading = new Reading({
         user: userID,
         manga: mangaID,
-        currentChapter: 350
+        chapter: 350
       });
 
       await reading.save();
@@ -201,15 +202,15 @@ describe('POST /api/readings', () => {
         .set('x-auth-token', token)
         .send({
           title: 'Berserk',
-          currentChapter: 350
+          chapter: 350
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('correct input', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -226,16 +227,16 @@ describe('POST /api/readings', () => {
         .set('x-auth-token', token)
         .send({
           title: 'Berserk',
-          currentChapter: 350
+          chapter: 350
         });
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });
 });
 
 describe('PATCH /api/readings/:id', () => {
-  let readingID;
+  let readingID: string;
 
   beforeAll(async () => {
     const user = new User({
@@ -260,7 +261,7 @@ describe('PATCH /api/readings/:id', () => {
     const reading = new Reading({
       user: user._id,
       manga: manga._id,
-      currentChapter: 350
+      chapter: 350
     });
 
     await reading.save();
@@ -275,7 +276,7 @@ describe('PATCH /api/readings/:id', () => {
   });
 
   describe('current chapter greater than manga chapters', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -291,15 +292,15 @@ describe('PATCH /api/readings/:id', () => {
       const res = await request(app).patch('/api/readings/' + readingID)
         .set('x-auth-token', token)
         .send({
-          currentChapter: 400
+          chapter: 400
         });
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('correct input', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -315,16 +316,16 @@ describe('PATCH /api/readings/:id', () => {
       const res = await request(app).patch('/api/readings/' + readingID)
         .set('x-auth-token', token)
         .send({
-          currentChapter: 357
+          chapter: 357
         });
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });
 });
 
 describe('DELETE /api/readings/:id', () => {
-  let readingID, mangaID;
+  let readingID: string, mangaID: string;
 
   beforeAll(async () => {
     const admin = new User({
@@ -358,7 +359,7 @@ describe('DELETE /api/readings/:id', () => {
     const reading = new Reading({
       user: user._id,
       manga: manga._id,
-      currentChapter: 350
+      chapter: 350
     });
 
     user.reading = [reading._id];
@@ -378,7 +379,7 @@ describe('DELETE /api/readings/:id', () => {
   });
 
   describe('non-existent reading', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -393,13 +394,13 @@ describe('DELETE /api/readings/:id', () => {
     it("should return 400 Bad Request", async () => {
       const res = await request(app).delete('/api/readings/' + mangaID)
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('another users reading', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -414,13 +415,13 @@ describe('DELETE /api/readings/:id', () => {
     it("should return 400 Bad Request", async () => {
       const res = await request(app).delete('/api/readings/' + readingID)
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(400);
+      expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
     });
   });
 
   describe('correct input', () => {
-    let token, response;
+    let token: string, response: request.Response;
 
     beforeAll(async () => {
       response = await request(app).post('/api/auth')
@@ -435,7 +436,7 @@ describe('DELETE /api/readings/:id', () => {
     it("should return 200 OK", async () => {
       const res = await request(app).delete('/api/readings/' + readingID)
         .set('x-auth-token', token);
-      expect(res.statusCode).toBe(200);
+      expect(res.status).toBe(200);
       expect(res.body.msg).toBeDefined();
     });
   });

@@ -1,14 +1,16 @@
-const express = require('express');
-const { body, validationResult } = require('express-validator');
-const router = express.Router();
-const auth = require('../../lib/auth');
-const Manga = require('../../models/Manga');
-const User = require('../../models/User');
+import { Router, Request, Response } from 'express';
+import { body, validationResult } from 'express-validator';
+
+import { auth } from '../../lib/auth';
+import { Manga } from '../../models/Manga';
+import { AuthRequest } from '../../types/authRequest';
+
+const router = Router();
 
 // @route GET api/manga
 // @desc Get All Manga
 // @access public
-router.get('/', async (req, res) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
     const manga = await Manga.find({}).populate('genre');
     if (!manga.length) {
@@ -24,7 +26,7 @@ router.get('/', async (req, res) => {
 // @route GET api/manga/:id
 // @desc Get All Manga
 // @access public
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -47,13 +49,12 @@ router.post('/', auth,
   body('author').not().isEmpty().trim().escape().withMessage('Must have an author'),
   body('synopsis').trim().escape(),
   body('chapters').toInt(),
-  async (req, res) => {
+  async (req: AuthRequest, res: Response) => {
     const { title, author, synopsis, chapters } = req.body;
-    const { id } = req.user;
+    const { accessLevel } = req.user;
 
     try {
-      const user = await User.findById(id);
-      if (user.accessLevel !== 'admin') {
+      if (accessLevel !== 'admin') {
         return res.status(400).json({ errors: 'Authorization denied' });
       }
 
@@ -90,14 +91,13 @@ router.patch('/:id', auth,
   body('author').not().isEmpty().trim().escape().withMessage('Must have an author'),
   body('synopsis').trim().escape(),
   body('chapters').toInt(),
-  async (req, res) => {
+  async (req: AuthRequest, res: Response) => {
     const { title, author, genres, synopsis, chapters } = req.body;
     const { id } = req.params;
-    const userID = req.user.id;
+    const accessLevel = req.user.accessLevel;
 
     try {
-      const user = await User.findById(userID);
-      if (user.accessLevel !== 'admin') {
+      if (accessLevel !== 'admin') {
         return res.status(400).json({ errors: 'Authorization denied' });
       }
 
@@ -128,13 +128,12 @@ router.patch('/:id', auth,
 // @route DELETE api/manga/:id
 // @desc Delete Manga
 // @access private
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth, async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
-  const userID = req.user.id;
+  const accessLevel = req.user.accessLevel;
 
   try {
-    const user = await User.findById(userID);
-    if (user.accessLevel !== 'admin') {
+    if (accessLevel !== 'admin') {
       return res.status(400).json({ errors: 'Authorization denied' });
     }
     
