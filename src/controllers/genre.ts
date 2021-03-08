@@ -1,30 +1,26 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-
-import { auth } from '../../lib/auth';
-import { Genre } from '../../models/Genre';
-import { Manga } from '../../models/Manga';
-import { AuthRequest } from '../../types/authRequest';
-
-const router = Router();
+import { Genre } from '../models/Genre';
+import { Manga } from '../models/Manga';
+import { AuthRequest } from '../types/authRequest';
 
 // @route POST api/genres
 // @desc Create Genre
 // @access private
-router.post('/', auth,
-  body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty'),
-  async (req: AuthRequest, res: Response) => {
+export const createGenre = async (req: AuthRequest, res: Response) => {
     const { name } = req.body;
     const { accessLevel } = req.user;
 
     try {
-      if (accessLevel !== 'admin') {
-        return res.status(401).json({ errors: 'Authorization denied' });
-      }
+      await body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty').run(req);
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
+      }
+
+      if (accessLevel !== 'admin') {
+        return res.status(401).json({ errors: 'Authorization denied' });
       }
 
       let genre = await Genre.findOne({ name });
@@ -40,26 +36,26 @@ router.post('/', auth,
     } catch (err) {
       res.status(500).json({ errors: 'Genre error' });
     }
-});
+};
 
 // @route PATCH api/genres/:id
 // @desc Update Genre
 // @access private
-router.patch('/:id', auth,
-  body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty'),
-  async (req: AuthRequest, res: Response) => {
+export const updateGenre = async (req: AuthRequest, res: Response) => {
     const { name } = req.body;
     const { id } = req.params;
     const accessLevel = req.user.accessLevel;
 
     try {
-      if (accessLevel !== 'admin') {
-        return res.status(401).json({ errors: 'Authorization denied' });
-      }
+      await body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty').run(req);
 
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
+      }
+
+      if (accessLevel !== 'admin') {
+        return res.status(401).json({ errors: 'Authorization denied' });
       }
 
       const genre = await Genre.findById(id);
@@ -73,12 +69,12 @@ router.patch('/:id', auth,
     } catch (err) {
       res.status(500).json({ errors: 'Genre error' });
     }
-});
+};
 
 // @route DELETE api/genres
 // @desc Delete Genre
 // @access private
-router.delete('/:id', auth, async (req: AuthRequest, res: Response) => {
+export const deleteGenre = async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
   const accessLevel = req.user.accessLevel;
 
@@ -107,6 +103,4 @@ router.delete('/:id', auth, async (req: AuthRequest, res: Response) => {
   } catch (err) {
     res.status(500).json({ errors: 'Genre error' });
   }
-});
-
-module.exports = router;
+};

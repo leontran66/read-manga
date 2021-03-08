@@ -1,24 +1,20 @@
 import bcrypt from 'bcrypt';
-import { Router, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
-
-import { auth } from '../../lib/auth';
-import { User } from '../../models/User';
-import { AuthRequest } from '../../types/authRequest';
-
-const router = Router();
+import { User } from '../models/User';
+import { AuthRequest } from '../types/authRequest';
 
 // @route POST api/users
 // @desc Register User
 // @access public
-router.post('/',
-  body('email').isEmail().normalizeEmail().withMessage('Invalid email'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-  async (req: Request, res: Response) => {
+export const registerUser = async (req: Request, res: Response) => {
     const { email, password, confirmPW } = req.body;
 
     try {
+      await body('email').isEmail().normalizeEmail().withMessage('Invalid email').run(req);
+      await body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long').run(req);
+
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -63,18 +59,18 @@ router.post('/',
     } catch (err) {
       res.status(500).json({ errors: 'User error' });
     }
-});
+};
 
 // @route PATCH api/users
 // @desc Update User
 // @access private
-router.patch('/', auth,
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-  async (req: AuthRequest, res: Response) => {
+export const updateUser = async (req: AuthRequest, res: Response) => {
     const { currentPW, password, confirmPW } = req.body;
     const { id } = req.user;
 
     try {
+      await body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long').run(req);
+
       // check if password is correct
       const user = await User.findById(id).select('-email -accessLevel');
       const isMatch = await bcrypt.compare(currentPW, user.password);
@@ -101,12 +97,12 @@ router.patch('/', auth,
     } catch (err) {
       res.status(500).json({ errors: 'User error' });
     }
-});
+};
 
 // @route DELETE api/users
 // @desc Delete User
 // @access private
-router.delete('/', auth, async (req: AuthRequest, res: Response) => {
+export const deleteUser = async (req: AuthRequest, res: Response) => {
   const { id } = req.user;
 
   try {
@@ -116,6 +112,4 @@ router.delete('/', auth, async (req: AuthRequest, res: Response) => {
   } catch (err) {
     res.status(500).json({ error: 'User error' });
   }
-});
-
-module.exports = router;
+};

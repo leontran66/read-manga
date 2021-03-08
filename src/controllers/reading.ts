@@ -1,18 +1,14 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-
-import { auth } from '../../lib/auth';
-import { Manga } from '../../models/Manga';
-import { Reading } from '../../models/Reading';
-import { User } from '../../models/User';
-import { AuthRequest } from '../../types/authRequest';
-
-const router = Router();
+import { Manga } from '../models/Manga';
+import { Reading } from '../models/Reading';
+import { User } from '../models/User';
+import { AuthRequest } from '../types/authRequest';
 
 // @route GET api/readings
-// @desc Get Reading
+// @desc Get Readings
 // @access private
-router.get('/', auth, async (req: AuthRequest, res: Response) => {
+export const getReadings = async (req: AuthRequest, res: Response) => {
     const { id } = req.user;
 
     try {
@@ -35,19 +31,19 @@ router.get('/', auth, async (req: AuthRequest, res: Response) => {
     } catch (err) {
       res.status(500).json({ error: 'Reading error' });
     }
-});
+};
 
 // @route POST api/readings
 // @desc Create Reading
 // @access private
-router.post('/', auth,
-  body('title').not().isEmpty().trim().escape().withMessage('Must have a title'),
-  body('chapter').toInt(),
-  async (req: AuthRequest, res: Response) => {
+export const createReading = async (req: AuthRequest, res: Response) => {
     const { title, chapter } = req.body;
     const { id } = req.user;
 
     try {
+      await body('title').not().isEmpty().trim().escape().withMessage('Must have a title').run(req);
+      await body('chapter').isNumeric().withMessage('Chapter must be a number').run(req);
+
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -81,18 +77,18 @@ router.post('/', auth,
     } catch (err) {
       res.status(500).json({ errors: 'Reading error' });
     }
-});
+};
 
 // @route PATCH api/readings/:id
 // @desc Update Reading
 // @access private
-router.patch('/:id', auth,
-  body('chapter').toInt(),
-  async (req: Request, res: Response) => {
+export const updateReading = async (req: Request, res: Response) => {
     const { chapter } = req.body;
     const { id } = req.params;
 
     try {
+      await body('chapter').isNumeric().withMessage('Chapter must be a number').run(req);
+
       const reading = await Reading.findById(id);
       const manga = await Manga.findById(reading.manga);
       if (manga.chapters < chapter) {
@@ -105,12 +101,12 @@ router.patch('/:id', auth,
     } catch (err) {
       res.status(500).json({ errors: 'Reading error' });
     }
-});
+};
 
 // @route DELETE api/readings/:id
 // @desc Delete Reading
 // @access private
-router.delete('/:id', auth, async (req: AuthRequest, res: Response) => {
+export const deleteReading = async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
   const userID = req.user.id;
 
@@ -132,6 +128,4 @@ router.delete('/:id', auth, async (req: AuthRequest, res: Response) => {
   } catch (err) {
     res.status(500).json({ errors: 'Reading error' });
   }
-});
-
-module.exports = router;
+};

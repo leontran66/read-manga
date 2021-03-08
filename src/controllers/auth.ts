@@ -1,17 +1,14 @@
 import bcrypt from 'bcrypt';
-import { Router, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { User } from '../models/User';
+import { AuthRequest } from '../types/authRequest';
 
-import { auth } from '../../lib/auth';
-import { User } from '../../models/User';
-import { AuthRequest } from '../../types/authRequest';
-
-const router = Router();
 
 // @route GET api/auth
 // @desc Get Current User
 // @access private
-router.get('/', auth, async (req: AuthRequest, res: Response) => {
+export const getUser = async (req: AuthRequest, res: Response) => {
   const { id } = req.user;
 
   try {
@@ -21,12 +18,12 @@ router.get('/', auth, async (req: AuthRequest, res: Response) => {
   } catch (err) {
     res.status(500).json({ errors: 'Authentication error' });
   }
-});
+};
 
 // @route POST api/auth
 // @desc Login User
 // @access public
-router.post('/', async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
@@ -61,6 +58,4 @@ router.post('/', async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500).json({ errors: err.message });
   }
-});
-
-module.exports = router;
+};

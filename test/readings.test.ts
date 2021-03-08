@@ -119,7 +119,7 @@ describe('POST /api/readings', () => {
         .set('x-auth-token', token)
         .send({
           title: '',
-          chapter: 0.5
+          chapter: 'test'
         });
       expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
