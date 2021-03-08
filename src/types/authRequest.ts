@@ -6,3 +6,10 @@ export interface AuthRequest extends Request {
     accessLevel: string;
   }
 };
+
+export interface VerifiedUser {
+  user: {
+    id: string;
+    accessLevel: string;
+  }
+}

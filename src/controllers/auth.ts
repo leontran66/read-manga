@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
 import { AuthRequest } from '../types/authRequest';
 
-
 // @route GET api/auth
 // @desc Get Current User
 // @access private

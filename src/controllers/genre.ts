@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { Genre } from '../models/Genre';
 import { Manga } from '../models/Manga';

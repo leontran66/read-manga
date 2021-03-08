@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { Manga } from '../models/Manga';
 import { Reading } from '../models/Reading';
@@ -82,7 +82,7 @@ export const createReading = async (req: AuthRequest, res: Response) => {
 // @route PATCH api/readings/:id
 // @desc Update Reading
 // @access private
-export const updateReading = async (req: Request, res: Response) => {
+export const updateReading = async (req: AuthRequest, res: Response) => {
     const { chapter } = req.body;
     const { id } = req.params;
 
