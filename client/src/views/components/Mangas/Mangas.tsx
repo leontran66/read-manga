@@ -11,7 +11,7 @@ const Mangas = () => {
     <div className='container-fluid'>
       
       <div className='mangas'>
-        <a href='/mangas/create' className='btn btn-primary mb-3'>Add Manga</a>
+        <a href='/mangas/create' className='btn btn-primary mb-3'>Add New Manga</a>
         <Manga />
         <Manga />
         <Manga />

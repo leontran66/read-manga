@@ -14,6 +14,7 @@ const Profile = () => {
         </ul>
         <div className="tab-content profile-tabs" id="pills-tabContent">
           <div className="tab-pane fade show active" id="pills-reading" role="tabpanel" aria-labelledby="pills-reading-tab">
+            <a href='/readings/new' className='btn btn-primary mb-3'>Add New Reading</a>
             <div className='table-responsive'>
               <table className='table table-bordered align-middle'>
                 <thead className='table-dark'>
