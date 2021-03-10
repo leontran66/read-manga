@@ -1,0 +1,6 @@
+{
+  "name": "loginform",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "./LoginForm.tsx"
+}

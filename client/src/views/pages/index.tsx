@@ -1,14 +1,11 @@
 import { Fragment } from 'react';
 
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import Landing from '../components/Landing';
 
 const IndexLayout = () => {
   return (
     <Fragment>
-      <Header />
-      Index Page
-      <Footer />
+      <Landing />
     </Fragment>
   );
 };

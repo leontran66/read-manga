@@ -1,0 +1,10 @@
+.mangas {
+  margin: 0 auto;
+  width: 50%;
+  min-height: 84.5vh;
+}
+
+.manga {
+  border-radius: 1em;
+  background-color: #dddddd;
+}

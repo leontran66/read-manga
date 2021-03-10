@@ -1,14 +1,11 @@
 import { Fragment } from 'react';
 
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import Profile from '../components/Profile';
 
 const ProfileLayout = () => {
   return (
     <Fragment>
-      <Header />
-      Profile Page
-      <Footer />
+      <Profile />
     </Fragment>
   );
 };

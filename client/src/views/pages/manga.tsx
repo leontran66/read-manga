@@ -1,14 +1,11 @@
 import { Fragment } from 'react';
 
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import Mangas from '../components/Mangas';
 
 const MangaLayout = () => {
   return (
     <Fragment>
-      <Header />
-      Manga Page
-      <Footer />
+      <Mangas />
     </Fragment>
   );
 };
