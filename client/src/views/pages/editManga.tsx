@@ -1,9 +1,11 @@
 import { Fragment } from 'react';
 
+import MangaForm from '../components/MangaForm';
+
 const EditMangaLayout = () => {
   return (
     <Fragment>
-      Edit Manga Form
+      <MangaForm />
     </Fragment>
   );
 };

@@ -1,13 +1,13 @@
 import { Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import createGenre from '../pages/createGenre';
 import createManga from '../pages/createManga';
-import editGenre from '../pages/editGenre';
 import editManga from '../pages/editManga';
 import editProfile from '../pages/editProfile';
+import genres from '../pages/genres';
 import login from '../pages/login';
 import manga from '../pages/manga';
+import mangas from '../pages/mangas';
 import profile from '../pages/profile';
 import register from '../pages/register';
 
@@ -26,11 +26,11 @@ const App = () => {
       <Switch>
         <Route exact path='/' component={defaultRoute} />
         <Route exact path='/index.html' component={defaultRoute} />
-        <Route exact path='/genres/new' component={createGenre} />
-        <Route exact path='/genres/:id/edit' component={editGenre} />
+        <Route exact path='/genres' component={genres} />
         <Route exact path='/login' component={login} />
-        <Route exact path='/manga' component={manga} />
+        <Route exact path='/manga' component={mangas} />
         <Route exact path='/manga/new' component={createManga} />
+        <Route exact path='/manga/:id' component={manga} />
         <Route exact path='/manga/:id/edit' component={editManga} />
         <Route exact path='/profile' component={profile} />
         <Route exact path='/profile/edit' component={editProfile} />

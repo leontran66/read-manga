@@ -1,0 +1,6 @@
+{
+  "name": "creategenreform",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "./CreateGenreForm.tsx"
+}

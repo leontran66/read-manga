@@ -11,6 +11,9 @@ const Header = () => {
             <li className='nav-item'>
               <a className='nav-link' href='/manga'>Manga</a>
             </li>
+            <li className='nav-item'>
+              <a className='nav-link' href='/genres'>Genres</a>
+            </li>
           </ul>
           <ul className='navbar-nav mr-auto mb-2 mb-lg-0'>
             <li className='nav-item'>

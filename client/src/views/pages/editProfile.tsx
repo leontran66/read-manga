@@ -1,9 +1,11 @@
 import { Fragment } from 'react';
 
+import EditProfileForm from '../components/EditProfileForm';
+
 const EditProfileLayout = () => {
   return (
     <Fragment>
-      Edit Profile Form
+      <EditProfileForm />
     </Fragment>
   );
 };

@@ -60,9 +60,9 @@ const Profile = () => {
                     </tbody>
                   </table>
                 </p>
-                <a href="/users/edit" className="btn btn-primary">Update Password</a>
-                <button type="button" className='btn btn-danger mx-2' data-bs-toggle="modal" data-bs-target="#profileDelete">Delete Account</button>
-                <div className="modal fade" id="profileDelete" tabIndex={-1} aria-labelledby="profileDeleteLabel" aria-hidden="true">
+                <a href="/profile/edit" className="btn btn-primary">Update Password</a>
+                <button type="button" className='btn btn-danger mx-2' data-bs-toggle="modal" data-bs-target="#deleteUser">Delete Account</button>
+                <div className="modal fade" id="deleteUser" tabIndex={-1} aria-labelledby="deleteUserLabel" aria-hidden="true">
                   <div className="modal-dialog modal-fullscreen-sm-down">
                     <div className='modal-content'>
                       <div className='modal-header'>
@@ -73,8 +73,8 @@ const Profile = () => {
                         <p>Are you sure you wish to delete your account? This action is irreversible.</p>
                       </div>
                       <div className='modal-footer'>
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <a href='/users/delete' className='btn btn-danger'>Delete Account</a>
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                       </div>
                     </div>
                   </div>

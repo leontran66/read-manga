@@ -1,11 +1,11 @@
 import { Fragment } from 'react';
 
-import Mangas from '../components/Mangas';
+import Manga from '../components/Manga';
 
 const MangaLayout = () => {
   return (
     <Fragment>
-      <Mangas />
+      <Manga />
     </Fragment>
   );
 };
