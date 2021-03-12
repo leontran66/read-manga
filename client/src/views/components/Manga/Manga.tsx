@@ -5,7 +5,7 @@ const Manga = () => {
     <div className='manga mb-3 p-4'>
       <h3 className='d-block'>
         Berserk
-        <a href='/manga/id/edit' className='ms-2 btn btn-warning'>Edit</a>
+        <a href='/manga/id/edit' className='ms-2 btn btn-primary'>Edit</a>
         <a href='/manga/id/delete' className='ms-2 btn btn-danger'>Delete</a>
         <div className='float-end'><button className='btn btn-primary'>Add To Reading List</button></div>
       </h3>

@@ -1,5 +1,8 @@
 import './Profile.css';
 
+import CreateReadingForm from '../CreateReadingForm';
+import EditReadingForm from '../EditReadingForm';
+
 const Profile = () => {
   return (
     <div className='container-fluid'>
@@ -14,7 +17,7 @@ const Profile = () => {
         </ul>
         <div className="tab-content profile-tabs" id="pills-tabContent">
           <div className="tab-pane fade show active" id="pills-reading" role="tabpanel" aria-labelledby="pills-reading-tab">
-            <a href='/readings/new' className='btn btn-primary mb-3'>Add New Reading</a>
+            <CreateReadingForm />
             <div className='table-responsive'>
               <table className='table table-bordered align-middle'>
                 <thead className='table-dark'>
@@ -37,7 +40,7 @@ const Profile = () => {
                   <tr>
                     <td className='profile-manga'><a href='/mangas/id'>Berserk</a></td>
                     <td className='profile-chapter'>357</td>
-                    <td className='profile-actions'><a href='/mangas/id/edit' className='btn btn-sm btn-primary'>Edit</a>{' '}<a href='/mangas/id/delete' className='btn btn-sm btn-danger'>Delete</a></td>
+                    <td className='profile-actions'><EditReadingForm />{' '}<a href='/mangas/id/delete' className='btn btn-sm btn-danger'>Delete</a></td>
                   </tr>
                 </tbody>
               </table>
@@ -46,7 +49,7 @@ const Profile = () => {
           <div className="tab-pane fade" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab">
             <div className="profile-settings card">
               <div className="card-body">
-                <p className="card-text">
+                <div className="card-text">
                   <table className='table table-borderless'>
                     <tbody>
                       <tr>
@@ -59,7 +62,7 @@ const Profile = () => {
                       </tr>
                     </tbody>
                   </table>
-                </p>
+                </div>
                 <a href="/profile/edit" className="btn btn-primary">Update Password</a>
                 <button type="button" className='btn btn-danger mx-2' data-bs-toggle="modal" data-bs-target="#deleteUser">Delete Account</button>
                 <div className="modal fade" id="deleteUser" tabIndex={-1} aria-labelledby="deleteUserLabel" aria-hidden="true">

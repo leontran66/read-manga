@@ -12,13 +12,15 @@ const RegisterForm = () => {
           </div>
           <div className='mb-3'>
             <label htmlFor='password' className='form-label'>Password</label>
-            <input type='password' className='form-control' id='password' name='password' />
+            <input type='password' className='form-control' id='password' name='password' autoComplete='on' />
           </div>
           <div className='mb-3'>
             <label htmlFor='confirmPW' className='form-label'>Confirm Password</label>
-            <input type='password' className='form-control' id='confirmPW' name='confirmPW' />
+            <input type='password' className='form-control' id='confirmPW' name='confirmPW' autoComplete='on' />
           </div>
-          <button type='submit' className='btn btn-primary'>Register</button>
+          <a href='/login'>Already have an account? Login</a>
+          <br />
+          <button type='submit' className='mt-3 btn btn-primary'>Register</button>
         </form>
       </div>
     </div>

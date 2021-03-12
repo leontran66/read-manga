@@ -2,11 +2,11 @@ import { Fragment } from 'react';
 
 import './CreateGenreForm.css';
 
-const GenreForm = () => {
+const CreateGenreForm = () => {
   return (
     <Fragment>
       <button type="button" className='btn btn-primary mb-3' data-bs-toggle="modal" data-bs-target="#createGenreForm">Add New Genre</button>
-      <div className="createGenreForm modal fade" id="createGenreForm" tabIndex={-1} aria-labelledby="createGenreFormLabel" aria-hidden="true">
+      <div className="create-genre-form modal fade" id="createGenreForm" tabIndex={-1} aria-labelledby="createGenreFormLabel" aria-hidden="true">
         <div className="modal-dialog modal-fullscreen-sm-down">
           <div className='modal-content'>
             <form method='POST' action='/genres'>
@@ -30,4 +30,4 @@ const GenreForm = () => {
   );
 };
 
-export default GenreForm;
+export default CreateGenreForm;

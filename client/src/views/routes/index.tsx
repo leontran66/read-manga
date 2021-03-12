@@ -11,8 +11,6 @@ import mangas from '../pages/mangas';
 import profile from '../pages/profile';
 import register from '../pages/register';
 
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import NotFound from '../components/NotFound';
 
 import defaultRoute from './default';
@@ -22,7 +20,6 @@ import './index.css';
 const App = () => {
   return (
     <Fragment>
-      <Header />
       <Switch>
         <Route exact path='/' component={defaultRoute} />
         <Route exact path='/index.html' component={defaultRoute} />
@@ -37,7 +34,6 @@ const App = () => {
         <Route exact path='/register' component={register} />
         <Route component={NotFound} />
       </Switch>
-      <Footer />
     </Fragment>
   );
 };
