@@ -10,8 +10,7 @@ export type UserDocument = mongoose.Document & {
 const userSchema = new Schema<UserDocument>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  accessLevel: { type: String, required: true },
-  reading: [{ type: Schema.Types.ObjectId, ref: 'Reading' }]
+  accessLevel: { type: String, required: true }
 });
 
 export const User = mongoose.model<UserDocument>('User', userSchema);

@@ -9,8 +9,9 @@ import { AuthRequest } from '../types/authRequest';
 // @access public
 export const getAllManga = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const manga = await Manga.find({}).populate('genre');
-    if (!manga.length) {
+    // check if manga has any documents
+    const manga = await Manga.find({});
+    if (manga.length <= 0) {
       return res.status(400).json({ errors: 'Couldn\'t find any manga' });
     }
 
@@ -21,13 +22,14 @@ export const getAllManga = async (req: Request, res: Response): Promise<Response
 };
 
 // @route GET api/manga/:id
-// @desc Get All Manga
+// @desc Get Manga
 // @access public
 export const getManga = async (req: Request, res: Response): Promise<Response> => {
   const { id } = req.params;
 
   try {
-    const manga = await Manga.findById(id).populate('genre');
+    // check if manga exists
+    const manga = await Manga.findById(id);
     if (!manga) {
       return res.status(400).json({ errors: 'Manga not found' });
     }
@@ -51,32 +53,41 @@ export const createManga = async (req: AuthRequest, res: Response): Promise<Resp
       await body('synopsis').trim().escape().run(req);
       await body('chapters').isNumeric().withMessage('Chapters must be a number').run(req);
 
+      // check if input is valid
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
 
+      // check if user is admin
       if (accessLevel !== 'admin') {
-        return res.status(400).json({ errors: 'Authorization denied' });
+        return res.status(401).json({ errors: 'Authorization denied' });
       }
 
-      let manga = await Manga.findOne({ title, author });
+      // check if manga already exists
+      let manga = await Manga.findOne({ title: title.toLowerCase(), author: author.toLowerCase() });
       if (manga) {
         return res.status(400).json({ errors: 'Manga already exists' });
       }
 
       manga = new Manga({
-        title,
-        author,
+        title: title.toLowerCase(),
+        author: author.toLowerCase(),
         synopsis,
         chapters
       });
 
       await manga.save();
 
+      if (genres.length > 0) {
+        genres.forEach(async (genre: string) => {
+          await Genre.findOneAndUpdate({ name: genre.toLowerCase() }, { $push: { manga: manga._id } });
+        });
+      }
+
       return res.status(200).json({ msg: 'Manga created' });
     } catch (err) {
-      return res.status(500).json({ errors: 'Manga error' });
+      return res.status(500).json({ errors: err.message });
     }
 };
 
@@ -94,28 +105,37 @@ export const updateManga = async (req: AuthRequest, res: Response): Promise<Resp
       await body('synopsis').trim().escape().run(req);
       await body('chapters').isNumeric().withMessage('Chapters must be a number').run(req);
 
+      // check if input is valid
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
 
+      // check if user is admin
       if (accessLevel !== 'admin') {
-        return res.status(400).json({ errors: 'Authorization denied' });
+        return res.status(401).json({ errors: 'Authorization denied' });
       }
 
-
+      // check if manga exists
       const manga = await Manga.findById(id);
       if (!manga) {
         return res.status(400).json({ errors: 'Manga not found' });
       }
 
       await Manga.findByIdAndUpdate(id, {
-        title,
-        author,
-        genres,
+        title: title.toLowerCase(),
+        author: author.toLowerCase(),
         synopsis,
         chapters
       });
+
+      await Genre.updateMany({ manga: { $in: [id] } }, { $pull : { manga: id } });
+
+      if (genres.length > 0) {
+        genres.forEach(async (genre: string) => {
+          await Genre.updateMany({ name: genre.toLowerCase() }, { $push: { manga: id } });
+        });
+      }
 
       return res.status(200).json({ msg: 'Manga updated' });
     } catch (err) {
@@ -131,16 +151,20 @@ export const deleteManga = async (req: AuthRequest, res: Response): Promise<Resp
   const accessLevel = req.user.accessLevel;
 
   try {
+    // check if user is admin
     if (accessLevel !== 'admin') {
-      return res.status(400).json({ errors: 'Authorization denied' });
+      return res.status(401).json({ errors: 'Authorization denied' });
     }
     
+    // check if manga exists
     const manga = await Manga.findById(id);
     if (!manga) {
       return res.status(400).json({ errors: 'Manga not found' });
     }
 
     await Manga.findByIdAndDelete(id);
+
+    await Genre.updateMany({ manga: { $in: [id] } }, { $pull: { manga: id } });
 
     return res.status(200).json({ msg: 'Manga deleted' });
   } catch (err) {

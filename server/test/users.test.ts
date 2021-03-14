@@ -4,216 +4,177 @@ import request from 'supertest';
 import app from '../src/app';
 import { User } from '../src/models/User';
 
-describe('POST /api/users', () => {
-  afterEach(async () => {
+describe('Test the user route', () => {
+  beforeAll(async () => {
+    const user = new User({
+      email: 'existinguser@gmail.com',
+      password: await bcrypt.hash('testing', 12),
+      accessLevel: 'user'
+    });
+
+    await user.save();
+  });
+
+  afterAll(async () => {
     await User.deleteMany({}).exec();
   });
 
-  describe('no input', () => {
-    it("should return 400 Bad Request", async () => {
+  describe('POST /api/users', () => {
+    test('no input should return 400 Bad Request', async () => {
+      const res = await request(app).post('/api/users');
+      expect(res.status).toBe(400);
+      expect(res.body.errors[0].msg).toBe('Invalid email');
+      expect(res.body.errors[1].msg).toBe('Password must be at least 6 characters long');
+    });
+
+    test('existing user should return 400 Bad Request', async() => {
       const res = await request(app).post('/api/users')
         .send({
-          email: '',
-          password: '',
-          confirmPW: ''
+          email: 'existinguser@gmail.com',
+          password: 'testing',
+          confirmPW: 'testing'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBeDefined();
+      expect(res.body.errors).toBe('User already exists');
+    });
+
+    test('mismatched passwords should return 400 Bad Request', async() => {
+      const res = await request(app).post('/api/users')
+        .send({
+          email: 'newuser@gmail.com',
+          password: 'testing',
+          confirmPW: 'testingg'
+        });
+      expect(res.status).toBe(400);
+      expect(res.body.errors).toBe('Passwords do not match');
+    });
+
+    test('correct input should return 200 OK', async() => {
+      const res = await request(app).post('/api/users')
+        .send({
+          email: 'newuser@gmail.com',
+          password: 'testing',
+          confirmPW: 'testing'
+        });
+      const newuser = await User.findOne({ email: 'newuser@gmail.com' });
+      expect(res.status).toBe(200);
+      expect(res.body.token).toBeDefined();
+      expect(newuser.email).toBe('newuser@gmail.com');
     });
   });
-  
-  describe('existing user', () => {
-    beforeAll(async () => {
-      const user = new User({
-        email: 'testuser@gmail.com',
-        password: await bcrypt.hash('testing', 2),
-        accessLevel: 'user',
-        reading: []
-      });
 
-      await user.save();
+  describe('PATCH /api/users', () => {
+    let token: string, response: request.Response;
+
+    beforeAll(async () => {
+      response = await request(app).post('/api/auth')
+        .send({
+          email: 'existinguser@gmail.com',
+          password: 'testing'
+        });
+      
+      token = response.body.token;
     });
 
     afterAll(async () => {
-      await User.deleteMany({}).exec();
+      await User.findOneAndUpdate({ email: 'existinguser@gmail.com' }, { password: await bcrypt.hash('testing', 12) }).exec();
     });
 
-    it("should return 400 Bad Request", async () => {
-      const res = await request(app).post('/api/users')
+    test('unauthorized user should return 401 Unauthorized', async () => {
+      const res = await request(app).patch('/api/users')
         .send({
-          email: 'testuser@gmail.com',
+          currentPW: 'testing',
+          password: 'testingg',
+          confirmPW: 'testingg'
+        });
+      expect(res.status).toBe(401);
+      expect(res.body.errors).toBe('Authorization denied');
+    });
+
+    test('no input should return 400 Bad Request', async () => {
+      const res = await request(app).patch('/api/users')
+        .set('x-auth-token', token);
+      expect(res.status).toBe(400);
+      expect(res.body.errors[0].msg).toBe('Password must be at least 6 characters long');
+    });
+    
+    test('incorrect password should return 400 Bad Request', async () => {
+      const res = await request(app).patch('/api/users')
+        .set('x-auth-token', token)
+        .send({
+          currentPW: 'testingg',
+          password: 'testinggg',
+          confirmPW: 'testinggg'
+        });
+      expect(res.status).toBe(400);
+      expect(res.body.errors).toBe('Incorrect password');
+    });
+
+    test('same password should return 400 Bad Request', async () => {
+      const res = await request(app).patch('/api/users')
+        .set('x-auth-token', token)
+        .send({
+          currentPW: 'testing',
           password: 'testing',
           confirmPW: 'testing'
         });
-      
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBeDefined();
+      expect(res.body.errors).toBe('New password cannot be the same as current password');
     });
-  });
-
-  describe('password mismatch', () => {
-    it("should return 400 Bad Request", async () => {
-      const res = await request(app).post('/api/users')
-        .send({
-          email: 'testuser@gmail.com',
-          password: 'testing',
-          confirmPW: 'test'
-        });
-      expect(res.status).toBe(400);
-      expect(res.body.errors).toBeDefined();
-    });
-  });
-
-  describe('correct input', () => {
-    it("should return 200 OK", async () => {
-      const res = await request(app).post('/api/users')
-        .send({
-          email: 'testuser@gmail.com',
-          password: 'testing',
-          confirmPW: 'testing'
-        });
-      expect(res.status).toBe(200);
-      expect(res.body.token).toBeDefined();
-    });
-  });
-});
-
-describe('PATCH /api/users', () => {
-  let token: string, response: request.Response;
-
-  beforeAll(async () => {
-    const user = new User({
-      email: 'testuser@gmail.com',
-      password: await bcrypt.hash('testing', 2),
-      accessLevel: 'user',
-      reading: []
-    });
-
-    await user.save();
-
-    response = await request(app).post('/api/auth')
-      .send({
-        email: 'testuser@gmail.com',
-        password: 'testing'
-      });
-
-    token = response.body.token;
-  });
-
-  afterEach(async () => {
-    await User.findOneAndUpdate(
-      { email: 'testuser@gmail.com' },
-      { password: await bcrypt.hash('testing', 2) }
-    ).exec();
-  });
-
-  afterAll(async () => {
-    await User.deleteMany({}).exec();
-  })
-
-  describe('no input', () => {
-    it("should return 400 Bad Request", async () => {
-      const res = await request(app).patch('/api/users')
-        .set('x-auth-token', token)
-        .send({
-          currentPW: '',
-          password: '',
-          confirmPW: ''
-        });
-      expect(res.status).toBe(400);
-      expect(res.body.errors).toBeDefined();
-    });
-  });
-
-  describe('incorrect password', () => {
-    it("should return 400 Bad Request", async () => {
-      const res = await request(app).patch('/api/users')
-        .set('x-auth-token', token)
-        .send({
-          currentPW: 'test',
-          password: '',
-          confirmPW: ''
-        });
-      expect(res.status).toBe(400);
-      expect(res.body.errors).toBeDefined();
-    });
-  });
-  
-  describe('short password', () => {
-    it("should return 400 Bad Request", async () => {
+    
+    test('mismatched passwords should return 400 Bad Request', async () => {
       const res = await request(app).patch('/api/users')
         .set('x-auth-token', token)
         .send({
           currentPW: 'testing',
-          password: 'test',
-          confirmPW: 'test'
+          password: 'testingg',
+          confirmPW: 'testinggg'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBeDefined();
+      expect(res.body.errors).toBe('Passwords do not match');
     });
-  });
-
-  describe('password mismatch', () => {
-    it("should return 400 Bad Request", async () => {
+    
+    test('correct input should return 200 OK', async () => {
       const res = await request(app).patch('/api/users')
         .set('x-auth-token', token)
         .send({
           currentPW: 'testing',
-          password: 'testing',
-          confirmPW: 'test'
+          password: 'testingg',
+          confirmPW: 'testingg'
         });
-      expect(res.status).toBe(400);
-      expect(res.body.errors).toBeDefined();
+        const existinguser = await User.findOne({ email: 'existinguser@gmail.com' });
+        expect(res.status).toBe(200);
+        expect(res.body.msg).toBe('User updated');
+        expect(await bcrypt.compare('testingg', existinguser.password)).toBe(true);
     });
   });
 
-  describe('correct input', () => {
-    it("should return 200 OK", async () => {
-      const res = await request(app).patch('/api/users')
-        .set('x-auth-token', token)
+  describe('DELETE /api/users', () => {
+    let token: string, response: request.Response;
+
+    beforeAll(async () => {
+      response = await request(app).post('/api/auth')
         .send({
-          currentPW: 'testing',
-          password: 'newtest',
-          confirmPW: 'newtest'
+          email: 'existinguser@gmail.com',
+          password: 'testing'
         });
-      expect(res.status).toBe(200);
-      expect(res.body.msg).toBeDefined();
-    });
-  });
-});
 
-describe('DELETE /api/users', () => {
-  let token: string, response: request.Response;
-
-  beforeAll(async () => {
-    const user = new User({
-      email: 'testuser@gmail.com',
-      password: await bcrypt.hash('testing', 2),
-      accessLevel: 'user',
-      reading: []
+      token = response.body.token;
     });
 
-    await user.save();
+    test('unauthorized user should return 401 Unauthorized', async () => {
+      const res = await request(app).delete('/api/users');
+      expect(res.status).toBe(401);
+      expect(res.body.errors).toBe('Authorization denied');
+    });
 
-    response = await request(app).post('/api/auth')
-      .send({
-        email: 'testuser@gmail.com',
-        password: 'testing'
-      });
-
-    token = response.body.token;
-  });
-
-  afterAll(async () => {
-    await User.deleteMany({}).exec();
-  })
-
-  describe('delete user', () => {
-    it("should return 200 OK", async () => {
+    test('correct input should return 200 OK', async () => {
       const res = await request(app).delete('/api/users')
         .set('x-auth-token', token);
-      expect(res.status).toBe(200);
-      expect(res.body.msg).toBeDefined();
+        const existinguser = await User.findOne({ email: 'existinguser@gmail.com' });
+        expect(res.status).toBe(200);
+        expect(res.body.msg).toBe('User deleted');
+        expect(existinguser).toBeNull();
     });
   });
 });

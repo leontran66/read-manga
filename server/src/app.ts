@@ -16,7 +16,10 @@ import * as userController from './controllers/user';
 
 const app = express();
 
-const db = process.env.MONGODB_URI_LOCAL;
+let db = process.env.MONGODB_URI;
+if (process.env.NODE_ENV === 'test') {
+  db = process.env.MONGODB_URI_LOCAL;
+}
 mongoose.connect(db, {
   useNewUrlParser: true,
   useFindAndModify: false,

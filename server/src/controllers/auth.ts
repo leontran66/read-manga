@@ -29,7 +29,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
     // check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ errors: 'Invalid credentials '});
+      return res.status(401).json({ errors: 'Invalid credentials'});
     }
 
     // check if password is correct

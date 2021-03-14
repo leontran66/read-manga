@@ -1,7 +1,6 @@
 import { Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { Genre } from '../models/Genre';
-import { Manga } from '../models/Manga';
 import { AuthRequest } from '../types/authRequest';
 
 // @route POST api/genres
@@ -14,21 +13,27 @@ export const createGenre = async (req: AuthRequest, res: Response): Promise<Resp
     try {
       await body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty').run(req);
 
+      // check if input is valid
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
 
+      // check if user is admin
       if (accessLevel !== 'admin') {
         return res.status(401).json({ errors: 'Authorization denied' });
       }
 
-      let genre = await Genre.findOne({ name });
+      // check if genre already exists
+      let genre = await Genre.findOne({ name: name.toLowerCase() });
       if (genre) {
         return res.status(400).json({ errors: 'Genre already exists' });
       }
 
-      genre = new Genre({ name });
+      genre = new Genre({
+        name: name.toLowerCase(),
+        manga: []
+      });
 
       await genre.save();
 
@@ -49,21 +54,30 @@ export const updateGenre = async (req: AuthRequest, res: Response): Promise<Resp
     try {
       await body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty').run(req);
 
+      // check if input is valid
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
 
+      // check if user is admin
       if (accessLevel !== 'admin') {
         return res.status(401).json({ errors: 'Authorization denied' });
       }
 
-      const genre = await Genre.findById(id);
+      // check if genre exists
+      let genre = await Genre.findById(id);
       if (!genre) {
         return res.status(400).json({ errors: 'Genre not found' });
       }
   
-      await Genre.findByIdAndUpdate(id, { name });
+      // check if genre already exists
+      genre = await Genre.findOne({ name: name.toLowerCase() });
+      if (genre) {
+        return res.status(400).json({ errors: 'Genre already exists' });
+      }
+
+      await Genre.findByIdAndUpdate(id, { name: name.toLowerCase() });
 
       return res.status(200).json({ msg: 'Genre updated' });
     } catch (err) {
@@ -79,25 +93,18 @@ export const deleteGenre = async (req: AuthRequest, res: Response): Promise<Resp
   const accessLevel = req.user.accessLevel;
 
   try {
+    // check if user is admin
     if (accessLevel !== 'admin') {
       return res.status(401).json({ errors: 'Authorization denied' });
     }
 
+    // check if genre exists
     const genre = await Genre.findById(id);
     if (!genre) {
       return res.status(400).json({ errors: 'Genre not found' });
     }
 
     await Genre.findByIdAndDelete(id);
-
-    /*
-    const manga = Manga.find({ $in: { genres: id } });
-    if (manga.length > 0) {
-      manga.forEach(async (item) => {
-        await Manga.findByIdAndUpdate(item._id, { $pull: { genres: id } });
-      });
-    }
-    */
 
     return res.status(200).json({ msg: 'Genre deleted' });
   } catch (err) {

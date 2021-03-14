@@ -15,16 +15,19 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       await body('email').isEmail().normalizeEmail().withMessage('Invalid email').run(req);
       await body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long').run(req);
 
+      // check if input is valid
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const userExists = await User.findOne({ email });
-      if (userExists) {
+      // check if user already exists
+      const isExists = await User.findOne({ email });
+      if (isExists) {
         return res.status(400).json({ errors: 'User already exists' });
       }
 
+      // check if passwords match
       if (password !== confirmPW) {
         return res.status(400).json({ errors: 'Passwords do not match' });
       }
@@ -71,6 +74,12 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
     try {
       await body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long').run(req);
 
+      // check if input is valid
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
       // check if password is correct
       const user = await User.findById(id).select('-email -accessLevel');
       const isMatch = await bcrypt.compare(currentPW, user.password);
@@ -78,10 +87,10 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
         return res.status(400).json({ errors: 'Incorrect password' });
       }
 
-      // check if form data is valid
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+      // check if password is the same as current password
+      const isSame = await bcrypt.compare(password, user.password);
+      if (isSame) {
+        return res.status(400).json({ errors: 'New password cannot be the same as current password' });
       }
 
       // check if passwords match
