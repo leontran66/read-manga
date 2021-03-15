@@ -8,9 +8,16 @@ import { AuthRequest } from '../types/authRequest';
 // @desc Get All Manga
 // @access public
 export const getAllManga = async (req: Request, res: Response): Promise<Response> => {
+  const { q } = req.query;
+
   try {
     // check if manga has any documents
-    const manga = await Manga.find({});
+    let manga;
+    if (q) {
+      manga = await Manga.find({ $text: { $search: q.toString().toLowerCase() } });
+    } else {
+      manga = await Manga.find({});
+    }
     if (manga.length <= 0) {
       return res.status(400).json({ errors: 'Couldn\'t find any manga' });
     }
@@ -34,7 +41,9 @@ export const getManga = async (req: Request, res: Response): Promise<Response> =
       return res.status(400).json({ errors: 'Manga not found' });
     }
 
-    return res.status(200).json({ manga });
+    const genres = await Genre.find({ manga: id });
+
+    return res.status(200).json({ manga, genres });
   } catch (err) {
     return res.status(500).json({ errors: 'Manga error' });
   }

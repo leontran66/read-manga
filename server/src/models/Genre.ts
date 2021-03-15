@@ -6,6 +6,7 @@ import mongoose, { Schema } from 'mongoose';
 
 export type GenreDocument = mongoose.Document & {
   name: string;
+  manga: [string];
 }
 
 const genreSchema = new Schema<GenreDocument>({

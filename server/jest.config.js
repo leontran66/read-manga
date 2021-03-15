@@ -8,6 +8,9 @@ module.exports = {
       "ts",
       "js"
   ],
+  modulePathIgnorePatterns: [
+    "dist"
+  ],
   transform: {
       "^.+\\.(ts|tsx)$": "ts-jest"
   },

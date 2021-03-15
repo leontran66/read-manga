@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
 
 import EditProfileForm from '../components/EditProfileForm';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../components/common/Header';
+import Footer from '../components/common/Footer';
 import MainContainer from '../components/common/MainContainer';
 
 const EditProfileLayout = () => {

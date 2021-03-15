@@ -89,6 +89,15 @@ describe('Test the manga route', () => {
       expect(res.body.manga[0].synopsis).toBe('Gol D. Roger, a man referred to as the "Pirate King," is set to ...');
       expect(res.body.manga[0].chapters).toBe(1007);
     });
+  
+    test('correct input with query should return 200 OK', async () => {
+      const res = await request(app).get('/api/manga?q=one');
+      expect(res.status).toBe(200);
+      expect(res.body.manga[0].title).toBe('one piece');
+      expect(res.body.manga[0].author).toBe('eiichiro oda');
+      expect(res.body.manga[0].synopsis).toBe('Gol D. Roger, a man referred to as the "Pirate King," is set to ...');
+      expect(res.body.manga[0].chapters).toBe(1007);
+    });
   });
 
   describe('GET /api/manga/:id', () => {
@@ -100,6 +109,9 @@ describe('Test the manga route', () => {
       mangaID = manga._id;
 
       const genre = await Genre.findOne({ name: 'adventure' });
+      genre.manga.push(mangaID);
+
+      await genre.save();
 
       genreID = genre._id;
     });
@@ -117,6 +129,7 @@ describe('Test the manga route', () => {
       expect(res.body.manga.author).toBe('eiichiro oda');
       expect(res.body.manga.synopsis).toBe('Gol D. Roger, a man referred to as the "Pirate King," is set to ...');
       expect(res.body.manga.chapters).toBe(1007);
+      expect(res.body.genres[0].name).toBe('adventure');
     });
   });
 

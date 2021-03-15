@@ -10,7 +10,7 @@ const Landing = () => {
           <form className='row row-cols-auto g-2 align-items-center' method='GET' action='/manga'>
             <div className='col-10'>
               <label htmlFor='search' className='form-label'></label>
-              <input type='text' className='form-control' id='search' name='query' placeholder='Title, Author or Genre...' />
+              <input type='text' className='form-control' id='search' name='query' placeholder='Search by title...' />
             </div>
             <div className='col-2'>
               <button type='submit' className='mt-4 btn btn-primary'>Search</button>

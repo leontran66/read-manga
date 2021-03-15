@@ -14,4 +14,6 @@ const mangaSchema = new Schema<MangaDocument>({
   chapters: { type: Number, min: 0 }
 });
 
+mangaSchema.index({ title: 'text' });
+
 export const Manga = mongoose.model<MangaDocument>('Manga', mangaSchema);
