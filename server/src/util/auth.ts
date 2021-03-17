@@ -14,7 +14,7 @@ export const auth = (req: AuthRequest, res: Response, next: NextFunction) => {
       req.user = verified.user;
     });
 
-    next();
+    return next();
   } catch (error) {
     return res.status(401).json({ error: [{ msg: 'Authorization denied' }] });
   }

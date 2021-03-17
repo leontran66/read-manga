@@ -7,7 +7,7 @@ import { AuthRequest } from '../types/authRequest';
 // @route GET api/auth
 // @desc Get Current User
 // @access private
-export const getUser = async (req: AuthRequest, res: Response): Promise<Response> => {
+export const getUser = async (req: AuthRequest, res: Response) => {
   const { id } = req.user;
 
   try {
@@ -22,7 +22,7 @@ export const getUser = async (req: AuthRequest, res: Response): Promise<Response
 // @route POST api/auth
 // @desc Login User
 // @access public
-export const loginUser = async (req: Request, res: Response): Promise<Response> => {
+export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {

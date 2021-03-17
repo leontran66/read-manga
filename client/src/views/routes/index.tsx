@@ -21,6 +21,11 @@ import './index.css';
 import { Provider } from 'react-redux';
 import store from '../../state/store';
 import { loadUser } from '../../state/ducks/auth/actions';
+import setAuthToken from '../../state/utils/setAuthToken';
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 const App = () => {
   useEffect(() => {

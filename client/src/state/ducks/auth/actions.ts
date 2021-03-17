@@ -15,7 +15,7 @@ export const loadUser = (): ThunkAction<void, RootState, unknown, Action<string>
 
     dispatch({
       type: types.LOAD_USER,
-      payload: res.data
+      payload: res.data.user
     });
   } catch (err) {
     dispatch({
@@ -32,19 +32,26 @@ export const logoutUser = (): ThunkAction<void, RootState, unknown, Action<strin
 };
 
 export const loginUser = (email: string, password: string): ThunkAction<void, RootState, unknown, Action<string>> => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
   const data = { email, password };
+
   try {
-    const res = await axios.post('/api/auth', data);
+    const res = await axios.post('/api/auth', data, config);
 
     dispatch({
       type: types.LOGIN_USER,
-      payload: res.data
+      payload: res.data.token
     });
 
-    // dispatch(loadUser());
+    dispatch(loadUser());
   } catch (err) {
     dispatch({
-      type: types.LOAD_USER_FAIL,
+      type: types.LOGIN_USER_FAIL,
       payload: err.response.data.errors
     });
   }

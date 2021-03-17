@@ -17,8 +17,7 @@ export type Error = {
 export type Token = string;
 
 export type User = {
-  email: string,
-  password: string
+  email: string
 }
 
 export interface AuthState {
