@@ -69,7 +69,7 @@ describe('Test the manga route', () => {
     test('no manga should return 400 Bad Request', async () => {
       const res = await request(app).get('/api/manga');
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Couldn\'t find any manga');
+      expect(res.body.errors[0].msg).toBe('Couldn\'t find any manga');
     });
 
     test('correct input should return 200 OK', async () => {
@@ -119,7 +119,7 @@ describe('Test the manga route', () => {
     test('non-manga id should return 400 Bad Request', async () => {
       const res = await request(app).get('/api/manga/' + genreID);
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Manga not found');
+      expect(res.body.errors[0].msg).toBe('Manga not found');
     });
 
     test('correct input should return 200 OK', async () => {
@@ -157,7 +157,7 @@ describe('Test the manga route', () => {
           chapters: 357
         });
         expect(res.status).toBe(401);
-        expect(res.body.errors).toBe('Authorization denied');
+        expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
 
     test('PATCH /api/manga from user should return 401 Unauthorized', async () => {
@@ -172,7 +172,7 @@ describe('Test the manga route', () => {
           chapters: 357
         });
         expect(res.status).toBe(401);
-        expect(res.body.errors).toBe('Authorization denied');
+        expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
 
     test('DELETE /api/manga from user should return 401 Unauthorized', async () => {
@@ -180,7 +180,7 @@ describe('Test the manga route', () => {
       const res = await request(app).delete('/api/manga/' + manga._id)
         .set('x-auth-token', token);
         expect(res.status).toBe(401);
-        expect(res.body.errors).toBe('Authorization denied');
+        expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
   });
 
@@ -216,7 +216,7 @@ describe('Test the manga route', () => {
           chapters: 1007
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Manga already exists');
+      expect(res.body.errors[0].msg).toBe('Manga already exists');
     });
 
     test('correct input should return 200 OK', async() => {
@@ -289,7 +289,7 @@ describe('Test the manga route', () => {
           chapters: 116
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Manga not found');
+      expect(res.body.errors[0].msg).toBe('Manga not found');
     });
 
     test('correct input should return 200 OK', async() => {
@@ -336,7 +336,7 @@ describe('Test the manga route', () => {
       const res = await request(app).delete('/api/manga/' + genreID)
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Manga not found');
+      expect(res.body.errors[0].msg).toBe('Manga not found');
     });
 
     test('correct input should return 200 OK', async() => {

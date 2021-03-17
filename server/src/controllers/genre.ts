@@ -21,13 +21,13 @@ export const createGenre = async (req: AuthRequest, res: Response): Promise<Resp
 
       // check if user is admin
       if (accessLevel !== 'admin') {
-        return res.status(401).json({ errors: 'Authorization denied' });
+        return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
       }
 
       // check if genre already exists
       let genre = await Genre.findOne({ name: name.toLowerCase() });
       if (genre) {
-        return res.status(400).json({ errors: 'Genre already exists' });
+        return res.status(400).json({ errors: [{ msg: 'Genre already exists' }] });
       }
 
       genre = new Genre({
@@ -39,7 +39,7 @@ export const createGenre = async (req: AuthRequest, res: Response): Promise<Resp
 
       return res.status(200).json({ msg: 'Genre created' });
     } catch (err) {
-      return res.status(500).json({ errors: 'Genre error' });
+      return res.status(500).json({ errors: [{ msg: 'Genre error' }] });
     }
 };
 
@@ -62,26 +62,26 @@ export const updateGenre = async (req: AuthRequest, res: Response): Promise<Resp
 
       // check if user is admin
       if (accessLevel !== 'admin') {
-        return res.status(401).json({ errors: 'Authorization denied' });
+        return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
       }
 
       // check if genre exists
       let genre = await Genre.findById(id);
       if (!genre) {
-        return res.status(400).json({ errors: 'Genre not found' });
+        return res.status(400).json({ errors: [{ msg: 'Genre not found' }] });
       }
   
       // check if genre already exists
       genre = await Genre.findOne({ name: name.toLowerCase() });
       if (genre) {
-        return res.status(400).json({ errors: 'Genre already exists' });
+        return res.status(400).json({ errors: [{ msg: 'Genre already exists' }] });
       }
 
       await Genre.findByIdAndUpdate(id, { name: name.toLowerCase() });
 
       return res.status(200).json({ msg: 'Genre updated' });
     } catch (err) {
-      return res.status(500).json({ errors: 'Genre error' });
+      return res.status(500).json({ errors: [{ msg: 'Genre error' }] });
     }
 };
 
@@ -95,19 +95,19 @@ export const deleteGenre = async (req: AuthRequest, res: Response): Promise<Resp
   try {
     // check if user is admin
     if (accessLevel !== 'admin') {
-      return res.status(401).json({ errors: 'Authorization denied' });
+      return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
     }
 
     // check if genre exists
     const genre = await Genre.findById(id);
     if (!genre) {
-      return res.status(400).json({ errors: 'Genre not found' });
+      return res.status(400).json({ errors: [{ msg: 'Genre not found' }] });
     }
 
     await Genre.findByIdAndDelete(id);
 
     return res.status(200).json({ msg: 'Genre deleted' });
   } catch (err) {
-    return res.status(500).json({ errors: 'Genre error' });
+    return res.status(500).json({ errors: [{ msg: 'Genre error' }] });
   }
 };

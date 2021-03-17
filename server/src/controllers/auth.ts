@@ -11,11 +11,11 @@ export const getUser = async (req: AuthRequest, res: Response): Promise<Response
   const { id } = req.user;
 
   try {
-    const user = await User.findById(id).select('-accessLevel -reading');
+    const user = await User.findById(id).select('email');
 
     return res.status(200).json({ user });
   } catch (err) {
-    return res.status(500).json({ errors: 'Authentication error' });
+    return res.status(500).json({ errors: [{ msg: 'Authentication error' }] });
   }
 };
 
@@ -29,13 +29,13 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
     // check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ errors: 'Invalid credentials'});
+      return res.status(401).json({ errors: [{ msg: 'Invalid credentials' }] });
     }
 
     // check if password is correct
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ errors: 'Invalid credentials' });
+      return res.status(401).json({ errors: [{ msg: 'Invalid credentials' }] });
     }
 
     const payload = {
@@ -55,6 +55,6 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
       }
     );
   } catch (err) {
-    return res.status(500).json({ errors: err.message });
+    return res.status(500).json({ errors: [{ msg: 'Authentication error' }] });
   }
 };

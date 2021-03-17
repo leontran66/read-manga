@@ -19,14 +19,12 @@ import defaultRoute from './default';
 import './index.css';
 
 import { Provider } from 'react-redux';
-import configureStore from '../../state/store';
+import store from '../../state/store';
 import { loadUser } from '../../state/ducks/auth/actions';
-
-const store = configureStore();
 
 const App = () => {
   useEffect(() => {
-    store.dispatch(loadUser());
+    store.dispatch<any>(loadUser());
   }, []);
 
   return (

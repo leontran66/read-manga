@@ -4,7 +4,8 @@ const initialState: types.AuthState = {
   token: localStorage.getItem('token'),
   isAuthenticated: false,
   isLoading: true,
-  user: null
+  user: null,
+  errors: []
 };
 
 export default function authReducer(state = initialState, action: types.AuthActionTypes): types.AuthState {
@@ -25,10 +26,32 @@ export default function authReducer(state = initialState, action: types.AuthActi
         isAuthenticated: true,
         isLoading: false
       }
+    case types.UPDATE_USER:
+      return {
+        ...state,
+        isLoading: false
+      }
+    case types.DELETE_USER_FAIL:
+    case types.UPDATE_USER_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        errors: action.payload
+      }
     case types.LOAD_USER_FAIL:
     case types.LOGIN_USER_FAIL:
-    case types.LOGOUT:
     case types.REGISTER_USER_FAIL:
+      localStorage.removeItem('token');
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        isLoading: false,
+        user: null,
+        errors: action.payload
+      }
+    case types.DELETE_USER:
+    case types.LOGOUT:
       localStorage.removeItem('token');
       return {
         ...state,

@@ -19,12 +19,12 @@ export const getAllManga = async (req: Request, res: Response): Promise<Response
       manga = await Manga.find({});
     }
     if (manga.length <= 0) {
-      return res.status(400).json({ errors: 'Couldn\'t find any manga' });
+      return res.status(400).json({ errors: [{ msg: 'Couldn\'t find any manga' }] });
     }
 
     return res.status(200).json({ manga });
   } catch (err) {
-    return res.status(500).json({ errors: 'Manga error' });
+    return res.status(500).json({ errors: [{ msg: 'Manga error' }] });
   }
 };
 
@@ -38,14 +38,14 @@ export const getManga = async (req: Request, res: Response): Promise<Response> =
     // check if manga exists
     const manga = await Manga.findById(id);
     if (!manga) {
-      return res.status(400).json({ errors: 'Manga not found' });
+      return res.status(400).json({ errors: [{ msg: 'Manga not found' }] });
     }
 
     const genres = await Genre.find({ manga: id });
 
     return res.status(200).json({ manga, genres });
   } catch (err) {
-    return res.status(500).json({ errors: 'Manga error' });
+    return res.status(500).json({ errors: [{ msg: 'Manga error' }] });
   }
 };
 
@@ -70,13 +70,13 @@ export const createManga = async (req: AuthRequest, res: Response): Promise<Resp
 
       // check if user is admin
       if (accessLevel !== 'admin') {
-        return res.status(401).json({ errors: 'Authorization denied' });
+        return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
       }
 
       // check if manga already exists
       let manga = await Manga.findOne({ title: title.toLowerCase(), author: author.toLowerCase() });
       if (manga) {
-        return res.status(400).json({ errors: 'Manga already exists' });
+        return res.status(400).json({ errors: [{ msg: 'Manga already exists' }] });
       }
 
       manga = new Manga({
@@ -96,7 +96,7 @@ export const createManga = async (req: AuthRequest, res: Response): Promise<Resp
 
       return res.status(200).json({ msg: 'Manga created' });
     } catch (err) {
-      return res.status(500).json({ errors: err.message });
+      return res.status(500).json({ errors: [{ msg: 'Manga error' }] });
     }
 };
 
@@ -122,13 +122,13 @@ export const updateManga = async (req: AuthRequest, res: Response): Promise<Resp
 
       // check if user is admin
       if (accessLevel !== 'admin') {
-        return res.status(401).json({ errors: 'Authorization denied' });
+        return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
       }
 
       // check if manga exists
       const manga = await Manga.findById(id);
       if (!manga) {
-        return res.status(400).json({ errors: 'Manga not found' });
+        return res.status(400).json({ errors: [{ msg: 'Manga not found' }] });
       }
 
       await Manga.findByIdAndUpdate(id, {
@@ -148,7 +148,7 @@ export const updateManga = async (req: AuthRequest, res: Response): Promise<Resp
 
       return res.status(200).json({ msg: 'Manga updated' });
     } catch (err) {
-      return res.status(500).json({ errors: 'Manga error' });
+      return res.status(500).json({ errors: [{ msg: 'Manga error' }] });
     }
 };
 
@@ -162,13 +162,13 @@ export const deleteManga = async (req: AuthRequest, res: Response): Promise<Resp
   try {
     // check if user is admin
     if (accessLevel !== 'admin') {
-      return res.status(401).json({ errors: 'Authorization denied' });
+      return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
     }
     
     // check if manga exists
     const manga = await Manga.findById(id);
     if (!manga) {
-      return res.status(400).json({ errors: 'Manga not found' });
+      return res.status(400).json({ errors: [{ msg: 'Manga not found' }] });
     }
 
     await Manga.findByIdAndDelete(id);
@@ -177,6 +177,6 @@ export const deleteManga = async (req: AuthRequest, res: Response): Promise<Resp
 
     return res.status(200).json({ msg: 'Manga deleted' });
   } catch (err) {
-    return res.status(500).json({ errors: 'Manga error' });
+    return res.status(500).json({ errors: [{ msg: 'Manga error' }] });
   }
 };

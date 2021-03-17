@@ -63,7 +63,7 @@ describe('Test the genres route', () => {
           name: 'Action'
         });
         expect(res.status).toBe(401);
-        expect(res.body.errors).toBe('Authorization denied');
+        expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
 
     test('PATCH /api/genres from user should return 401 Unauthorized', async () => {
@@ -74,7 +74,7 @@ describe('Test the genres route', () => {
           name: 'Action'
         });
         expect(res.status).toBe(401);
-        expect(res.body.errors).toBe('Authorization denied');
+        expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
 
     test('DELETE /api/genres from user should return 401 Unauthorized', async () => {
@@ -82,7 +82,7 @@ describe('Test the genres route', () => {
       const res = await request(app).delete('/api/genres/' + genre._id)
         .set('x-auth-token', token);
         expect(res.status).toBe(401);
-        expect(res.body.errors).toBe('Authorization denied');
+        expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
   });
 
@@ -113,7 +113,7 @@ describe('Test the genres route', () => {
           name: 'Adventure'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Genre already exists');
+      expect(res.body.errors[0].msg).toBe('Genre already exists');
     });
 
     test('correct input should return 200 OK', async () => {
@@ -168,7 +168,7 @@ describe('Test the genres route', () => {
           name: 'Drama'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Genre not found');
+      expect(res.body.errors[0].msg).toBe('Genre not found');
     });
 
     test('updating to an existing genre should return 400 Bad Request', async () => {
@@ -178,7 +178,7 @@ describe('Test the genres route', () => {
           name: 'Demons'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Genre already exists');
+      expect(res.body.errors[0].msg).toBe('Genre already exists');
     });
 
     test('correct input should return 200 OK', async () => {
@@ -219,7 +219,7 @@ describe('Test the genres route', () => {
       const res = await request(app).delete('/api/genres/' + userID)
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Genre not found');
+      expect(res.body.errors[0].msg).toBe('Genre not found');
     });
 
     test('correct input should return 200 OK', async () => {

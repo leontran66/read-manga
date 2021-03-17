@@ -24,12 +24,12 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       // check if user already exists
       const isExists = await User.findOne({ email });
       if (isExists) {
-        return res.status(400).json({ errors: 'User already exists' });
+        return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
       }
 
       // check if passwords match
       if (password !== confirmPW) {
-        return res.status(400).json({ errors: 'Passwords do not match' });
+        return res.status(400).json({ errors: [{ msg: 'Passwords do not match' }] });
       }
 
       const hash = await bcrypt.hash(password, 12);
@@ -60,7 +60,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
         }
       );
     } catch (err) {
-      return res.status(500).json({ errors: 'User error' });
+      return res.status(500).json({ errors: [{ msg: 'User error' }] });
     }
 };
 
@@ -84,18 +84,18 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
       const user = await User.findById(id).select('-email -accessLevel');
       const isMatch = await bcrypt.compare(currentPW, user.password);
       if (!isMatch) {
-        return res.status(400).json({ errors: 'Incorrect password' });
+        return res.status(400).json({ errors: [{ msg: 'Incorrect password' }] });
       }
 
       // check if password is the same as current password
       const isSame = await bcrypt.compare(password, user.password);
       if (isSame) {
-        return res.status(400).json({ errors: 'New password cannot be the same as current password' });
+        return res.status(400).json({ errors: [{ msg: 'New password cannot be the same as current password' }] });
       }
 
       // check if passwords match
       if (password !== confirmPW) {
-        return res.status(400).json({ errors: 'Passwords do not match' });
+        return res.status(400).json({ errors: [{ msg: 'Passwords do not match' }] });
       }
 
       const hash = await bcrypt.hash(password, 12);
@@ -104,7 +104,7 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
 
       return res.status(200).json({ msg: 'User updated' });
     } catch (err) {
-      return res.status(500).json({ errors: 'User error' });
+      return res.status(500).json({ errors: [{ msg: 'User error' }] });
     }
 };
 
@@ -119,6 +119,6 @@ export const deleteUser = async (req: AuthRequest, res: Response): Promise<Respo
 
     return res.status(200).json({ msg: 'User deleted' });
   } catch (err) {
-    return res.status(500).json({ error: 'User error' });
+    return res.status(500).json({ errors: [{ msg: 'User error' }] });
   }
 };

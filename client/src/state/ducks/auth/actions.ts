@@ -1,9 +1,11 @@
 import axios from 'axios';
-import { Dispatch } from 'redux';
+import { Action } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '../../store';
 import * as types from './types';
 import setAuthToken from '../../utils/setAuthToken';
 
-export const loadUser = () => async (dispatch: Dispatch) => {
+export const loadUser = (): ThunkAction<void, RootState, unknown, Action<string>> => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
@@ -17,57 +19,33 @@ export const loadUser = () => async (dispatch: Dispatch) => {
     });
   } catch (err) {
     dispatch({
-      type: types.LOAD_USER_FAIL
+      type: types.LOAD_USER_FAIL,
+      payload: err.response.data.errors
     });
   }
 };
 
-export const loginUser = (email: string, password: string) => async (dispatch: Dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
-  const body = JSON.stringify({ email, password });
+export const logoutUser = (): ThunkAction<void, RootState, unknown, Action<string>> => async dispatch => {
+  dispatch({
+    type: types.LOGOUT
+  });
+};
 
+export const loginUser = (email: string, password: string): ThunkAction<void, RootState, unknown, Action<string>> => async dispatch => {
+  const data = { email, password };
   try {
-    const res = await axios.post('/api/auth', body, config);
+    const res = await axios.post('/api/auth', data);
 
     dispatch({
       type: types.LOGIN_USER,
       payload: res.data
-    })
-  } catch (err) {
-    dispatch({
-      type: types.LOGIN_USER_FAIL
     });
-  }
-}
 
-export const logoutUser = () => async (dispatch: Dispatch) => {
-  dispatch({
-    type: types.LOGOUT
-  });
-}
-
-export const registerUser = (email: string, password: string, confirmPW: string) => async (dispatch: Dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
-  const body = JSON.stringify({ email, password, confirmPW });
-
-  try {
-    const res = await axios.post('/api/users', body, config);
-
-    dispatch({
-      type: types.REGISTER_USER,
-      payload: res.data
-    })
+    // dispatch(loadUser());
   } catch (err) {
     dispatch({
-      type: types.REGISTER_USER_FAIL
+      type: types.LOAD_USER_FAIL,
+      payload: err.response.data.errors
     });
   }
 };

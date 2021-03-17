@@ -6,7 +6,7 @@ export const auth = (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const token = req.header('x-auth-token');
     if (!token) {
-      return res.status(401).json({ errors: 'Authorization denied' });
+      return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
     };
 
     jwt.verify(token, process.env.JWT_SECRET, (err, verified: VerifiedUser) => {
@@ -16,6 +16,6 @@ export const auth = (req: AuthRequest, res: Response, next: NextFunction) => {
 
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Authorization denied' });
+    return res.status(401).json({ error: [{ msg: 'Authorization denied' }] });
   }
 };

@@ -85,7 +85,7 @@ describe('Test the readings route', () => {
           chapter: 1000
         });
         expect(res.status).toBe(401);
-        expect(res.body.errors).toBe('Authorization denied');
+        expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
 
     test('PATCH /api/readings while logged out should return 401 Unauthorized', async () => {
@@ -94,7 +94,7 @@ describe('Test the readings route', () => {
           chapter: 1000
         });
         expect(res.status).toBe(401);
-        expect(res.body.errors).toBe('Authorization denied');
+        expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
 
     test('PATCH /api/readings/:id not belonging to user should return 401 Unauthorized', async () => {
@@ -104,20 +104,20 @@ describe('Test the readings route', () => {
           chapter: 355
         });
       expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('Authorization denied');
+      expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
 
     test('DELETE /api/readings while logged out should return 401 Unauthorized', async () => {
       const res = await request(app).delete('/api/readings/' + readingID);
         expect(res.status).toBe(401);
-        expect(res.body.errors).toBe('Authorization denied');
+        expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
   
     test('DELETE /api/readings/:id not belonging to user should return 401 Unauthorized', async () => {
       const res = await request(app).delete('/api/readings/' + readingID)
         .set('x-auth-token', token);
       expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('Authorization denied');
+      expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
   });
 
@@ -140,7 +140,7 @@ describe('Test the readings route', () => {
       const res = await request(app).get('/api/readings')
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Couldn\'t find any readings')
+      expect(res.body.errors[0].msg).toBe('Couldn\'t find any readings')
     });
     
     test('correct input should return 200 OK', async () => {
@@ -192,7 +192,7 @@ describe('Test the readings route', () => {
           chapter: 100
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Manga not found');
+      expect(res.body.errors[0].msg).toBe('Manga not found');
     });
     
     test('existing reading should return 400 Bad Request', async () => {
@@ -203,7 +203,7 @@ describe('Test the readings route', () => {
           chapter: 350
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Reading already exists for user');
+      expect(res.body.errors[0].msg).toBe('Reading already exists for user');
     });
 
     test('greater than manga chapters input should return 400 Bad Request', async () => {
@@ -214,7 +214,7 @@ describe('Test the readings route', () => {
           chapter: 2000
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Current chapter cannot be more than number of chapters in manga');
+      expect(res.body.errors[0].msg).toBe('Current chapter cannot be more than number of chapters in manga');
     });
     
     test('correct input should return 200 OK', async () => {
@@ -267,7 +267,7 @@ describe('Test the readings route', () => {
           chapter: 355
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Reading not found');
+      expect(res.body.errors[0].msg).toBe('Reading not found');
     });
     
     test('greater than manga chapters input should return 400 Bad Request', async () => {
@@ -277,7 +277,7 @@ describe('Test the readings route', () => {
           chapter: 400
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Current chapter cannot be more than number of chapters in manga');
+      expect(res.body.errors[0].msg).toBe('Current chapter cannot be more than number of chapters in manga');
     });
     
     test('correct input should return 200 OK', async () => {
@@ -318,7 +318,7 @@ describe('Test the readings route', () => {
       const res = await request(app).delete('/api/readings/' + mangaID)
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Reading not found');
+      expect(res.body.errors[0].msg).toBe('Reading not found');
     });
     
     test('correct input should return 200 OK', async () => {

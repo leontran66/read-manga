@@ -35,7 +35,7 @@ describe('Test the auth route', () => {
     test('unauthorized user should return 401 Unauthorized', async () => {
       const res = await request(app).get('/api/auth');
       expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('Authorization denied');
+      expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
 
     test('correct input should return 200 OK', async () => {
@@ -44,7 +44,6 @@ describe('Test the auth route', () => {
       expect(res.status).toBe(200);
       const user = await User.findOne({ email: 'existinguser@gmail.com' });
       expect(res.body.user.email).toBe(user.email);
-      expect(res.body.user.password).toBe(user.password);
     });
   });
 
@@ -52,7 +51,7 @@ describe('Test the auth route', () => {
     test('no input should return 400 Bad Request', async () => {
       const res = await request(app).post('/api/auth');
       expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('Invalid credentials');
+      expect(res.body.errors[0].msg).toBe('Invalid credentials');
     });
     
     test('non-existent user should return 400 Bad Request', async () => {
@@ -62,7 +61,7 @@ describe('Test the auth route', () => {
           password: 'testing'
         });
       expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('Invalid credentials');
+      expect(res.body.errors[0].msg).toBe('Invalid credentials');
     });
 
     test('incorrect password should return 400 Bad Request', async () => {
@@ -72,7 +71,7 @@ describe('Test the auth route', () => {
           password: 'testingg'
         });
       expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('Invalid credentials');
+      expect(res.body.errors[0].msg).toBe('Invalid credentials');
     });
 
     test('correct input should return 200 OK', async () => {

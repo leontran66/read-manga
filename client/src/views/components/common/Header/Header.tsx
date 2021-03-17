@@ -1,4 +1,14 @@
-const Header = () => {
+
+import { connect } from 'react-redux';
+import { AuthState } from '../../../../state/ducks/auth/types';
+import { logoutUser } from '../../../../state/ducks/auth/actions';
+import store from '../../../../state/store';
+
+const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  store.dispatch<any>(logoutUser());
+};
+
+const Header = (auth?: AuthState, isAuthenticated?: boolean) => {
   return (
     <div className='navbar navbar-expand-lg navbar-dark bg-dark mb-3'>
       <div className='container-fluid'>
@@ -26,7 +36,7 @@ const Header = () => {
               <a className='nav-link' href='/profile'>Profile</a>
             </li>
             <li className='nav-item'>
-              <a className='nav-link' href='/logout'>Logout</a>
+              <a className='nav-link' href='#!' onClick={e => onClick(e)}>Logout</a>
             </li>
           </ul>
         </div>
@@ -35,4 +45,9 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state: AuthState) => ({
+  auth: state,
+  isAuthenticated: state.isAuthenticated
+});
+
+export default connect(mapStateToProps, { logoutUser })(Header);

@@ -14,12 +14,12 @@ export const getReadings = async (req: AuthRequest, res: Response): Promise<Resp
     try {
       const readings = await Reading.find({ user: id });
       if (!readings.length) {
-        return res.status(400).json({ errors: 'Couldn\'t find any readings' });
+        return res.status(400).json({ errors: [{ msg: 'Couldn\'t find any readings' }] });
       }
 
       return res.status(200).json({ readings });
     } catch (err) {
-      return res.status(500).json({ error: 'Reading error' });
+      return res.status(500).json({ error: [{ msg: 'Reading error' }] });
     }
 };
 
@@ -43,18 +43,18 @@ export const createReading = async (req: AuthRequest, res: Response): Promise<Re
       // check if manga exists
       const manga = await Manga.findOne({ title: title.toLowerCase() });
       if (!manga) {
-        return res.status(400).json({ errors: 'Manga not found' });
+        return res.status(400).json({ errors: [{ msg: 'Manga not found' }] });
       }
 
       // check if reading for user already exists
       let reading = await Reading.findOne({ user: id, manga: manga._id });
       if (reading) {
-        return res.status(400).json({ errors: 'Reading already exists for user' });
+        return res.status(400).json({ errors: [{ msg: 'Reading already exists for user' }] });
       }
 
       // check if chapters is greater than chapters in manga
       if (manga.chapters < chapter) {
-        return res.status(400).json({ errors: 'Current chapter cannot be more than number of chapters in manga' });
+        return res.status(400).json({ errors: [{ msg: 'Current chapter cannot be more than number of chapters in manga' }] });
       }
 
       reading = new Reading({
@@ -67,7 +67,7 @@ export const createReading = async (req: AuthRequest, res: Response): Promise<Re
 
       return res.status(200).json({ msg: 'Reading created' });
     } catch (err) {
-      return res.status(500).json({ errors: 'Reading error' });
+      return res.status(500).json({ errors: [{ msg: 'Reading error' }] });
     }
 };
 
@@ -91,26 +91,26 @@ export const updateReading = async (req: AuthRequest, res: Response): Promise<Re
       // check if reading exists
       const reading = await Reading.findById(id);
       if (!reading) {
-        return res.status(400).json({ errors: 'Reading not found'});
+        return res.status(400).json({ errors: [{ msg: 'Reading not found' }] });
       }
 
       // check if reading belongs to user
       const user = await User.findById(userID);
       if (!user._id.equals(reading.user)) {
-        return res.status(401).json({ errors: 'Authorization denied' });
+        return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
       }
 
       // check if chapters is greater than chapters in manga
       const manga = await Manga.findById(reading.manga);
       if (manga.chapters < chapter) {
-        return res.status(400).json({ errors: 'Current chapter cannot be more than number of chapters in manga' });
+        return res.status(400).json({ errors: [{ msg: 'Current chapter cannot be more than number of chapters in manga' }] });
       }
 
       await Reading.findByIdAndUpdate(id, { chapter });
 
       return res.status(200).json({ msg: 'Reading updated' });
     } catch (err) {
-      return res.status(500).json({ errors: 'Reading error' });
+      return res.status(500).json({ errors: [{ msg: 'Reading error' }] });
     }
 };
 
@@ -125,19 +125,19 @@ export const deleteReading = async (req: AuthRequest, res: Response): Promise<Re
     // check if reading exists
     const reading = await Reading.findById(id);
     if (!reading) {
-      return res.status(400).json({ errors: 'Reading not found' });
+      return res.status(400).json({ errors: [{ msg: 'Reading not found' }] });
     }
 
     // check if reading belongs to user
     const user = await User.findById(userID);
     if (!user._id.equals(reading.user)) {
-      return res.status(401).json({ errors: 'Authorization denied' });
+      return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
     }
 
     await Reading.findByIdAndDelete(id);
 
     return res.status(200).json({ msg: 'Reading deleted' });
   } catch (err) {
-    return res.status(500).json({ errors: 'Reading error' });
+    return res.status(500).json({ errors: [{ msg: 'Reading error' }] });
   }
 };

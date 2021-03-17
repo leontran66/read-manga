@@ -35,7 +35,7 @@ describe('Test the user route', () => {
           confirmPW: 'testing'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('User already exists');
+      expect(res.body.errors[0].msg).toBe('User already exists');
     });
 
     test('mismatched passwords should return 400 Bad Request', async() => {
@@ -46,7 +46,7 @@ describe('Test the user route', () => {
           confirmPW: 'testingg'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Passwords do not match');
+      expect(res.body.errors[0].msg).toBe('Passwords do not match');
     });
 
     test('correct input should return 200 OK', async() => {
@@ -88,7 +88,7 @@ describe('Test the user route', () => {
           confirmPW: 'testingg'
         });
       expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('Authorization denied');
+      expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
 
     test('no input should return 400 Bad Request', async () => {
@@ -107,7 +107,7 @@ describe('Test the user route', () => {
           confirmPW: 'testinggg'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Incorrect password');
+      expect(res.body.errors[0].msg).toBe('Incorrect password');
     });
 
     test('same password should return 400 Bad Request', async () => {
@@ -119,7 +119,7 @@ describe('Test the user route', () => {
           confirmPW: 'testing'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('New password cannot be the same as current password');
+      expect(res.body.errors[0].msg).toBe('New password cannot be the same as current password');
     });
     
     test('mismatched passwords should return 400 Bad Request', async () => {
@@ -131,7 +131,7 @@ describe('Test the user route', () => {
           confirmPW: 'testinggg'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors).toBe('Passwords do not match');
+      expect(res.body.errors[0].msg).toBe('Passwords do not match');
     });
     
     test('correct input should return 200 OK', async () => {
@@ -165,7 +165,7 @@ describe('Test the user route', () => {
     test('unauthorized user should return 401 Unauthorized', async () => {
       const res = await request(app).delete('/api/users');
       expect(res.status).toBe(401);
-      expect(res.body.errors).toBe('Authorization denied');
+      expect(res.body.errors[0].msg).toBe('Authorization denied');
     });
 
     test('correct input should return 200 OK', async () => {
