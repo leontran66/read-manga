@@ -1,9 +1,19 @@
-import './Profile.css';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import AuthProps from '../../types/AuthProps';
+import { RootState } from '../../../state/store';
 
 import CreateReadingForm from '../CreateReadingForm';
 import EditReadingForm from '../EditReadingForm';
 
-const Profile = () => {
+import './Profile.css';
+
+const Profile = (props: AuthProps) => {
+
+  if (!props.isAuthenticated) {
+    return <Redirect to='/login' />;
+  }
+
   return (
     <div className='container-fluid'>
       <div className='profile mx-auto'>
@@ -91,4 +101,8 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+const mapStateToProps = (state: RootState) => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps)(Profile);

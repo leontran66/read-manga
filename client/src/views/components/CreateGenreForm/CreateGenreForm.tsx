@@ -1,8 +1,16 @@
 import { Fragment } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import AuthProps from '../../types/AuthProps';
+import { RootState } from '../../../state/store';
 
 import './CreateGenreForm.css';
 
-const CreateGenreForm = () => {
+const CreateGenreForm = (props: AuthProps) => {
+  if (!props.isAuthenticated) {
+    return <Redirect to='/login' />;
+  }
+
   return (
     <Fragment>
       <button type="button" className='btn btn-primary mb-3' data-bs-toggle="modal" data-bs-target="#createGenreForm">Add New Genre</button>
@@ -30,4 +38,8 @@ const CreateGenreForm = () => {
   );
 };
 
-export default CreateGenreForm;
+const mapStateToProps = (state: RootState) => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps)(CreateGenreForm);

@@ -1,8 +1,16 @@
 import { Fragment } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import AuthProps from '../../types/AuthProps';
+import { RootState } from '../../../state/store';
 
 import './EditReadingForm.css';
 
-const EditReadingForm = () => {
+const EditReadingForm = (props: AuthProps) => {
+  if (!props.isAuthenticated) {
+    return <Redirect to='/login' />;
+  }
+
   return (
     <Fragment>
       <button type="button" className='btn btn-sm btn-primary' data-bs-toggle="modal" data-bs-target="#editReadingForm">Edit</button>
@@ -30,4 +38,8 @@ const EditReadingForm = () => {
   );
 };
 
-export default EditReadingForm;
+const mapStateToProps = (state: RootState) => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps)(EditReadingForm);

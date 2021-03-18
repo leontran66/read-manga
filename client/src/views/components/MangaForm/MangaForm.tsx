@@ -1,6 +1,15 @@
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import AuthProps from '../../types/AuthProps';
+import { RootState } from '../../../state/store';
+
 import './MangaForm.css';
 
-const MangaForm = () => {
+const MangaForm = (props: AuthProps) => {
+  if (!props.isAuthenticated) {
+    return <Redirect to='/login' />;
+  }
+
   return (
     <div className='container-fluid'>
       <div className='manga-form mx-auto'>
@@ -33,4 +42,8 @@ const MangaForm = () => {
   );
 };
 
-export default MangaForm;
+const mapStateToProps = (state: RootState) => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps)(MangaForm);

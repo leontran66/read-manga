@@ -1,6 +1,15 @@
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import AuthProps from '../../types/AuthProps';
+import { RootState } from '../../../state/store';
+
 import './EditProfileForm.css';
 
-const EditProfileForm = () => {
+const EditProfileForm = (props: AuthProps) => {
+  if (!props.isAuthenticated) {
+    return <Redirect to='/login' />;
+  }
+
   return (
     <div className='container-fluid'>
       <div className='edit-profile-form mx-auto'>
@@ -25,4 +34,8 @@ const EditProfileForm = () => {
   );
 };
 
-export default EditProfileForm;
+const mapStateToProps = (state: RootState) => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps)(EditProfileForm);

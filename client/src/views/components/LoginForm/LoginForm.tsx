@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { AuthState } from '../../../state/ducks/auth/types';
+import AuthProps from '../../types/AuthProps';
+import { RootState } from '../../../state/store';
 import { loginUser } from '../../../state/ducks/auth/actions';
 import store from '../../../state/store';
 import './LoginForm.css';
 
-const LoginForm = (isAuthenticated?: boolean) => {
+const LoginForm = (props: AuthProps) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -21,7 +22,7 @@ const LoginForm = (isAuthenticated?: boolean) => {
     store.dispatch<any>(loginUser(email, password));
   }
 
-  if (!isAuthenticated) {
+  if (props.isAuthenticated) {
     return <Redirect to='/profile' />
   }
 
@@ -46,8 +47,8 @@ const LoginForm = (isAuthenticated?: boolean) => {
   );
 };
 
-const mapStateToProps = (state: AuthState) => ({
-  isAuthenticated: state.isAuthenticated
+const mapStateToProps = (state: RootState) => ({
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapStateToProps, { loginUser })(LoginForm);
