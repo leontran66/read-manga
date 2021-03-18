@@ -6,7 +6,10 @@ import * as reducers from './ducks';
 const preloadedState = {};
 
 const rootReducer = combineReducers({
-  auth: reducers.auth
+  auth: reducers.auth,
+  genres: reducers.genres,
+  manga: reducers.manga,
+  readings: reducers.readings
 });
 
 const store = configureStore({

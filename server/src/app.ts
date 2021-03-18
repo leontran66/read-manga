@@ -38,6 +38,7 @@ app.use(helmet());
 
 app.get('/api/auth', auth, authController.getUser);
 app.post('/api/auth', authController.loginUser);
+app.get('/api/genres', auth, genreController.getAllGenres);
 app.post('/api/genres', auth, genreController.createGenre);
 app.patch('/api/genres/:id', auth, genreController.updateGenre);
 app.delete('/api/genres/:id', auth, genreController.deleteGenre);

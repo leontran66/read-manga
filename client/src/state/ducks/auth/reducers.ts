@@ -15,7 +15,8 @@ export default function authReducer(state = initialState, action: types.AuthActi
         ...state,
         isAuthenticated: true,
         isLoading: false,
-        user: action.payload
+        user: action.payload,
+        errors: []
       };
     case types.LOGIN_USER:
     case types.REGISTER_USER:
@@ -24,12 +25,14 @@ export default function authReducer(state = initialState, action: types.AuthActi
         ...state,
         token: action.payload,
         isAuthenticated: true,
-        isLoading: false
+        isLoading: false,
+        errors: []
       };
     case types.UPDATE_USER:
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        errors: []
       };
     case types.DELETE_USER_FAIL:
     case types.UPDATE_USER_FAIL:
@@ -58,7 +61,8 @@ export default function authReducer(state = initialState, action: types.AuthActi
         token: null,
         isAuthenticated: false,
         isLoading: false,
-        user: null
+        user: null,
+        errors: []
       };
     default:
       return state;

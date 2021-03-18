@@ -3,6 +3,29 @@ import { body, validationResult } from 'express-validator';
 import { Genre } from '../models/Genre';
 import { AuthRequest } from '../types/authRequest';
 
+// @route GET api/genres
+// @desc Get All Genres
+// @access private
+export const getAllGenres = async (req: AuthRequest, res: Response): Promise<Response> => {
+  const { accessLevel } = req.user;
+
+  try {
+    // check if user is admin
+    if (accessLevel !== 'admin') {
+      return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
+    }
+
+    const genres = await Genre.find({});
+    if (genres.length <= 0) {
+      return res.status(400).json({ errors: [{ msg: 'Couldn\'t find any genres' }] });
+    }
+
+    return res.status(200).json({ genres });
+  } catch (err) {
+    return res.status(500).json({ errors: [{ msg: 'Genre error' }] });
+  }
+};
+
 // @route POST api/genres
 // @desc Create Genre
 // @access private
