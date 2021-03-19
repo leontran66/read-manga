@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import AuthProps from '../../types/AuthProps';
+import { Props } from '../../types/Props';
 import { RootState } from '../../../state/store';
 import { loginUser } from '../../../state/ducks/auth/actions';
 import store from '../../../state/store';
 import './LoginForm.css';
 
-const LoginForm = (props: AuthProps) => {
+const LoginForm = (props: Props) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -48,7 +48,8 @@ const LoginForm = (props: AuthProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  isLoading: state.auth.isLoading
 });
 
 export default connect(mapStateToProps, { loginUser })(LoginForm);

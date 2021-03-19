@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import AuthProps from '../../../types/AuthProps';
+import { Props } from '../../../types/Props';
 import { RootState } from '../../../../state/store';
 import { logoutUser } from '../../../../state/ducks/auth/actions';
 import store from '../../../../state/store';
@@ -10,7 +10,7 @@ const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
   store.dispatch<any>(logoutUser());
 };
 
-const Header = (props: AuthProps) => {
+const Header = (props: Props) => {
   const authLinks = (
     <ul className='navbar-nav mr-auto mb-2 mb-lg-0'>
       <li className='nav-item'>
@@ -61,7 +61,8 @@ const Header = (props: AuthProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  isLoading: state.auth.isLoading
 });
 
 export default connect(mapStateToProps, { logoutUser })(Header);

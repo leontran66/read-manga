@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import AuthProps from '../../types/AuthProps';
+import { Props } from '../../types/Props';
 import { RootState } from '../../../state/store';
 import { registerUser } from '../../../state/ducks/auth/actions';
 import store from '../../../state/store';
 
 import './RegisterForm.css';
 
-const RegisterForm = (props: AuthProps) => {
+const RegisterForm = (props: Props) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -27,7 +27,6 @@ const RegisterForm = (props: AuthProps) => {
   if (props.isAuthenticated) {
     return <Redirect to='/profile' />
   }
-
 
   return (
     <div className='container-fluid'>
@@ -56,7 +55,8 @@ const RegisterForm = (props: AuthProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  isLoading: state.auth.isLoading
 });
 
 export default connect(mapStateToProps)(RegisterForm);

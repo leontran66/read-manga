@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import AuthProps from '../../types/AuthProps';
+import { Props } from '../../types/Props';
 import { RootState } from '../../../state/store';
 
 import './EditGenreForm.css';
 
-const EditGenreForm = (props: AuthProps) => {
+const EditGenreForm = (props: Props) => {
   if (!props.isAuthenticated) {
     return <Redirect to='/login' />;
   }
@@ -39,7 +39,8 @@ const EditGenreForm = (props: AuthProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  isLoading: state.auth.isLoading
 });
 
 export default connect(mapStateToProps)(EditGenreForm);

@@ -1,16 +1,12 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import AuthProps from '../../types/AuthProps';
+import { Props } from '../../types/Props';
 import { RootState } from '../../../state/store';
 
 import './CreateReadingForm.css';
 
-const CreateGenreForm = (props: AuthProps) => {
-  if (!props.isAuthenticated) {
-    return <Redirect to='/login' />;
-  }
-
+const CreateGenreForm = (props: Props) => {
   return (
     <Fragment>
       <button type="button" className='btn btn-primary mb-3' data-bs-toggle="modal" data-bs-target="#createReadingForm">Add New Reading</button>
@@ -48,7 +44,8 @@ const CreateGenreForm = (props: AuthProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  isLoading: state.auth.isLoading
 });
 
 export default connect(mapStateToProps)(CreateGenreForm);

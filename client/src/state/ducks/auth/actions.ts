@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as types from './types';
 import { AppThunk } from '../../types/AppThunk';
 import setAuthToken from '../../utils/setAuthToken';
+import history from '../../../history';
 
 export const loadUser = (): AppThunk => async dispatch => {
   if (localStorage.token) {
@@ -20,6 +21,8 @@ export const loadUser = (): AppThunk => async dispatch => {
       type: types.LOAD_USER_FAIL,
       payload: err.response.data.errors
     });
+
+    history.push('/login');
   }
 };
 
@@ -92,6 +95,12 @@ export const updateUser = (currentPW: string, password: string, confirmPW: strin
 
   try {
     await axios.patch('/api/users', data, config);
+
+    dispatch({
+      type: types.UPDATE_USER
+    });
+
+    history.push('/profile');
   } catch (err) {
     dispatch({
       type: types.UPDATE_USER_FAIL,
@@ -103,6 +112,12 @@ export const updateUser = (currentPW: string, password: string, confirmPW: strin
 export const deleteUser = (): AppThunk => async dispatch => {
   try {
     await axios.delete('/api/users');
+
+    dispatch({
+      type: types.DELETE_USER
+    });
+
+    history.push('/');
   } catch (err) {
     dispatch({
       type: types.DELETE_USER_FAIL,

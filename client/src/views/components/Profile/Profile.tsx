@@ -1,20 +1,22 @@
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import AuthProps from '../../types/AuthProps';
+import { ScaleLoader } from 'react-spinners';
+import { ProfileProps } from '../../types/Props';
 import { RootState } from '../../../state/store';
-
 import CreateReadingForm from '../CreateReadingForm';
+
+import DeleteProfileFrom from '../DeleteProfileForm';
 import EditReadingForm from '../EditReadingForm';
 
 import './Profile.css';
 
-const Profile = (props: AuthProps) => {
-
-  if (!props.isAuthenticated) {
-    return <Redirect to='/login' />;
-  }
-
-  return (
+const Profile = ({ auth: { user }, isAuthenticated, isLoading }: ProfileProps) => {
+  return isLoading && user === null ? (
+    <div className='container-fluid'>
+      <div className="position-absolute top-50 start-50 translate-middle">
+        <ScaleLoader color='#36D7B7' loading={isLoading} height={70} width={8} radius={4} margin={4} />
+      </div>
+    </div>
+  ) : (
     <div className='container-fluid'>
       <div className='profile mx-auto'>
         <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -64,7 +66,7 @@ const Profile = (props: AuthProps) => {
                     <tbody>
                       <tr>
                         <td>Email:</td>
-                        <td>leontran66@gmail.com</td>
+                        <td>{user ? user.email : ''}</td>
                       </tr>
                       <tr>
                         <td>Password:</td>
@@ -74,24 +76,7 @@ const Profile = (props: AuthProps) => {
                   </table>
                 </div>
                 <a href="/profile/edit" className="btn btn-primary">Update Password</a>
-                <button type="button" className='btn btn-danger mx-2' data-bs-toggle="modal" data-bs-target="#deleteUser">Delete Account</button>
-                <div className="modal fade" id="deleteUser" tabIndex={-1} aria-labelledby="deleteUserLabel" aria-hidden="true">
-                  <div className="modal-dialog modal-fullscreen-sm-down">
-                    <div className='modal-content'>
-                      <div className='modal-header'>
-                        <h5 className='modal-title'>Confirmation of Account Deletion</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div className='modal-body'>
-                        <p>Are you sure you wish to delete your account? This action is irreversible.</p>
-                      </div>
-                      <div className='modal-footer'>
-                        <a href='/users/delete' className='btn btn-danger'>Delete Account</a>
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <DeleteProfileFrom />
               </div>
             </div>
           </div>
@@ -102,7 +87,9 @@ const Profile = (props: AuthProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated
+  auth: state.auth,
+  isAuthenticated: state.auth.isAuthenticated,
+  isLoading: state.auth.isLoading
 });
 
 export default connect(mapStateToProps)(Profile);
