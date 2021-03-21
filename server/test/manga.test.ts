@@ -201,9 +201,12 @@ describe('Test the manga route', () => {
       const res = await request(app).post('/api/manga')
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Must have a title');
-      expect(res.body.errors[1].msg).toBe('Must have an author');
-      expect(res.body.errors[2].msg).toBe('Chapters must be a number');
+      expect(res.body.errors[0].msg).toBe('Title must not be empty.');
+      expect(res.body.errors[0].param).toBe('title');
+      expect(res.body.errors[1].msg).toBe('Author must not be empty.');
+      expect(res.body.errors[1].param).toBe('author');
+      expect(res.body.errors[2].msg).toBe('Chapters must be a number.');
+      expect(res.body.errors[2].param).toBe('chapters');
     });
 
     test('existing manga should return 400 Bad Request', async() => {
@@ -216,7 +219,10 @@ describe('Test the manga route', () => {
           chapters: 1007
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Manga already exists');
+      expect(res.body.errors[0].msg).toBe('Manga already exists.');
+      expect(res.body.errors[0].param).toBe('title');
+      expect(res.body.errors[1].msg).toBe('Manga already exists.');
+      expect(res.body.errors[1].param).toBe('author');
     });
 
     test('correct input should return 200 OK', async() => {
@@ -273,9 +279,12 @@ describe('Test the manga route', () => {
       const res = await request(app).patch('/api/manga/' + mangaID)
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Must have a title');
-      expect(res.body.errors[1].msg).toBe('Must have an author');
-      expect(res.body.errors[2].msg).toBe('Chapters must be a number');
+      expect(res.body.errors[0].msg).toBe('Title must not be empty.');
+      expect(res.body.errors[0].param).toBe('title');
+      expect(res.body.errors[1].msg).toBe('Author must not be empty.');
+      expect(res.body.errors[1].param).toBe('author');
+      expect(res.body.errors[2].msg).toBe('Chapters must be a number.');
+      expect(res.body.errors[2].param).toBe('chapters');
     });
 
     test('non-manga id should return 400 Bad Request', async() => {

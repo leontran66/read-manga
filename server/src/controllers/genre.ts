@@ -34,7 +34,7 @@ export const createGenre = async (req: AuthRequest, res: Response): Promise<Resp
     const { accessLevel } = req.user;
 
     try {
-      await body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty').run(req);
+      await body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty.').run(req);
 
       // check if input is valid
       const errors = validationResult(req);
@@ -50,7 +50,7 @@ export const createGenre = async (req: AuthRequest, res: Response): Promise<Resp
       // check if genre already exists
       let genre = await Genre.findOne({ name: name.toLowerCase() });
       if (genre) {
-        return res.status(400).json({ errors: [{ msg: 'Genre already exists' }] });
+        return res.status(400).json({ errors: [{ msg: 'Genre already exists.', param: 'name' }] });
       }
 
       genre = new Genre({
@@ -75,7 +75,7 @@ export const updateGenre = async (req: AuthRequest, res: Response): Promise<Resp
     const accessLevel = req.user.accessLevel;
 
     try {
-      await body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty').run(req);
+      await body('name').not().isEmpty().trim().escape().withMessage('Name must not be empty.').run(req);
 
       // check if input is valid
       const errors = validationResult(req);
@@ -97,7 +97,7 @@ export const updateGenre = async (req: AuthRequest, res: Response): Promise<Resp
       // check if genre already exists
       genre = await Genre.findOne({ name: name.toLowerCase() });
       if (genre) {
-        return res.status(400).json({ errors: [{ msg: 'Genre already exists' }] });
+        return res.status(400).json({ errors: [{ msg: 'Genre already exists.', param: 'name' }] });
       }
 
       await Genre.findByIdAndUpdate(id, { name: name.toLowerCase() });

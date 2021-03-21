@@ -31,8 +31,8 @@ export const createReading = async (req: AuthRequest, res: Response): Promise<Re
     const { id } = req.user;
 
     try {
-      await body('title').not().isEmpty().trim().escape().withMessage('Must have a title').run(req);
-      await body('chapter').isNumeric().withMessage('Chapter must be a number').run(req);
+      await body('title').not().isEmpty().trim().escape().withMessage('Title must not be empty.').run(req);
+      await body('chapter').isNumeric().withMessage('Chapter must be a number.').run(req);
 
       // check if input is valid
       const errors = validationResult(req);
@@ -49,12 +49,12 @@ export const createReading = async (req: AuthRequest, res: Response): Promise<Re
       // check if reading for user already exists
       let reading = await Reading.findOne({ user: id, manga: manga._id });
       if (reading) {
-        return res.status(400).json({ errors: [{ msg: 'Reading already exists for user' }] });
+        return res.status(400).json({ errors: [{ msg: 'Reading for this title already exists.', param: 'title' }] });
       }
 
       // check if chapters is greater than chapters in manga
       if (manga.chapters < chapter) {
-        return res.status(400).json({ errors: [{ msg: 'Current chapter cannot be more than number of chapters in manga' }] });
+        return res.status(400).json({ errors: [{ msg: 'Chapter cannot be more than number of chapters in manga.', param: 'chapter' }] });
       }
 
       reading = new Reading({
@@ -80,7 +80,7 @@ export const updateReading = async (req: AuthRequest, res: Response): Promise<Re
     const userID = req.user.id;
 
     try {
-      await body('chapter').isNumeric().withMessage('Chapter must be a number').run(req);
+      await body('chapter').isNumeric().withMessage('Chapter must be a number.').run(req);
 
       // check if input is valid
       const errors = validationResult(req);
@@ -103,7 +103,7 @@ export const updateReading = async (req: AuthRequest, res: Response): Promise<Re
       // check if chapters is greater than chapters in manga
       const manga = await Manga.findById(reading.manga);
       if (manga.chapters < chapter) {
-        return res.status(400).json({ errors: [{ msg: 'Current chapter cannot be more than number of chapters in manga' }] });
+        return res.status(400).json({ errors: [{ msg: 'Chapter cannot be more than number of chapters in manga', param: 'chapter' }] });
       }
 
       await Reading.findByIdAndUpdate(id, { chapter });

@@ -1,16 +1,9 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { Props } from '../../types/Props';
-import { RootState } from '../../../state/store';
 
 import './EditReadingForm.css';
 
-const EditReadingForm = (props: Props) => {
-  if (!props.isAuthenticated) {
-    return <Redirect to='/login' />;
-  }
-
+const EditReadingForm = () => {
   return (
     <Fragment>
       <button type="button" className='btn btn-sm btn-primary' data-bs-toggle="modal" data-bs-target="#editReadingForm">Edit</button>
@@ -38,9 +31,6 @@ const EditReadingForm = (props: Props) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.auth.isLoading
-});
+const mapStateToProps = () => ({});
 
 export default connect(mapStateToProps)(EditReadingForm);

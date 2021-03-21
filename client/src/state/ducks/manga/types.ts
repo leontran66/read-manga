@@ -18,14 +18,14 @@ type Manga = {
 }
 
 export interface MangaState {
-  manga: [Manga] | [],
+  manga: Array<Manga>,
   isLoading: boolean,
-  errors: [Error] | []
+  errors: Array<Error>
 }
 
 interface LoadAction {
   type: typeof LOAD_ALL_MANGA | typeof LOAD_MANGA,
-  payload: [Manga]
+  payload: Array<Manga>
 }
 
 interface MangaAction {
@@ -34,7 +34,7 @@ interface MangaAction {
 
 interface FailAction {
   type: typeof LOAD_MANGA_FAIL | typeof CREATE_MANGA_FAIL | typeof DELETE_MANGA_FAIL | typeof UPDATE_MANGA_FAIL,
-  payload: [Error]
+  payload: Array<Error>
 }
 
 export type MangaActionTypes = FailAction | LoadAction | MangaAction;

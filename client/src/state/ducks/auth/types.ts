@@ -14,16 +14,20 @@ export const UPDATE_USER_FAIL = 'UPDATE_USER_FAIL';
 
 type Token = string;
 
-type User = {
-  email: string
+export type User = {
+  email: string,
+  accessLevel: string
 }
 
 export interface AuthState {
   token: Token | null,
   isAuthenticated: boolean,
   isLoading: boolean,
-  user: User | null,
-  errors: [Error] | []
+  user: {
+    email: string,
+    accessLevel: string
+  } | null,
+  errors: Array<Error>
 };
 
 interface AuthAction {
@@ -42,7 +46,7 @@ interface UserAction {
 
 interface FailAction {
   type: typeof DELETE_USER_FAIL | typeof LOAD_USER_FAIL | typeof LOGIN_USER_FAIL | typeof REGISTER_USER_FAIL | typeof UPDATE_USER_FAIL,
-  payload: [Error]
+  payload: Array<Error>
 }
 
 export type AuthActionTypes = AuthAction | FailAction | LoadAction | UserAction;

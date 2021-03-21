@@ -1,4 +1,4 @@
-import EditGenreForm from '../EditGenreForm';
+import EditGenreForm from '../common/modals/EditGenreForm';
 
 import './Genres.css';
 

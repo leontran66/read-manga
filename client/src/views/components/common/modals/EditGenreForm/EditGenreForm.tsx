@@ -1,16 +1,9 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { Props } from '../../types/Props';
-import { RootState } from '../../../state/store';
 
 import './EditGenreForm.css';
 
-const EditGenreForm = (props: Props) => {
-  if (!props.isAuthenticated) {
-    return <Redirect to='/login' />;
-  }
-
+const EditGenreForm = () => {
   return (
     <Fragment>
       <button type="button" className='ms-2 btn btn-primary' data-bs-toggle="modal" data-bs-target="#editGenreForm">Edit</button>
@@ -38,9 +31,6 @@ const EditGenreForm = (props: Props) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.auth.isLoading
-});
+const mapStateToProps = () => ({});
 
 export default connect(mapStateToProps)(EditGenreForm);

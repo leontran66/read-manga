@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Props } from '../../types/Props';
 import { RootState } from '../../../state/store';
+import { EnhancedProps } from '../../types/Props';
 
 import './MangaForm.css';
 
-const MangaForm = (props: Props) => {
-  if (!props.isAuthenticated) {
-    return <Redirect to='/login' />;
+const MangaForm = ({ auth: { user }}: EnhancedProps) => {
+  if (user && user.accessLevel !== 'admin') {
+    return <Redirect to='/' />;
   }
 
   return (
@@ -43,8 +43,7 @@ const MangaForm = (props: Props) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.auth.isLoading
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(MangaForm);

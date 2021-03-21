@@ -1,12 +1,18 @@
+import { connect } from 'react-redux';
+import { RootState } from '../../../state/store';
+import { EnhancedProps } from '../../types/Props';
+
 import Manga from './MangaResult';
 
 import './Mangas.css';
 
-const Mangas = () => {
+const Mangas = ({ auth: { user } }: EnhancedProps) => {
   return (
     <div className='container-fluid'>
       <div className='mangas'>
-        <a href='/manga/new' className='btn btn-primary mb-3'>Add New Manga</a>
+        {user && user.accessLevel === 'admin' &&
+          <a href='/manga/new' className='btn btn-primary mb-3'>Add New Manga</a>
+        }
         <Manga />
         <Manga />
         <Manga />
@@ -16,4 +22,8 @@ const Mangas = () => {
   );
 };
 
-export default Mangas;
+const mapStateToProps = (state: RootState) => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(Mangas);

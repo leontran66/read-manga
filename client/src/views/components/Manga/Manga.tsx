@@ -1,12 +1,21 @@
+import { Fragment } from 'react';
+import { connect } from 'react-redux';
+import { RootState } from '../../../state/store';
+import { EnhancedProps } from '../../types/Props';
+
 import './Manga.css';
 
-const Manga = () => {
+const Manga = ({ auth: { user } }: EnhancedProps) => {
   return (
     <div className='manga mb-3 p-4'>
       <h3 className='d-block'>
         Berserk
-        <a href='/manga/id/edit' className='ms-2 btn btn-primary'>Edit</a>
-        <a href='/manga/id/delete' className='ms-2 btn btn-danger'>Delete</a>
+        {user && user.accessLevel === 'admin' &&
+          <Fragment>
+            <a href='/manga/id/edit' className='ms-2 btn btn-primary'>Edit</a>
+            <a href='/manga/id/delete' className='ms-2 btn btn-danger'>Delete</a>
+          </Fragment>
+        }
         <div className='float-end'><button className='btn btn-primary'>Add To Reading List</button></div>
       </h3>
       <h6 className='fst-italic'><a href='/manga?query='>Miura, Kentarou</a></h6>
@@ -25,4 +34,8 @@ const Manga = () => {
   );
 };
 
-export default Manga;
+const mapStateToProps = (state: RootState) => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(Manga);

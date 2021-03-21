@@ -11,7 +11,7 @@ export const getUser = async (req: AuthRequest, res: Response) => {
   const { id } = req.user;
 
   try {
-    const user = await User.findById(id).select('email');
+    const user = await User.findById(id).select('email accessLevel');
 
     return res.status(200).json({ user });
   } catch (err) {
@@ -29,13 +29,13 @@ export const loginUser = async (req: Request, res: Response) => {
     // check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ errors: [{ msg: 'Invalid credentials' }] });
+      return res.status(401).json({ errors: [{ msg: 'Invalid credentials.', param: 'email' }] });
     }
 
     // check if password is correct
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ errors: [{ msg: 'Invalid credentials' }] });
+      return res.status(401).json({ errors: [{ msg: 'Invalid credentials.', param: 'password' }] });
     }
 
     const payload = {

@@ -15,14 +15,14 @@ type Reading = {
 }
 
 export interface ReadingState {
-  readings: [Reading] | [],
+  readings: Array<Reading>,
   isLoading: boolean,
-  errors: [Error] | []
+  errors: Array<Error>
 }
 
 interface LoadAction {
   type: typeof LOAD_READINGS,
-  payload: [Reading]
+  payload: Array<Reading>
 }
 
 interface ReadingAction {
@@ -31,7 +31,7 @@ interface ReadingAction {
 
 interface FailAction {
   type: typeof CREATE_READING_FAIL | typeof DELETE_READING_FAIL | typeof LOAD_READINGS_FAIL | typeof UPDATE_READING_FAIL,
-  payload: [Error]
+  payload: Array<Error>
 }
 
 export type ReadingActionTypes = FailAction | LoadAction | ReadingAction;

@@ -11,14 +11,14 @@ import mangas from '../pages/mangas';
 import profile from '../pages/profile';
 import register from '../pages/register';
 
-import NotFound from '../components/NotFound';
-
-import history from '../../history';
 import defaultRoute from './default';
+import NotFound from '../components/NotFound';
+import PrivateRoute from '../utils/PrivateRoute';
 
 import './index.css';
 
 import { Provider } from 'react-redux';
+import history from '../../history';
 import store from '../../state/store';
 import { loadUser } from '../../state/ducks/auth/actions';
 import setAuthToken from '../../state/utils/setAuthToken';
@@ -39,15 +39,15 @@ const App = () => {
             <Switch>
               <Route exact path='/' component={defaultRoute} />
               <Route exact path='/index.html' component={defaultRoute} />
-              <Route exact path='/genres' component={genres} />
-              <Route exact path='/login' component={login} />
-              <Route exact path='/manga' component={mangas} />
-              <Route exact path='/manga/new' component={createManga} />
-              <Route exact path='/manga/:id' component={manga} />
-              <Route exact path='/manga/:id/edit' component={editManga} />
-              <Route exact path='/profile' component={profile} />
-              <Route exact path='/profile/edit' component={editProfile} />
               <Route exact path='/register' component={register} />
+              <Route exact path='/login' component={login} />
+              <PrivateRoute exact path='/profile' component={profile} />
+              <PrivateRoute path='/profile/edit' component={editProfile} />
+              <PrivateRoute exact path='/manga/new' component={createManga} />
+              <PrivateRoute path='/manga/:id/edit' component={editManga} />
+              <PrivateRoute exact path='/genres' component={genres} />
+              <Route path='/manga/:id' component={manga} />
+              <Route exact path='/manga' component={mangas} />
               <Route component={NotFound} />
             </Switch>
           </Fragment>

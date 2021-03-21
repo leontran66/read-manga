@@ -23,8 +23,10 @@ describe('Test the user route', () => {
     test('no input should return 400 Bad Request', async () => {
       const res = await request(app).post('/api/users');
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Invalid email');
-      expect(res.body.errors[1].msg).toBe('Password must be at least 6 characters long');
+      expect(res.body.errors[0].msg).toBe('Email is not valid.');
+      expect(res.body.errors[0].param).toBe('email');
+      expect(res.body.errors[1].msg).toBe('Password must be at least 6 characters long.');
+      expect(res.body.errors[1].param).toBe('password');
     });
 
     test('existing user should return 400 Bad Request', async() => {
@@ -35,7 +37,7 @@ describe('Test the user route', () => {
           confirmPW: 'testing'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('User already exists');
+      expect(res.body.errors[0].msg).toBe('Email is already in use.');
     });
 
     test('mismatched passwords should return 400 Bad Request', async() => {
@@ -46,7 +48,7 @@ describe('Test the user route', () => {
           confirmPW: 'testingg'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Passwords do not match');
+      expect(res.body.errors[0].msg).toBe('Passwords do not match.');
     });
 
     test('correct input should return 200 OK', async() => {
@@ -95,7 +97,8 @@ describe('Test the user route', () => {
       const res = await request(app).patch('/api/users')
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Password must be at least 6 characters long');
+      expect(res.body.errors[0].msg).toBe('Password must be at least 6 characters long.');
+      expect(res.body.errors[0].param).toBe('password');
     });
     
     test('incorrect password should return 400 Bad Request', async () => {
@@ -107,7 +110,8 @@ describe('Test the user route', () => {
           confirmPW: 'testinggg'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Incorrect password');
+      expect(res.body.errors[0].msg).toBe('Password is incorrect.');
+      expect(res.body.errors[0].param).toBe('currentPW');
     });
 
     test('same password should return 400 Bad Request', async () => {
@@ -119,7 +123,8 @@ describe('Test the user route', () => {
           confirmPW: 'testing'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('New password cannot be the same as current password');
+      expect(res.body.errors[0].msg).toBe('New password cannot be the same as current password.');
+      expect(res.body.errors[0].param).toBe('password');
     });
     
     test('mismatched passwords should return 400 Bad Request', async () => {
@@ -131,7 +136,8 @@ describe('Test the user route', () => {
           confirmPW: 'testinggg'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Passwords do not match');
+      expect(res.body.errors[0].msg).toBe('Passwords do not match.');
+      expect(res.body.errors[0].param).toBe('confirmPW');
     });
     
     test('correct input should return 200 OK', async () => {

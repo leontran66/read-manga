@@ -17,7 +17,7 @@ export default function authReducer(state = initialState, action: types.AuthActi
         isLoading: false,
         user: action.payload,
         errors: []
-      };
+      }
     case types.LOGIN_USER:
     case types.REGISTER_USER:
       localStorage.setItem('token', action.payload);
@@ -25,7 +25,6 @@ export default function authReducer(state = initialState, action: types.AuthActi
         ...state,
         token: action.payload,
         isAuthenticated: true,
-        isLoading: false,
         errors: []
       };
     case types.UPDATE_USER:
@@ -50,7 +49,6 @@ export default function authReducer(state = initialState, action: types.AuthActi
         token: null,
         isAuthenticated: false,
         isLoading: false,
-        user: null,
         errors: action.payload
       };
     case types.DELETE_USER:
@@ -61,7 +59,6 @@ export default function authReducer(state = initialState, action: types.AuthActi
         token: null,
         isAuthenticated: false,
         isLoading: false,
-        user: null,
         errors: []
       };
     default:

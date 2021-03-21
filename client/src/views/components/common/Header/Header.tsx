@@ -1,23 +1,23 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Props } from '../../../types/Props';
+import { EnhancedProps } from '../../../types/Props';
 import { RootState } from '../../../../state/store';
 import { logoutUser } from '../../../../state/ducks/auth/actions';
 import store from '../../../../state/store';
 
-const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-  store.dispatch<any>(logoutUser());
-};
-
-const Header = (props: Props) => {
+const Header = ({ auth: { isAuthenticated, user } }: EnhancedProps) => {
+  const onClick = () => {
+    store.dispatch<any>(logoutUser());
+  };
+  
   const authLinks = (
     <ul className='navbar-nav mr-auto mb-2 mb-lg-0'>
       <li className='nav-item'>
         <Link className='nav-link' to='/profile'>Profile</Link>
       </li>
       <li className='nav-item'>
-        <a className='nav-link' href='#!' onClick={e => onClick(e)}>Logout</a>
+        <a className='nav-link' href='#!' onClick={() => onClick()}>Logout</a>
       </li>
     </ul>
   );
@@ -51,9 +51,9 @@ const Header = (props: Props) => {
             <li className='nav-item'>
               <Link className='nav-link' to='/manga'>Manga</Link>
             </li>
-            <Fragment>{props.isAuthenticated? genreLink: null }</Fragment>
+            <Fragment>{user && user.accessLevel === 'admin' ? genreLink : null }</Fragment>
           </ul>
-          <Fragment>{props.isAuthenticated? authLinks : guestLinks}</Fragment>
+          <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
         </div>
       </div>
     </div>
@@ -61,8 +61,7 @@ const Header = (props: Props) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.auth.isLoading
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { logoutUser })(Header);

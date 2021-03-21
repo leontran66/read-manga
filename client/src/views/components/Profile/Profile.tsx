@@ -1,22 +1,16 @@
 import { connect } from 'react-redux';
-import { ScaleLoader } from 'react-spinners';
-import { ProfileProps } from '../../types/Props';
 import { RootState } from '../../../state/store';
-import CreateReadingForm from '../CreateReadingForm';
+import { EnhancedProps } from '../../types/Props';
 
-import DeleteProfileFrom from '../DeleteProfileForm';
-import EditReadingForm from '../EditReadingForm';
+import CreateReadingForm from '../common/modals/CreateReadingForm';
+import DeleteProfileForm from '../common/modals/DeleteProfileForm';
+import EditProfileForm from '../common/modals/EditProfileForm';
+import EditReadingForm from '../common/modals/EditReadingForm';
 
 import './Profile.css';
 
-const Profile = ({ auth: { user }, isAuthenticated, isLoading }: ProfileProps) => {
-  return isLoading && user === null ? (
-    <div className='container-fluid'>
-      <div className="position-absolute top-50 start-50 translate-middle">
-        <ScaleLoader color='#36D7B7' loading={isLoading} height={70} width={8} radius={4} margin={4} />
-      </div>
-    </div>
-  ) : (
+const Profile = ({ auth }: EnhancedProps) => {
+  return (
     <div className='container-fluid'>
       <div className='profile mx-auto'>
         <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -66,7 +60,7 @@ const Profile = ({ auth: { user }, isAuthenticated, isLoading }: ProfileProps) =
                     <tbody>
                       <tr>
                         <td>Email:</td>
-                        <td>{user ? user.email : ''}</td>
+                        <td>{auth.user ? auth.user.email : 'Couldn\'t load email'}</td>
                       </tr>
                       <tr>
                         <td>Password:</td>
@@ -75,8 +69,8 @@ const Profile = ({ auth: { user }, isAuthenticated, isLoading }: ProfileProps) =
                     </tbody>
                   </table>
                 </div>
-                <a href="/profile/edit" className="btn btn-primary">Update Password</a>
-                <DeleteProfileFrom />
+                <EditProfileForm />
+                <DeleteProfileForm />
               </div>
             </div>
           </div>
@@ -87,9 +81,7 @@ const Profile = ({ auth: { user }, isAuthenticated, isLoading }: ProfileProps) =
 };
 
 const mapStateToProps = (state: RootState) => ({
-  auth: state.auth,
-  isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.auth.isLoading
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(Profile);

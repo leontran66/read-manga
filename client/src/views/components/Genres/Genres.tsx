@@ -1,16 +1,15 @@
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Props } from '../../types/Props';
-import { RootState } from '../../../state/store';
-
 import Genre from './Genre';
-import CreateGenreForm from '../CreateGenreForm';
+import { RootState } from '../../../state/store';
+import { EnhancedProps } from '../../types/Props';
+import CreateGenreForm from '../common/modals/CreateGenreForm';
 
 import './Genres.css';
 
-const Genres = (props: Props) => {
-  if (!props.isAuthenticated) {
-    return <Redirect to='/login' />;
+const Genres = ({ auth }: EnhancedProps) => {
+  if (auth.user !== null && auth.user.accessLevel !== 'admin') {
+      return <Redirect to='/' />;
   }
 
   return (
@@ -28,8 +27,7 @@ const Genres = (props: Props) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.auth.isLoading
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(Genres);

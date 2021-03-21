@@ -1,12 +1,28 @@
-export interface Props {
-  isAuthenticated: boolean,
-  isLoading: boolean
-}
+import React from 'react';
+import { RouteProps } from 'react-router';
+import { Alert } from '../../state/ducks/alerts/types';
 
-export interface ProfileProps extends Props {
+export type GuestProps = {
+  alerts: Array<Alert>,
   auth: {
+    isAuthenticated: boolean
+  }
+};
+
+export type PrivateProps = {
+  auth: {
+    isAuthenticated: boolean,
+    isLoading: boolean
+  },
+  component: React.ElementType
+} & RouteProps;
+
+export type EnhancedProps = {
+  auth: {
+    isAuthenticated: boolean,
     user: {
-      email: string
+      email: string,
+      accessLevel: string
     } | null
   }
-}
+};

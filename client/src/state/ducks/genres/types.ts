@@ -15,14 +15,14 @@ type Genre = {
 }
 
 export interface GenreState {
-  genres: [Genre] | [],
+  genres: Array<Genre>,
   isLoading: boolean,
-  errors: [Error] | []
+  errors: Array<Error>
 }
 
 interface LoadAction {
   type: typeof LOAD_ALL_GENRES,
-  payload: [Genre]
+  payload: Array<Genre>
 }
 
 interface GenreAction {
@@ -31,7 +31,7 @@ interface GenreAction {
 
 interface FailAction {
   type: typeof CREATE_GENRE_FAIL | typeof DELETE_GENRE_FAIL | typeof LOAD_GENRE_FAIL | typeof UPDATE_GENRE_FAIL,
-  payload: [Error]
+  payload: Array<Error>
 }
 
 export type GenreActionTypes = FailAction | GenreAction | LoadAction;

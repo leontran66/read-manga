@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 
-import EditProfileForm from '../components/EditProfileForm';
+import EditProfileForm from '../components/common/modals/EditProfileForm';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import MainContainer from '../components/common/MainContainer';

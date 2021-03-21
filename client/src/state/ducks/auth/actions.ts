@@ -1,6 +1,8 @@
 import axios from 'axios';
+import $ from 'jquery';
 import * as types from './types';
 import { AppThunk } from '../../types/AppThunk';
+import { setAlert } from '../alerts/actions';
 import setAuthToken from '../../utils/setAuthToken';
 import history from '../../../history';
 
@@ -21,8 +23,6 @@ export const loadUser = (): AppThunk => async dispatch => {
       type: types.LOAD_USER_FAIL,
       payload: err.response.data.errors
     });
-
-    history.push('/login');
   }
 };
 
@@ -45,6 +45,11 @@ export const loginUser = (email: string, password: string): AppThunk => async di
 
     dispatch(loadUser());
   } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error: any) => dispatch(setAlert(error.msg, error.param)));
+    }
+
     dispatch({
       type: types.LOGIN_USER_FAIL,
       payload: err.response.data.errors
@@ -77,6 +82,11 @@ export const registerUser = (email: string, password: string, confirmPW: string)
 
     dispatch(loadUser());
   } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error: any) => dispatch(setAlert(error.msg, error.param)));
+    }
+
     dispatch({
       type: types.REGISTER_USER_FAIL,
       payload: err.response.data.errors
@@ -99,9 +109,12 @@ export const updateUser = (currentPW: string, password: string, confirmPW: strin
     dispatch({
       type: types.UPDATE_USER
     });
-
-    history.push('/profile');
   } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error: any) => dispatch(setAlert(error.msg, error.param)));
+    }
+
     dispatch({
       type: types.UPDATE_USER_FAIL,
       payload: err.response.data.errors

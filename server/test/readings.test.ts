@@ -180,8 +180,10 @@ describe('Test the readings route', () => {
       const res = await request(app).post('/api/readings')
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Must have a title');
-      expect(res.body.errors[1].msg).toBe('Chapter must be a number');
+      expect(res.body.errors[0].msg).toBe('Title must not be empty.');
+      expect(res.body.errors[0].param).toBe('title');
+      expect(res.body.errors[1].msg).toBe('Chapter must be a number.');
+      expect(res.body.errors[1].param).toBe('chapter');
     });
     
     test('non-existent manga should return 400 Bad Request', async () => {
@@ -203,7 +205,8 @@ describe('Test the readings route', () => {
           chapter: 350
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Reading already exists for user');
+      expect(res.body.errors[0].msg).toBe('Reading for this title already exists.');
+      expect(res.body.errors[0].param).toBe('title');
     });
 
     test('greater than manga chapters input should return 400 Bad Request', async () => {
@@ -214,7 +217,8 @@ describe('Test the readings route', () => {
           chapter: 2000
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Current chapter cannot be more than number of chapters in manga');
+      expect(res.body.errors[0].msg).toBe('Chapter cannot be more than number of chapters in manga.');
+      expect(res.body.errors[0].param).toBe('chapter');
     });
     
     test('correct input should return 200 OK', async () => {
@@ -257,7 +261,8 @@ describe('Test the readings route', () => {
       const res = await request(app).patch('/api/readings/' + readingID)
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Chapter must be a number');
+      expect(res.body.errors[0].msg).toBe('Chapter must be a number.');
+      expect(res.body.errors[0].param).toBe('chapter');
     });
     
     test('non-reading id should return 400 Bad Request', async () => {
@@ -277,7 +282,8 @@ describe('Test the readings route', () => {
           chapter: 400
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Current chapter cannot be more than number of chapters in manga');
+      expect(res.body.errors[0].msg).toBe('Chapter cannot be more than number of chapters in manga');
+      expect(res.body.errors[0].param).toBe('chapter');
     });
     
     test('correct input should return 200 OK', async () => {

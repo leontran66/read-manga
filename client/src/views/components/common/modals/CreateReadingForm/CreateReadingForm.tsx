@@ -1,12 +1,9 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { Props } from '../../types/Props';
-import { RootState } from '../../../state/store';
 
 import './CreateReadingForm.css';
 
-const CreateGenreForm = (props: Props) => {
+const CreateReadingForm = () => {
   return (
     <Fragment>
       <button type="button" className='btn btn-primary mb-3' data-bs-toggle="modal" data-bs-target="#createReadingForm">Add New Reading</button>
@@ -43,9 +40,6 @@ const CreateGenreForm = (props: Props) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  isLoading: state.auth.isLoading
-});
+const mapStateToProps = () => ({});
 
-export default connect(mapStateToProps)(CreateGenreForm);
+export default connect(mapStateToProps)(CreateReadingForm);

@@ -155,7 +155,8 @@ describe('Test the genres route', () => {
       const res = await request(app).post('/api/genres')
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Name must not be empty');
+      expect(res.body.errors[0].msg).toBe('Name must not be empty.');
+      expect(res.body.errors[0].param).toBe('name');
     });
 
     test('existing genre should return 400 Bad Request', async () => {
@@ -165,7 +166,8 @@ describe('Test the genres route', () => {
           name: 'Adventure'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Genre already exists');
+      expect(res.body.errors[0].msg).toBe('Genre already exists.');
+      expect(res.body.errors[0].param).toBe('name');
     });
 
     test('correct input should return 200 OK', async () => {
@@ -210,7 +212,8 @@ describe('Test the genres route', () => {
       const res = await request(app).patch('/api/genres/' + genreID)
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Name must not be empty');
+      expect(res.body.errors[0].msg).toBe('Name must not be empty.');
+      expect(res.body.errors[0].param).toBe('name');
     });
 
     test('non-genre id should return 400 Bad Request', async () => {
@@ -230,7 +233,8 @@ describe('Test the genres route', () => {
           name: 'Demons'
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Genre already exists');
+      expect(res.body.errors[0].msg).toBe('Genre already exists.');
+      expect(res.body.errors[0].param).toBe('name');
     });
 
     test('correct input should return 200 OK', async () => {

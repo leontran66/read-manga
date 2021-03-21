@@ -12,8 +12,8 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     const { email, password, confirmPW } = req.body;
 
     try {
-      await body('email').isEmail().normalizeEmail().withMessage('Invalid email').run(req);
-      await body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long').run(req);
+      await body('email').isEmail().normalizeEmail().withMessage('Email is not valid.').run(req);
+      await body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.').run(req);
 
       // check if input is valid
       const errors = validationResult(req);
@@ -24,12 +24,12 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       // check if user already exists
       const isExists = await User.findOne({ email });
       if (isExists) {
-        return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+        return res.status(400).json({ errors: [{ msg: 'Email is already in use.', param: 'email' }] });
       }
 
       // check if passwords match
       if (password !== confirmPW) {
-        return res.status(400).json({ errors: [{ msg: 'Passwords do not match' }] });
+        return res.status(400).json({ errors: [{ msg: 'Passwords do not match.', param: 'confirmPW' }] });
       }
 
       const hash = await bcrypt.hash(password, 12);
@@ -72,7 +72,7 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
     const { id } = req.user;
 
     try {
-      await body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long').run(req);
+      await body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long.').run(req);
 
       // check if input is valid
       const errors = validationResult(req);
@@ -84,18 +84,18 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
       const user = await User.findById(id).select('-email -accessLevel');
       const isMatch = await bcrypt.compare(currentPW, user.password);
       if (!isMatch) {
-        return res.status(400).json({ errors: [{ msg: 'Incorrect password' }] });
+        return res.status(400).json({ errors: [{ msg: 'Password is incorrect.', param: 'currentPW' }] });
       }
 
       // check if password is the same as current password
       const isSame = await bcrypt.compare(password, user.password);
       if (isSame) {
-        return res.status(400).json({ errors: [{ msg: 'New password cannot be the same as current password' }] });
+        return res.status(400).json({ errors: [{ msg: 'New password cannot be the same as current password.', param: 'password' }] });
       }
 
       // check if passwords match
       if (password !== confirmPW) {
-        return res.status(400).json({ errors: [{ msg: 'Passwords do not match' }] });
+        return res.status(400).json({ errors: [{ msg: 'Passwords do not match.', param: 'confirmPW' }] });
       }
 
       const hash = await bcrypt.hash(password, 12);

@@ -57,10 +57,10 @@ export const createManga = async (req: AuthRequest, res: Response): Promise<Resp
     const { accessLevel } = req.user;
 
     try {
-      await body('title').not().isEmpty().trim().escape().withMessage('Must have a title').run(req);
-      await body('author').not().isEmpty().trim().escape().withMessage('Must have an author').run(req);
+      await body('title').not().isEmpty().trim().escape().withMessage('Title must not be empty.').run(req);
+      await body('author').not().isEmpty().trim().escape().withMessage('Author must not be empty.').run(req);
       await body('synopsis').trim().escape().run(req);
-      await body('chapters').isNumeric().withMessage('Chapters must be a number').run(req);
+      await body('chapters').isNumeric().withMessage('Chapters must be a number.').run(req);
 
       // check if input is valid
       const errors = validationResult(req);
@@ -76,7 +76,7 @@ export const createManga = async (req: AuthRequest, res: Response): Promise<Resp
       // check if manga already exists
       let manga = await Manga.findOne({ title: title.toLowerCase(), author: author.toLowerCase() });
       if (manga) {
-        return res.status(400).json({ errors: [{ msg: 'Manga already exists' }] });
+        return res.status(400).json({ errors: [{ msg: 'Manga already exists.', param: 'title' }, { msg: 'Manga already exists.', param: 'author' }] });
       }
 
       manga = new Manga({
@@ -109,10 +109,10 @@ export const updateManga = async (req: AuthRequest, res: Response): Promise<Resp
     const accessLevel = req.user.accessLevel;
 
     try {
-      await body('title').not().isEmpty().trim().escape().withMessage('Must have a title').run(req);
-      await body('author').not().isEmpty().trim().escape().withMessage('Must have an author').run(req);
+      await body('title').not().isEmpty().trim().escape().withMessage('Title must not be empty.').run(req);
+      await body('author').not().isEmpty().trim().escape().withMessage('Author must not be empty.').run(req);
       await body('synopsis').trim().escape().run(req);
-      await body('chapters').isNumeric().withMessage('Chapters must be a number').run(req);
+      await body('chapters').isNumeric().withMessage('Chapters must be a number.').run(req);
 
       // check if input is valid
       const errors = validationResult(req);
@@ -126,9 +126,15 @@ export const updateManga = async (req: AuthRequest, res: Response): Promise<Resp
       }
 
       // check if manga exists
-      const manga = await Manga.findById(id);
+      let manga = await Manga.findById(id);
       if (!manga) {
         return res.status(400).json({ errors: [{ msg: 'Manga not found' }] });
+      }
+
+      // check if manga already exists
+      manga = await Manga.findOne({ title: title.toLowerCase(), author: author.toLowerCase() });
+      if (manga) {
+        return res.status(400).json({ errors: [{ msg: 'Manga already exists.', param: 'title' }, { msg: 'Manga already exists.', param: 'author' }] });
       }
 
       await Manga.findByIdAndUpdate(id, {

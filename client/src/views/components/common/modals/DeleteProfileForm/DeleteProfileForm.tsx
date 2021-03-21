@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { deleteUser } from '../../../state/ducks/auth/actions';
-import store from '../../../state/store';
+import { deleteUser } from '../../../../../state/ducks/auth/actions';
+import store from '../../../../../state/store';
 
 import './DeleteProfileForm.css';
 
@@ -25,7 +25,7 @@ const DeleteProfileForm = () => {
             </div>
             <div className='modal-footer'>
               <button className='btn btn-danger' onClick={() => onClick()} data-bs-dismiss='modal'>Delete Account</button>
-              <button type='button' className='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+              <button type='button' className='btn btn-secondary' data-bs-dismiss='modal'>Cancel</button>
             </div>
           </div>
         </div>
