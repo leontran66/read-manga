@@ -1,6 +1,6 @@
 {
-  "name": "manga",
+  "name": "alert",
   "version": "0.0.0",
   "private": "false",
-  "main": "./Manga.tsx"
+  "main": "./Alert.tsx"
 }

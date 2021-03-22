@@ -25,7 +25,7 @@ const RegisterForm = ({ alerts, auth: { isAuthenticated } }: GuestProps) => {
     setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
     const alertToRemove = alerts.find(alert => alert.alertField === e.currentTarget.name);
     if (alertToRemove) {
-      store.dispatch<any>(removeAlert(alertToRemove.id));
+      store.dispatch<any>(removeAlert(alertToRemove.alertField));
     }
   };
 

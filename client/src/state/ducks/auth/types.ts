@@ -14,7 +14,7 @@ export const UPDATE_USER_FAIL = 'UPDATE_USER_FAIL';
 
 type Token = string;
 
-export type User = {
+type User = {
   email: string,
   accessLevel: string
 }

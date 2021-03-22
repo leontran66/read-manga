@@ -1,10 +1,8 @@
 import axios from 'axios';
-import $ from 'jquery';
 import * as types from './types';
 import { AppThunk } from '../../types/AppThunk';
-import { setAlert } from '../alerts/actions';
+import { setAlert, setSuccessAlert } from '../alerts/actions';
 import setAuthToken from '../../utils/setAuthToken';
-import history from '../../../history';
 
 export const loadUser = (): AppThunk => async dispatch => {
   if (localStorage.token) {
@@ -104,11 +102,13 @@ export const updateUser = (currentPW: string, password: string, confirmPW: strin
   const data = { currentPW, password, confirmPW };
 
   try {
-    await axios.patch('/api/users', data, config);
+    const res = await axios.patch('/api/users', data, config);
 
     dispatch({
       type: types.UPDATE_USER
     });
+
+    dispatch(setSuccessAlert(res.data.msg));
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -129,8 +129,6 @@ export const deleteUser = (): AppThunk => async dispatch => {
     dispatch({
       type: types.DELETE_USER
     });
-
-    history.push('/');
   } catch (err) {
     dispatch({
       type: types.DELETE_USER_FAIL,

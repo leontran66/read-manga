@@ -5,9 +5,9 @@ import { EnhancedProps } from '../../types/Props';
 
 import './MangaForm.css';
 
-const MangaForm = ({ auth: { user }}: EnhancedProps) => {
-  if (user && user.accessLevel !== 'admin') {
-    return <Redirect to='/' />;
+const MangaForm = ({ auth: { isLoading, user }}: EnhancedProps) => {
+  if (!isLoading && (!user || user.accessLevel !== 'admin')) {
+    return <Redirect to='/404' />;
   }
 
   return (

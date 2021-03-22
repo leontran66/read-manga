@@ -1,0 +1,5 @@
+.alert-container {
+  margin-top: 1em;
+  margin-left: calc(50% - 5.5em);
+  z-index: 9999;
+}

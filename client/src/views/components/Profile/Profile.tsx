@@ -2,10 +2,9 @@ import { connect } from 'react-redux';
 import { RootState } from '../../../state/store';
 import { EnhancedProps } from '../../types/Props';
 
-import CreateReadingForm from '../common/modals/CreateReadingForm';
 import DeleteProfileForm from '../common/modals/DeleteProfileForm';
 import EditProfileForm from '../common/modals/EditProfileForm';
-import EditReadingForm from '../common/modals/EditReadingForm';
+import Readings from '../Readings';
 
 import './Profile.css';
 
@@ -23,34 +22,7 @@ const Profile = ({ auth }: EnhancedProps) => {
         </ul>
         <div className="tab-content profile-tabs" id="pills-tabContent">
           <div className="tab-pane fade show active" id="pills-reading" role="tabpanel" aria-labelledby="pills-reading-tab">
-            <CreateReadingForm />
-            <div className='table-responsive'>
-              <table className='table table-bordered align-middle'>
-                <thead className='table-dark'>
-                  <tr>
-                    <th className='profile-manga'>Manga</th>
-                    <th className='profile-chapter' colSpan={2}>Chapter</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className='profile-manga'><a href='/mangas/id'>Berserk</a></td>
-                    <td className='profile-chapter'>357</td>
-                    <td className='profile-actions'><a href='/mangas/id/edit' className='btn btn-sm btn-primary'>Edit</a>{' '}<a href='/mangas/id/delete' className='btn btn-sm btn-danger'>Delete</a></td>
-                  </tr>
-                  <tr>
-                    <td className='profile-manga'><a href='/mangas/id'>Berserk</a></td>
-                    <td className='profile-chapter'>357</td>
-                    <td className='profile-actions'><a href='/mangas/id/edit' className='btn btn-sm btn-primary'>Edit</a>{' '}<a href='/mangas/id/delete' className='btn btn-sm btn-danger'>Delete</a></td>
-                  </tr>
-                  <tr>
-                    <td className='profile-manga'><a href='/mangas/id'>Berserk</a></td>
-                    <td className='profile-chapter'>357</td>
-                    <td className='profile-actions'><EditReadingForm />{' '}<a href='/mangas/id/delete' className='btn btn-sm btn-danger'>Delete</a></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            {<Readings />}
           </div>
           <div className="tab-pane fade" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab">
             <div className="profile-settings card">

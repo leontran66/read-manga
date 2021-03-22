@@ -1,13 +1,17 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { deleteUser } from '../../../../../state/ducks/auth/actions';
 import store from '../../../../../state/store';
 
 import './DeleteProfileForm.css';
 
 const DeleteProfileForm = () => {
+  let history = useHistory();
+
   const onClick = () => {
     store.dispatch<any>(deleteUser());
+    history.push('/');
   };
   
   return (

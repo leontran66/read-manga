@@ -4,9 +4,9 @@
 
 ## Stack
 
-- NodeJS/Express
-- React/Redux
-- MongoDB/Mongoose
+- NodeJS/Express Backend
+- React/Redux Frontend
+- MongoDB/Mongoose Database/ODM
 
 ## Dependencies
 
@@ -14,21 +14,22 @@
 
 | Dependency        | Usage                                                    |
 | ----------------- | -------------------------------------------------------- |
-| Express           | Node web app framework                                   |
-| Mongoose          | ODM for MongoDB                                          |
 | Bcrypt            | Hashes passwords for safe storage                        |
-| JSONWebToken      | Encodes/signs information in order to authorize requests |
+| Express           | Node web app framework                                   |
 | Express-validator | Validates and sanitizes form inputs for express          |
 | Helmet            | Sets various headers for security                        |
+| JSONWebToken      | Encodes/signs information in order to authorize requests |
+| Mongoose          | ODM for MongoDB                                          |
 
 ### Client
 
-| Dependency | Usage                                   |
-| ---------- | --------------------------------------- |
-| Axios      | Library to make requests to the API     |
-| React      | Library for creating the user interface |
-| Redux      | Library to manage state for React       |
-| Uuid       | Creates id                              |
+| Dependency   | Usage                                   |
+| ------------ | --------------------------------------- |
+| Axios        | Library to make requests to the API     |
+| React        | Library for creating the user interface |
+| React Router | Library for declaring routes in react   |
+| Redux        | Library to manage state for React       |
+| Uuid         | Creates ids                             |
 
 ## Database Structure
 
@@ -104,6 +105,7 @@
 
 | Route                    |                |
 | ------------------------ | -------------- |
+| / GET get all genres     | Private, Admin |
 | / POST create genre      | Private, Admin |
 | /:id PATCH update genre  | Private, Admin |
 | /:id DELETE delete genre | Private, Admin |

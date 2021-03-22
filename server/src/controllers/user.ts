@@ -102,7 +102,7 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<Respo
 
       await User.findByIdAndUpdate(id, { password: hash });
 
-      return res.status(200).json({ msg: 'User updated' });
+      return res.status(200).json({ msg: 'User updated.' });
     } catch (err) {
       return res.status(500).json({ errors: [{ msg: 'User error' }] });
     }
@@ -117,7 +117,7 @@ export const deleteUser = async (req: AuthRequest, res: Response): Promise<Respo
   try {
     await User.findByIdAndDelete(id);
 
-    return res.status(200).json({ msg: 'User deleted' });
+    return res.status(200).json({ msg: 'User deleted.' });
   } catch (err) {
     return res.status(500).json({ errors: [{ msg: 'User error' }] });
   }

@@ -1,40 +1,52 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../../state/store';
-import { EnhancedProps } from '../../types/Props';
+import { createReading } from '../../../state/ducks/readings/actions';
+import store, { RootState } from '../../../state/store';
+import { MangaResultProps } from '../../types/Props';
 
 import './Mangas.css';
 
-const Manga = ({ auth: { user } }: EnhancedProps) => {
+const Manga = ({ auth: { user }, manga, hasReading }: MangaResultProps) => {
+
+  const onClick = () => {
+    store.dispatch<any>(createReading(manga.title, 0));
+  }
+
   return (
     <div className='manga-result mb-3 p-4'>
-      <h3 className='d-block'>
-        <a href='/manga/id'>Berserk</a>
+      <h3 className='d-block mb-2'>
+        <a className='text-capitalize me-2' href={'/manga/' + manga._id}>{manga.title}</a>
         {user && user.accessLevel === 'admin' &&
           <Fragment>
-            <a href='/manga/id/edit' className='ms-2 btn btn-primary'>Edit</a>
-            <a href='/manga/id/delete' className='ms-2 btn btn-danger'>Delete</a>
+            <a href='/manga/id/edit' className='ms-2 mb-1 btn btn-primary'>Edit</a>
+            <a href='/manga/id/delete' className='ms-2 mb-1 btn btn-danger'>Delete</a>
           </Fragment>
         }
-        <div className='float-end'><button className='btn btn-primary'>Add To Reading List</button></div>
+        <div className='float-end'>
+          {
+            !hasReading &&
+            <button className='btn btn-primary' onClick={() => onClick()}>Add To Reading List</button>
+          }
+        </div>
       </h3>
-      <h6 className='fst-italic'><a href='/manga?query='>Miura, Kentarou</a></h6>
-      <a href='/manga?query='><span className='badge rounded-pill bg-primary mb-2 me-1'>Action</span></a>
-      <a href='/manga?query='><span className='badge rounded-pill bg-primary mb-2 me-1'>Adventure</span></a>
-      <a href='/manga?query='><span className='badge rounded-pill bg-primary mb-2 me-1'>Demons</span></a>
-      <a href='/manga?query='><span className='badge rounded-pill bg-primary mb-2 me-1'>Drama</span></a>
-      <a href='/manga?query='><span className='badge rounded-pill bg-primary mb-2 me-1'>Fantasy</span></a>
-      <a href='/manga?query='><span className='badge rounded-pill bg-primary mb-2 me-1'>Horror</span></a>
-      <a href='/manga?query='><span className='badge rounded-pill bg-primary mb-2 me-1'>Supernatural</span></a>
-      <a href='/manga?query='><span className='badge rounded-pill bg-primary mb-2 me-1'>Military</span></a>
-      <a href='/manga?query='><span className='badge rounded-pill bg-primary mb-2 me-1'>Psychological</span></a>
-      <a href='/manga?query='><span className='badge rounded-pill bg-primary mb-2 me-1'>Seinen</span></a>
-      <p>Guts, a former mercenary now known as the "Black Swordsman," is out for revenge. After a tumultuous childhood, he finally finds someone he respects and believes he can trust, only to have everything fall apart when this person takes away everything important to Guts for the purpose of fulfilling his own desires. Now marked for death, Guts becomes condemned to a fate in which he is relentlessly pursued by demonic beings.<br /><br />Setting out on a dreadful quest riddled with misfortune, Guts, armed with a massive sword and monstrous strength, will let nothing stop him, not even death itself, until he is finally able to take the head of the one who stripped him—and his loved one—of their humanity.</p>
+      <span className='badge bg-primary mb-3 me-1'>Action</span>
+      <span className='badge bg-primary mb-3 me-1'>Adventure</span>
+      <span className='badge bg-primary mb-3 me-1'>Demons</span>
+      <span className='badge bg-primary mb-3 me-1'>Drama</span>
+      <span className='badge bg-primary mb-3 me-1'>Fantasy</span>
+      <span className='badge bg-primary mb-3 me-1'>Horror</span>
+      <span className='badge bg-primary mb-3 me-1'>Supernatural</span>
+      <span className='badge bg-primary mb-3 me-1'>Military</span>
+      <span className='badge bg-primary mb-3 me-1'>Psychological</span>
+      <span className='badge bg-primary mb-3 me-1'>Seinen</span>
+      <h6 className='text-capitalize'><strong>Author: </strong>{manga.author}</h6>
+      <h6><strong>Chapters:</strong> {manga.chapters}</h6>
     </div>
   );
 };
 
 const mapStateToProps = (state: RootState) => ({
+  alerts: state.alerts,
   auth: state.auth
 });
 

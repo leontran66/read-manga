@@ -10,7 +10,8 @@ export const DELETE_MANGA_FAIL = 'DELETE_MANGA_FAIL';
 export const UPDATE_MANGA = 'UPDATE_MANGA';
 export const UPDATE_MANGA_FAIL = 'UPDATE_MANGA_FAIL';
 
-type Manga = {
+export type Manga = {
+  _id: string,
   title: string,
   author: string,
   synopsis: string,

@@ -49,7 +49,7 @@ app.patch('/api/manga/:id', auth, mangaController.updateManga);
 app.delete('/api/manga/:id', auth, mangaController.deleteManga);
 app.get('/api/readings', auth, readingController.getReadings);
 app.post('/api/readings', auth, readingController.createReading);
-app.patch('/api/readings/:id', auth, readingController.updateReading);
+app.patch('/api/readings', auth, readingController.updateReading);
 app.delete('/api/readings/:id', auth, readingController.deleteReading);
 app.post('/api/users', userController.registerUser);
 app.patch('/api/users', auth, userController.updateUser);

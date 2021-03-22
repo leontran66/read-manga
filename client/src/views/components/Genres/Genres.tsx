@@ -7,9 +7,9 @@ import CreateGenreForm from '../common/modals/CreateGenreForm';
 
 import './Genres.css';
 
-const Genres = ({ auth }: EnhancedProps) => {
-  if (auth.user !== null && auth.user.accessLevel !== 'admin') {
-      return <Redirect to='/' />;
+const Genres = ({ auth: { isLoading, user } }: EnhancedProps) => {
+  if (!isLoading && (!user || user.accessLevel !== 'admin')) {
+    return <Redirect to='/404' />;
   }
 
   return (

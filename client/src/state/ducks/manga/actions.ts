@@ -8,7 +8,7 @@ export const loadAllManga = (): AppThunk => async dispatch => {
 
     dispatch({
       type: types.LOAD_ALL_MANGA,
-      payload: res.data
+      payload: res.data.manga
     });
   } catch (err) {
     dispatch({
@@ -24,7 +24,7 @@ export const loadManga = (id: string): AppThunk => async dispatch => {
 
     dispatch({
       type: types.LOAD_MANGA,
-      payload: res.data
+      payload: [res.data.manga]
     });
   } catch (err) {
     dispatch({

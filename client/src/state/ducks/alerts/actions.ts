@@ -10,9 +10,24 @@ export const setAlert = (msg: string, alertField: string): AppThunk => async dis
   });
 };
 
-export const removeAlert = (id: string): AppThunk => async dispatch => {
+export const removeAlert = (alertField: string): AppThunk => async dispatch => {
   dispatch({
     type: types.REMOVE_ALERT,
-    payload: id
+    payload: alertField
   })
 };
+
+export const setSuccessAlert = (msg: string, timeout = 5000): AppThunk => async dispatch => {
+  const id = uuid();
+  dispatch({
+    type: types.SET_ALERT,
+    payload: { msg, alertField: 'success', id }
+  });
+
+  setTimeout(() => {
+    dispatch({
+      type: types.REMOVE_ALERT,
+      payload: 'success'
+    })
+  }, timeout);
+}

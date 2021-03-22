@@ -7,7 +7,7 @@ export default function alertsReducer(state = initialState, action: types.AlertA
     case types.SET_ALERT:
       return [...state, action.payload];
     case types.REMOVE_ALERT:
-      return state.filter((alert: types.Alert) => alert.id !== action.payload);
+      return state.filter((alert: types.Alert) => alert.alertField !== action.payload);
     default:
       return state;
   }

@@ -9,7 +9,8 @@ export const DELETE_READING_FAIL = 'DELETE_READING_FAIL';
 export const UPDATE_READING = 'UPDATE_READING';
 export const UPDATE_READING_FAIL = 'UPDATE_READING_FAIL';
 
-type Reading = {
+export type Reading = {
+  _id: string,
   manga: string,
   chapter: number
 }

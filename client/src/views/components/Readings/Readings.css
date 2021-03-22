@@ -1,0 +1,10 @@
+.profile-manga {
+  width: 80%;
+}
+
+.profile-chapter,
+.profile-actions {
+  min-width: 10%;
+  text-align: center;
+  white-space: nowrap;
+}

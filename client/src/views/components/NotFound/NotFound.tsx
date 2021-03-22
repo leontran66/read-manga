@@ -1,6 +1,14 @@
+import { Link, useHistory } from 'react-router-dom';
+
 import './NotFound.css';
 
 const NotFound = () => {
+  let history = useHistory();
+
+  const goBack = () => {
+    history.goBack();
+  };
+
   return (
     <div className='container-fluid'>
       
@@ -10,10 +18,9 @@ const NotFound = () => {
         <span>Page not found</span>
         <p>The page you are looking for doesn't exist or other error occurred.&nbsp;
           <br />
-          <a href='/'>Go back</a>
-          , or head over to {' '}
-          <a href='/'>Manga Tracker</a>
-          {' '}to choose a new direction.
+          <a href='#!' onClick={() => goBack()}>Go back</a>, or head over to the{' '}
+          <Link to='/'>Manga Tracker</Link>
+          {' '}homepage to choose a new direction.
         </p>
         </div>
       </div>

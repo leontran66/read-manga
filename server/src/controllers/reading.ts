@@ -65,7 +65,7 @@ export const createReading = async (req: AuthRequest, res: Response): Promise<Re
 
       await reading.save();
 
-      return res.status(200).json({ msg: 'Reading created' });
+      return res.status(200).json({ msg: 'Added' + title + 'to reading list.' });
     } catch (err) {
       return res.status(500).json({ errors: [{ msg: 'Reading error' }] });
     }
@@ -75,11 +75,11 @@ export const createReading = async (req: AuthRequest, res: Response): Promise<Re
 // @desc Update Reading
 // @access private
 export const updateReading = async (req: AuthRequest, res: Response): Promise<Response> => {
-    const { chapter } = req.body;
-    const { id } = req.params;
-    const userID = req.user.id;
+    const { title, chapter } = req.body;
+    const { id } = req.user;
 
     try {
+      await body('title').not().isEmpty().trim().escape().withMessage('Title must not be empty.').run(req);
       await body('chapter').isNumeric().withMessage('Chapter must be a number.').run(req);
 
       // check if input is valid
@@ -88,27 +88,32 @@ export const updateReading = async (req: AuthRequest, res: Response): Promise<Re
         return res.status(400).json({ errors: errors.array() });
       }
       
-      // check if reading exists
-      const reading = await Reading.findById(id);
+      // check if manga exists
+      const manga = await Manga.findOne({ title: title.toLowerCase() });
+      if (!manga) {
+        return res.status(400).json({ errors: [{ msg: 'Manga not found.', param: 'title' }] });
+      }
+
+      // check if reading for user already exists
+      let reading = await Reading.findOne({ user: id, manga: manga._id });
       if (!reading) {
         return res.status(400).json({ errors: [{ msg: 'Reading not found' }] });
       }
 
       // check if reading belongs to user
-      const user = await User.findById(userID);
+      const user = await User.findById(id);
       if (!user._id.equals(reading.user)) {
         return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
       }
 
       // check if chapters is greater than chapters in manga
-      const manga = await Manga.findById(reading.manga);
       if (manga.chapters < chapter) {
-        return res.status(400).json({ errors: [{ msg: 'Chapter cannot be more than number of chapters in manga', param: 'chapter' }] });
+        return res.status(400).json({ errors: [{ msg: 'Chapter cannot be more than number of chapters in manga.', param: 'chapter' }] });
       }
 
-      await Reading.findByIdAndUpdate(id, { chapter });
+      await Reading.findOneAndUpdate({ user: id, manga: manga._id }, { chapter });
 
-      return res.status(200).json({ msg: 'Reading updated' });
+      return res.status(200).json({ msg: 'Reading updated.' });
     } catch (err) {
       return res.status(500).json({ errors: [{ msg: 'Reading error' }] });
     }
@@ -136,7 +141,7 @@ export const deleteReading = async (req: AuthRequest, res: Response): Promise<Re
 
     await Reading.findByIdAndDelete(id);
 
-    return res.status(200).json({ msg: 'Reading deleted' });
+    return res.status(200).json({ msg: 'Reading deleted.' });
   } catch (err) {
     return res.status(500).json({ errors: [{ msg: 'Reading error' }] });
   }

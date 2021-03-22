@@ -1,0 +1,6 @@
+{
+  "name": "readings",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "./Readings.tsx"
+}

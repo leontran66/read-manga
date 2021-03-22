@@ -3,7 +3,6 @@ import { Router, Switch, Route } from 'react-router-dom';
 
 import createManga from '../pages/createManga';
 import editManga from '../pages/editManga';
-import editProfile from '../pages/editProfile';
 import genres from '../pages/genres';
 import login from '../pages/login';
 import manga from '../pages/manga';
@@ -11,6 +10,7 @@ import mangas from '../pages/mangas';
 import profile from '../pages/profile';
 import register from '../pages/register';
 
+import Alert from '../components/common/Alert';
 import defaultRoute from './default';
 import NotFound from '../components/NotFound';
 import PrivateRoute from '../utils/PrivateRoute';
@@ -36,13 +36,13 @@ const App = () => {
       <Provider store={store}>
         <Router history={history}>
           <Fragment>
+            <Alert />
             <Switch>
               <Route exact path='/' component={defaultRoute} />
               <Route exact path='/index.html' component={defaultRoute} />
               <Route exact path='/register' component={register} />
               <Route exact path='/login' component={login} />
               <PrivateRoute exact path='/profile' component={profile} />
-              <PrivateRoute path='/profile/edit' component={editProfile} />
               <PrivateRoute exact path='/manga/new' component={createManga} />
               <PrivateRoute path='/manga/:id/edit' component={editManga} />
               <PrivateRoute exact path='/genres' component={genres} />

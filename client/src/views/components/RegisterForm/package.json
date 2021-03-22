@@ -1,6 +1,6 @@
 {
   "name": "registerform",
   "version": "0.0.0",
-  "private": "true",
+  "private": "false",
   "main": "./RegisterForm.tsx"
 }

@@ -9,7 +9,7 @@ export const LOAD_GENRE_FAIL = 'LOAD_GENRE_FAIL';
 export const UPDATE_GENRE = 'UPDATE_GENRE';
 export const UPDATE_GENRE_FAIL = 'UPDATE_GENRE_FAIL';
 
-type Genre = {
+export type Genre = {
   name: string,
   manga: [string]
 }

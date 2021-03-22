@@ -25,8 +25,13 @@ export default function readingsReducer(state = initialState, action: types.Read
       };
     case types.CREATE_READING_FAIL:
     case types.DELETE_READING_FAIL:
-    case types.LOAD_READINGS_FAIL:
     case types.UPDATE_READING_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        errors: action.payload
+      }
+    case types.LOAD_READINGS_FAIL:
       return {
         ...state,
         readings: [],

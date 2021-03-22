@@ -1,5 +1,3 @@
-import './Landing.css';
-
 const Landing = () => {
   return (
     <div className='container-lg'>
