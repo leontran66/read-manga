@@ -1,9 +1,9 @@
 import { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
-import store, { RootState } from '../../../state/store';
-import { ReadingProps } from '../../types/Props';
 import { loadAllManga } from '../../../state/ducks/manga/actions';
 import { deleteReading, loadReadings } from '../../../state/ducks/readings/actions';
+import store, { RootState } from '../../../state/store';
+import { ReadingProps } from '../../types/Props';
 
 import CreateReadingForm from '../common/modals/CreateReadingForm/CreateReadingForm';
 import EditReadingForm from '../common/modals/EditReadingForm/EditReadingForm';

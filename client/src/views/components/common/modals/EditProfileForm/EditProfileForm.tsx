@@ -1,9 +1,9 @@
 import { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
-import { GuestProps } from '../../../../types/Props';
-import store, { RootState } from '../../../../../state/store';
-import { updateUser } from '../../../../../state/ducks/auth/actions';
 import { removeAlert } from '../../../../../state/ducks/alerts/actions';
+import { updateUser } from '../../../../../state/ducks/auth/actions';
+import store, { RootState } from '../../../../../state/store';
+import { GuestProps } from '../../../../types/Props';
 
 import './EditProfileForm.css';
 

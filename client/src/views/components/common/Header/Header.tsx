@@ -1,10 +1,9 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { EnhancedProps } from '../../../types/Props';
-import { RootState } from '../../../../state/store';
 import { logoutUser } from '../../../../state/ducks/auth/actions';
-import store from '../../../../state/store';
+import store, { RootState } from '../../../../state/store';
+import { EnhancedProps } from '../../../types/Props';
 
 const Header = ({ auth: { isAuthenticated, user } }: EnhancedProps) => {
   const onClick = () => {

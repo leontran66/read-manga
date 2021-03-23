@@ -1,13 +1,20 @@
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import Genre from './Genre';
-import { RootState } from '../../../state/store';
-import { EnhancedProps } from '../../types/Props';
+import { loadAllGenres } from '../../../state/ducks/genres/actions';
+import store, { RootState } from '../../../state/store';
+import { AllGenresProps } from '../../types/Props';
+
 import CreateGenreForm from '../common/modals/CreateGenreForm';
+import Genre from './Genre';
 
 import './Genres.css';
 
-const Genres = ({ auth: { isLoading, user } }: EnhancedProps) => {
+const Genres = ({ auth: { isLoading, user }, genres }: AllGenresProps) => {
+  useEffect(() => {
+    store.dispatch<any>(loadAllGenres());
+  }, []);
+
   if (!isLoading && (!user || user.accessLevel !== 'admin')) {
     return <Redirect to='/404' />;
   }
@@ -17,17 +24,19 @@ const Genres = ({ auth: { isLoading, user } }: EnhancedProps) => {
       <div className='genres'>
         <CreateGenreForm />
         <br />
-        <Genre />
-        <Genre />
-        <Genre />
-        <Genre />
+        {
+          !genres.isLoading && genres.genres ?
+          (genres.genres.map(genre => (<Genre key={genre.name} name={genre.name} />)))
+          : (<p className='text-center mt-5'>No Genres Found.</p>)
+        }
       </div>
     </div>
   );
 };
 
 const mapStateToProps = (state: RootState) => ({
-  auth: state.auth
+  auth: state.auth,
+  genres: state.genres
 });
 
 export default connect(mapStateToProps)(Genres);

@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
-import { CreateReadingProps } from '../../../../types/Props';
-import store, { RootState } from '../../../../../state/store';
 import { createReading } from '../../../../../state/ducks/readings/actions';
 import { removeAlert } from '../../../../../state/ducks/alerts/actions';
+import store, { RootState } from '../../../../../state/store';
+import { CreateReadingProps } from '../../../../types/Props';
 
 import './CreateReadingForm.css';
 

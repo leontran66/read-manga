@@ -1,8 +1,13 @@
 import React from 'react';
 import { RouteProps } from 'react-router';
 import { Alert } from '../../state/ducks/alerts/types';
+import { Genre } from '../../state/ducks/genres/types';
 import { Manga } from '../../state/ducks/manga/types';
 import { Reading } from '../../state/ducks/readings/types';
+
+export type ContainerProps = {
+  children: React.ReactNode
+}
 
 export type PrivateProps = {
   auth: {
@@ -50,6 +55,17 @@ export interface EditReadingProps extends AlertProps {
     title: string,
     chapter: number
   }
+}
+
+export interface AllGenresProps extends EnhancedProps {
+  genres: {
+    genres: Array<Genre>,
+    isLoading: boolean
+  }
+}
+
+export interface GenreProps {
+  name: string
 }
 
 export interface AllMangaProps extends EnhancedProps {

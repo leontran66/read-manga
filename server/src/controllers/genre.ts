@@ -15,7 +15,7 @@ export const getAllGenres = async (req: AuthRequest, res: Response): Promise<Res
       return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
     }
 
-    const genres = await Genre.find({});
+    const genres = await Genre.find({}).sort('name');
     if (genres.length <= 0) {
       return res.status(400).json({ errors: [{ msg: 'Couldn\'t find any genres' }] });
     }
@@ -60,7 +60,7 @@ export const createGenre = async (req: AuthRequest, res: Response): Promise<Resp
 
       await genre.save();
 
-      return res.status(200).json({ msg: 'Genre created' });
+      return res.status(200).json({ msg: 'Genre created.' });
     } catch (err) {
       return res.status(500).json({ errors: [{ msg: 'Genre error' }] });
     }

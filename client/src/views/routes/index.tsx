@@ -1,4 +1,5 @@
 import { Fragment, useEffect } from 'react';
+import { Provider } from 'react-redux';
 import { Router, Switch, Route } from 'react-router-dom';
 
 import createManga from '../pages/createManga';
@@ -15,13 +16,12 @@ import defaultRoute from './default';
 import NotFound from '../components/NotFound';
 import PrivateRoute from '../utils/PrivateRoute';
 
-import './index.css';
-
-import { Provider } from 'react-redux';
 import history from '../../history';
-import store from '../../state/store';
 import { loadUser } from '../../state/ducks/auth/actions';
 import setAuthToken from '../../state/utils/setAuthToken';
+import store from '../../state/store';
+
+import './index.css';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);

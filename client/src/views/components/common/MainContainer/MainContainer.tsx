@@ -1,12 +1,8 @@
-import React from 'react';
+import { ContainerProps } from '../../../types/Props';
 
 import './MainContainer.css';
 
-interface Props {
-  children: React.ReactNode
-};
-
-const MainContainer = (props: Props) => {
+const MainContainer = (props: ContainerProps) => {
   return (
     <div className='main-container'>
       {props.children}

@@ -14,9 +14,9 @@ export const getAllManga = async (req: Request, res: Response): Promise<Response
     // check if manga has any documents
     let manga;
     if (q) {
-      manga = await Manga.find({ $text: { $search: q.toString().toLowerCase() } });
+      manga = await Manga.find({ $text: { $search: q.toString().toLowerCase() } }).sort('name');
     } else {
-      manga = await Manga.find({});
+      manga = await Manga.find({}).sort('name');
     }
     if (manga.length <= 0) {
       return res.status(400).json({ errors: [{ msg: 'Couldn\'t find any manga' }] });
