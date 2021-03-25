@@ -1,5 +1,4 @@
 import React from 'react';
-import { RouteProps } from 'react-router';
 import { Alert } from '../../state/ducks/alerts/types';
 import { Genre } from '../../state/ducks/genres/types';
 import { Manga } from '../../state/ducks/manga/types';
@@ -9,53 +8,23 @@ export type ContainerProps = {
   children: React.ReactNode
 }
 
-export type PrivateProps = {
-  auth: {
-    isAuthenticated: boolean,
-    isLoading: boolean
-  },
-  component: React.ElementType
-} & RouteProps;
-
 export type AlertProps = {
   alerts: Array<Alert>
 }
 
-export interface GuestProps extends AlertProps {
-  auth: {
-    isAuthenticated: boolean
-  }
-};
-
-export type EnhancedProps = {
+export interface AuthProps extends AlertProps {
   auth: {
     isAuthenticated: boolean,
-    isLoading: boolean,
-    user: {
-      email: string,
-      accessLevel: string
-    } | null
-  }
-};
-
-export type ReadingProps = {
-  manga: Array<Manga>,
-  readings: {
-    readings: Array<Reading>,
     isLoading: boolean
   }
 }
 
-export interface CreateReadingProps extends AlertProps {
-  manga: Array<{ title: string }>
-}
-
-export interface EditReadingProps extends AlertProps {
-  reading: {
-    title: string,
-    chapter: number
-  }
-}
+export interface EnhancedProps extends AuthProps {
+  user: {
+    email: string,
+    accessLevel: string
+  } | null
+};
 
 export interface AllGenresProps extends EnhancedProps {
   genres: {
@@ -64,8 +33,8 @@ export interface AllGenresProps extends EnhancedProps {
   }
 }
 
-export interface GenreProps {
-  name: string
+export interface GenreProps extends AlertProps {
+  genre: Genre
 }
 
 export interface AllMangaProps extends EnhancedProps {

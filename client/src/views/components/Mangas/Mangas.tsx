@@ -9,7 +9,7 @@ import Manga from './MangaResult';
 
 import './Mangas.css';
 
-const Mangas = ({ auth, manga: { isLoading, manga }, readings }: AllMangaProps) => {
+const Mangas = ({ auth, manga: { isLoading, manga }, readings, user }: AllMangaProps) => {
   useEffect(() => {
     store.dispatch<any>(loadAllManga());
     store.dispatch<any>(loadReadings());
@@ -18,7 +18,7 @@ const Mangas = ({ auth, manga: { isLoading, manga }, readings }: AllMangaProps) 
   return (
     <div className='container-fluid'>
       <div className='mangas'>
-        {auth.user && auth.user.accessLevel === 'admin' &&
+        {user && user.accessLevel === 'admin' &&
           <a href='/manga/new' className='btn btn-primary mb-3'>Add New Manga</a>
         }
         {
@@ -34,9 +34,11 @@ const Mangas = ({ auth, manga: { isLoading, manga }, readings }: AllMangaProps) 
 };
 
 const mapStateToProps = (state: RootState) => ({
+  alerts: state.alerts,
   auth: state.auth,
   manga: state.manga,
   readings: state.readings.readings,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps)(Mangas);

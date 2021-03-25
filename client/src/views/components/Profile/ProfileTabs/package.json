@@ -1,0 +1,6 @@
+{
+  "name": "profiletabs",
+  "version": "0.0.0",
+  "private": "false",
+  "main": "./ProfileTabs.tsx"
+}

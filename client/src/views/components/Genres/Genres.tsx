@@ -10,7 +10,7 @@ import Genre from './Genre';
 
 import './Genres.css';
 
-const Genres = ({ auth: { isLoading, user }, genres }: AllGenresProps) => {
+const Genres = ({ auth: { isLoading }, genres, user }: AllGenresProps) => {
   useEffect(() => {
     store.dispatch<any>(loadAllGenres());
   }, []);
@@ -26,7 +26,7 @@ const Genres = ({ auth: { isLoading, user }, genres }: AllGenresProps) => {
         <br />
         {
           !genres.isLoading && genres.genres ?
-          (genres.genres.map(genre => (<Genre key={genre.name} name={genre.name} />)))
+          (genres.genres.map(genre => (<Genre key={genre._id} genre={genre} />)))
           : (<p className='text-center mt-5'>No Genres Found.</p>)
         }
       </div>
@@ -35,8 +35,10 @@ const Genres = ({ auth: { isLoading, user }, genres }: AllGenresProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
+  alerts: state.alerts,
   auth: state.auth,
-  genres: state.genres
+  genres: state.genres,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps)(Genres);

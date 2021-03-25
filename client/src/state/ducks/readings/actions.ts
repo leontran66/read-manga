@@ -51,7 +51,7 @@ export const createReading = (title: string, chapter: number): AppThunk => async
   }
 }
 
-  export const updateReading = (title: string, chapter: number): AppThunk => async dispatch => {  const config = {
+export const updateReading = (title: string, chapter: number): AppThunk => async dispatch => {  const config = {
     headers: {
       'Content-Type': 'application/json'
     }

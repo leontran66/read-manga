@@ -5,7 +5,7 @@ import { AlertProps } from '../../../types/Props';
 import './Alert.css';
 
 const Alert = ({ alerts }: AlertProps) => {
-  const alert = alerts.find(alert => alert.alertField === 'success');
+  const alert = alerts.find(alert => alert.field === 'success');
 
   return (
     <div className="position-absolute alert-container">

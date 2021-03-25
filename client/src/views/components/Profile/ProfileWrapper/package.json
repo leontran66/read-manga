@@ -1,0 +1,6 @@
+{
+  "name": "profilewrapper",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "./ProfileWrapper.tsx"
+}

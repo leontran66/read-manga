@@ -102,7 +102,7 @@ export const updateGenre = async (req: AuthRequest, res: Response): Promise<Resp
 
       await Genre.findByIdAndUpdate(id, { name: name.toLowerCase() });
 
-      return res.status(200).json({ msg: 'Genre updated' });
+      return res.status(200).json({ msg: 'Genre updated.' });
     } catch (err) {
       return res.status(500).json({ errors: [{ msg: 'Genre error' }] });
     }
@@ -129,7 +129,7 @@ export const deleteGenre = async (req: AuthRequest, res: Response): Promise<Resp
 
     await Genre.findByIdAndDelete(id);
 
-    return res.status(200).json({ msg: 'Genre deleted' });
+    return res.status(200).json({ msg: 'Genre deleted.' });
   } catch (err) {
     return res.status(500).json({ errors: [{ msg: 'Genre error' }] });
   }

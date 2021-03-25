@@ -14,13 +14,14 @@ import register from '../pages/register';
 import Alert from '../components/common/Alert';
 import defaultRoute from './default';
 import NotFound from '../components/NotFound';
-import PrivateRoute from '../utils/PrivateRoute';
 
 import history from '../../history';
 import { loadUser } from '../../state/ducks/auth/actions';
 import setAuthToken from '../../state/utils/setAuthToken';
 import store from '../../state/store';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.esm.min.js';
 import './index.css';
 
 if (localStorage.token) {
@@ -42,11 +43,12 @@ const App = () => {
               <Route exact path='/index.html' component={defaultRoute} />
               <Route exact path='/register' component={register} />
               <Route exact path='/login' component={login} />
-              <PrivateRoute exact path='/profile' component={profile} />
-              <PrivateRoute exact path='/manga/new' component={createManga} />
-              <PrivateRoute path='/manga/:id/edit' component={editManga} />
-              <PrivateRoute exact path='/genres' component={genres} />
-              <Route path='/manga/:id' component={manga} />
+              <Route exact path='/profile' component={profile} />
+              {/* <Route exact path='/manga/new' component={createManga} />
+              <Route exact path='/manga/:id/edit' component={editManga} />
+              <Route exact path='/genres' component={genres} />*/
+              }
+              <Route exact path='/manga/:id' component={manga} />
               <Route exact path='/manga' component={mangas} />
               <Route component={NotFound} />
             </Switch>

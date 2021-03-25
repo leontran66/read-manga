@@ -1,0 +1,6 @@
+{
+  "name": "loginwrapper",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "./LoginWrapper.tsx"
+}

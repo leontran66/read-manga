@@ -10,6 +10,7 @@ export const UPDATE_GENRE = 'UPDATE_GENRE';
 export const UPDATE_GENRE_FAIL = 'UPDATE_GENRE_FAIL';
 
 export type Genre = {
+  _id: string,
   name: string,
   manga: [string]
 }

@@ -6,7 +6,7 @@ import { MangaResultProps } from '../../types/Props';
 
 import './Mangas.css';
 
-const Manga = ({ auth: { user }, manga, hasReading }: MangaResultProps) => {
+const Manga = ({ manga, hasReading, user }: MangaResultProps) => {
 
   const onClick = () => {
     store.dispatch<any>(createReading(manga.title, 0));
@@ -47,7 +47,8 @@ const Manga = ({ auth: { user }, manga, hasReading }: MangaResultProps) => {
 
 const mapStateToProps = (state: RootState) => ({
   alerts: state.alerts,
-  auth: state.auth
+  auth: state.auth,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps)(Manga);

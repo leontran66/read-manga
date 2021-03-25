@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { removeAlert } from '../../../../../state/ducks/alerts/actions';
 import { updateUser } from '../../../../../state/ducks/auth/actions';
 import store, { RootState } from '../../../../../state/store';
-import { GuestProps } from '../../../../types/Props';
+import { AuthProps } from '../../../../types/Props';
 
 import './EditProfileForm.css';
 
-const EditProfileForm = ({ alerts }: GuestProps) => {
-  const currentPWAlert = alerts.find(alert => alert.alertField === 'currentPW');
-  const passwordAlert = alerts.find(alert => alert.alertField === 'password');
-  const confirmPWAlert = alerts.find(alert => alert.alertField === 'confirmPW');
+const EditProfileForm = ({ alerts }: AuthProps) => {
+  const currentPWAlert = alerts.find(alert => alert.field === 'currentPW');
+  const passwordAlert = alerts.find(alert => alert.field === 'password');
+  const confirmPWAlert = alerts.find(alert => alert.field === 'confirmPW');
 
   const [formData, setFormData] = useState({
     currentPW: '',
@@ -22,9 +22,8 @@ const EditProfileForm = ({ alerts }: GuestProps) => {
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
-    const alertToRemove = alerts.find(alert => alert.alertField === e.currentTarget.name);
-    if (alertToRemove) {
-      store.dispatch<any>(removeAlert(alertToRemove.alertField));
+    if (alerts.some(alert => alert.field === e.currentTarget.name)) {
+      store.dispatch<any>(removeAlert(e.currentTarget.name));
     }
   }
 

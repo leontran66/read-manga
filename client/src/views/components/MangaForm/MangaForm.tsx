@@ -5,7 +5,7 @@ import { EnhancedProps } from '../../types/Props';
 
 import './MangaForm.css';
 
-const MangaForm = ({ auth: { isLoading, user }}: EnhancedProps) => {
+const MangaForm = ({ auth: { isLoading }, user }: EnhancedProps) => {
   if (!isLoading && (!user || user.accessLevel !== 'admin')) {
     return <Redirect to='/404' />;
   }
@@ -43,7 +43,9 @@ const MangaForm = ({ auth: { isLoading, user }}: EnhancedProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  auth: state.auth
+  alerts: state.alerts,
+  auth: state.auth,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps)(MangaForm);

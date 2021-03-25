@@ -5,7 +5,9 @@ import './MainContainer.css';
 const MainContainer = (props: ContainerProps) => {
   return (
     <div className='main-container'>
-      {props.children}
+      <div className='container-fluid'>
+        {props.children}
+      </div>
     </div>
   );
 };

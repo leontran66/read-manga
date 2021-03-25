@@ -51,7 +51,7 @@ export const createGenre = (name: string): AppThunk => async dispatch => {
   }
 }
 
-  export const updateGenre = (id: string, name: string): AppThunk => async dispatch => {  const config = {
+export const updateGenre = (id: string, name: string, oldName: string): AppThunk => async dispatch => {  const config = {
     headers: {
       'Content-Type': 'application/json'
     }
@@ -60,11 +60,15 @@ export const createGenre = (name: string): AppThunk => async dispatch => {
   const data = { name };
 
   try {
-    await axios.patch('/api/genres/' + id, data, config);
+    const res = await axios.patch('/api/genres/' + id, data, config);
 
     dispatch({
       type: types.UPDATE_GENRE
     });
+
+    dispatch(loadAllGenres());
+
+    dispatch(setSuccessAlert(res.data.msg));
   } catch (err) {
     dispatch({
       type: types.UPDATE_GENRE_FAIL,
@@ -75,11 +79,15 @@ export const createGenre = (name: string): AppThunk => async dispatch => {
 
 export const deleteGenre = (id: string): AppThunk => async dispatch => {
   try {
-    await axios.delete('/api/genres/' + id);
+    const res = await axios.delete('/api/genres/' + id);
 
     dispatch({
       type: types.DELETE_GENRE
     });
+
+    dispatch(loadAllGenres());
+    
+    dispatch(setSuccessAlert(res.data.msg));
   } catch (err) {
     dispatch({
       type: types.DELETE_GENRE_FAIL,

@@ -8,7 +8,7 @@ import { AlertProps } from '../../../../types/Props';
 import './CreateGenreForm.css';
 
 const CreateGenreForm = ({ alerts }: AlertProps) => {
-  const nameAlert = alerts.find(alert => alert.alertField === 'name');
+  const nameAlert = alerts.find(alert => alert.field === 'name');
 
   const [formData, setFormData] = useState({
     name: ''
@@ -18,9 +18,8 @@ const CreateGenreForm = ({ alerts }: AlertProps) => {
 
   const onChange = (e: React.FormEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
-    const alertToRemove = alerts.find(alert => alert.alertField === e.currentTarget.name);
-    if (alertToRemove) {
-      store.dispatch<any>(removeAlert(alertToRemove.alertField));
+    if (alerts.some(alert => alert.field === e.currentTarget.name)) {
+      store.dispatch<any>(removeAlert(e.currentTarget.name));
     }
   }
 

@@ -8,7 +8,7 @@ import { MangaProps } from '../../types/Props';
 
 import './Manga.css';
 
-const Manga = ({ auth: { user }, manga: { isLoading, manga }, readings }: MangaProps) => {
+const Manga = ({ manga: { isLoading, manga }, readings, user }: MangaProps) => {
   const { id }: any = useParams();
 
   useEffect(() => {
@@ -52,9 +52,11 @@ const Manga = ({ auth: { user }, manga: { isLoading, manga }, readings }: MangaP
 };
 
 const mapStateToProps = (state: RootState) => ({
+  alerts: state.alerts,
   auth: state.auth,
   manga: state.manga,
-  readings: state.readings.readings
+  readings: state.readings.readings,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps)(Manga);

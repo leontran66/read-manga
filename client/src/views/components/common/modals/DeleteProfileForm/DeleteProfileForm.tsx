@@ -38,6 +38,4 @@ const DeleteProfileForm = () => {
   );
 };
 
-const mapStateToProps = () => ({});
-
-export default connect(mapStateToProps, { deleteUser })(DeleteProfileForm);
+export default connect()(DeleteProfileForm);

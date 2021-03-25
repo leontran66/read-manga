@@ -2,18 +2,18 @@ import * as types from './types';
 import { AppThunk } from '../../types/AppThunk';
 import { v4 as uuid } from 'uuid';
 
-export const setAlert = (msg: string, alertField: string): AppThunk => async dispatch => {
+export const setAlert = (msg: string, field: string): AppThunk => async dispatch => {
   const id = uuid();
   dispatch({
     type: types.SET_ALERT,
-    payload: { msg, alertField, id }
+    payload: { msg, field, id }
   });
 };
 
-export const removeAlert = (alertField: string): AppThunk => async dispatch => {
+export const removeAlert = (field: string): AppThunk => async dispatch => {
   dispatch({
     type: types.REMOVE_ALERT,
-    payload: alertField
+    payload: field
   })
 };
 
@@ -21,7 +21,7 @@ export const setSuccessAlert = (msg: string, timeout = 5000): AppThunk => async 
   const id = uuid();
   dispatch({
     type: types.SET_ALERT,
-    payload: { msg, alertField: 'success', id }
+    payload: { msg, field: 'success', id }
   });
 
   setTimeout(() => {

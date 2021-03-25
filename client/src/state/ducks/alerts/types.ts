@@ -3,7 +3,7 @@ export const SET_ALERT = 'SET_ALERT';
 
 export type Alert = {
   id: string,
-  alertField: string,
+  field: string,
   msg: string
 }
 

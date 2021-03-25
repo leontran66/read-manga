@@ -5,7 +5,7 @@ import { logoutUser } from '../../../../state/ducks/auth/actions';
 import store, { RootState } from '../../../../state/store';
 import { EnhancedProps } from '../../../types/Props';
 
-const Header = ({ auth: { isAuthenticated, user } }: EnhancedProps) => {
+const Header = ({ auth: { isAuthenticated, isLoading }, user }: EnhancedProps) => {
   const onClick = () => {
     store.dispatch<any>(logoutUser());
   };
@@ -50,9 +50,9 @@ const Header = ({ auth: { isAuthenticated, user } }: EnhancedProps) => {
             <li className='nav-item'>
               <Link className='nav-link' to='/manga'>Manga</Link>
             </li>
-            <Fragment>{user && user.accessLevel === 'admin' ? genreLink : null }</Fragment>
+            <Fragment>{!isLoading && user && user.accessLevel === 'admin' ? genreLink : null }</Fragment>
           </ul>
-          <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+          <Fragment>{isAuthenticated && !isLoading ? authLinks : guestLinks}</Fragment>
         </div>
       </div>
     </div>
@@ -60,7 +60,9 @@ const Header = ({ auth: { isAuthenticated, user } }: EnhancedProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  auth: state.auth
+  alerts: state.alerts,
+  auth: state.auth,
+  user: state.auth.user
 });
 
-export default connect(mapStateToProps, { logoutUser })(Header);
+export default connect(mapStateToProps)(Header);

@@ -65,7 +65,7 @@ export const createReading = async (req: AuthRequest, res: Response): Promise<Re
 
       await reading.save();
 
-      return res.status(200).json({ msg: 'Added' + title + 'to reading list.' });
+      return res.status(200).json({ msg: 'Added ' + title.slice(0,1).toUpperCase() + title.slice(1).toLowerCase() + ' to reading list.' });
     } catch (err) {
       return res.status(500).json({ errors: [{ msg: 'Reading error' }] });
     }
