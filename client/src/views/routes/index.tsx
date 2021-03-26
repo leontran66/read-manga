@@ -2,12 +2,9 @@ import { Fragment, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { Router, Switch, Route } from 'react-router-dom';
 
-import createManga from '../pages/createManga';
-import editManga from '../pages/editManga';
 import genres from '../pages/genres';
 import login from '../pages/login';
 import manga from '../pages/manga';
-import mangas from '../pages/mangas';
 import profile from '../pages/profile';
 import register from '../pages/register';
 
@@ -44,12 +41,8 @@ const App = () => {
               <Route exact path='/register' component={register} />
               <Route exact path='/login' component={login} />
               <Route exact path='/profile' component={profile} />
-              {/* <Route exact path='/manga/new' component={createManga} />
-              <Route exact path='/manga/:id/edit' component={editManga} />
-              <Route exact path='/genres' component={genres} />*/
-              }
-              <Route exact path='/manga/:id' component={manga} />
-              <Route exact path='/manga' component={mangas} />
+              <Route exact path='/genres' component={genres} />
+              <Route exact path='/manga' component={manga} />
               <Route component={NotFound} />
             </Switch>
           </Fragment>

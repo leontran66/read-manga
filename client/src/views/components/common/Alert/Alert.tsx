@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { RootState } from '../../../../state/store';
-import { AlertProps } from '../../../types/Props';
+import { AlertProps } from '../types';
 
 import './Alert.css';
 

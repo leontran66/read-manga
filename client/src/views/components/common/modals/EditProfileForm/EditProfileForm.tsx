@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { removeAlert } from '../../../../../state/ducks/alerts/actions';
 import { updateUser } from '../../../../../state/ducks/auth/actions';
 import store, { RootState } from '../../../../../state/store';
-import { AuthProps } from '../../../../types/Props';
+import { AlertProps } from '../../types';
 
 import './EditProfileForm.css';
 
-const EditProfileForm = ({ alerts }: AuthProps) => {
+const EditProfileForm = ({ alerts }: AlertProps) => {
   const currentPWAlert = alerts.find(alert => alert.field === 'currentPW');
   const passwordAlert = alerts.find(alert => alert.field === 'password');
   const confirmPWAlert = alerts.find(alert => alert.field === 'confirmPW');
@@ -79,8 +79,7 @@ const EditProfileForm = ({ alerts }: AuthProps) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  alerts: state.alerts,
-  auth: state.auth
+  alerts: state.alerts
 });
 
 export default connect(mapStateToProps)(EditProfileForm);

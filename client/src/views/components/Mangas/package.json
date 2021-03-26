@@ -1,6 +1,0 @@
-{
-  "name": "mangas",
-  "version": "0.0.0",
-  "private": "false",
-  "main": "./Mangas.tsx"
-}

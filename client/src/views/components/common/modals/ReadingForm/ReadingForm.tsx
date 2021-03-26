@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { removeAlert } from '../../../../../state/ducks/alerts/actions';
 import { createReading, updateReading } from '../../../../../state/ducks/readings/actions';
 import store, { RootState } from '../../../../../state/store';
-import { FormProps } from '../../../Profile/types';
+import { ReadingFormProps } from '../../types';
 
 import './ReadingForm.css';
 
-const ReadingForm = ({ alerts, isNew, manga, reading }: FormProps) => {
+const ReadingForm = ({ alerts, isNew, manga, reading }: ReadingFormProps) => {
   const titleAlert = alerts.find(alert => alert.field === 'title');
   const chapterAlert = alerts.find(alert => alert.field === 'chapter');
   
@@ -40,7 +40,7 @@ const ReadingForm = ({ alerts, isNew, manga, reading }: FormProps) => {
 
   return (
     <Fragment>
-      <div className='reading-form modal fade' id='ReadingForm' tabIndex={-1} aria-labelledby='readingFormLabel' aria-hidden='true'>
+      <div className='reading-form modal fade' id='readingForm' tabIndex={-1} aria-labelledby='readingFormLabel' aria-hidden='true'>
         <div className='modal-dialog modal-fullscreen-sm-down'>
           <div className='modal-content'>
             <form action='#!' onSubmit={e => onSubmit(e)}>

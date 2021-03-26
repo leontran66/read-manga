@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { ContainerProps } from '../../../types/Props';
+import { ContainerProps } from '../types';
 
 import './ProfileTabs.css';
 

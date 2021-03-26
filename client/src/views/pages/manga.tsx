@@ -1,20 +1,23 @@
 import { Fragment } from 'react';
 
-import Header from '../components/common/Header';
-import Footer from '../components/common/Footer';
-import MainContainer from '../components/common/MainContainer';
-import Manga from '../components/Manga';
+import Header from '../components/common/Header/Header';
+import Footer from '../components/common/Footer/Footer';
+import MainContainer from '../components/common/MainContainer/MainContainer';
+import Manga from '../components/Manga/Manga/Manga';
+import MangaWrapper from '../components/Manga/MangaWrapper/MangaWrapper';
 
-const MangaLayout = () => {
+const MangasLayout = () => {
   return (
     <Fragment>
       <Header />
       <MainContainer>
-        <Manga />
+        <MangaWrapper>
+          <Manga />
+        </MangaWrapper>
       </MainContainer>
       <Footer />
     </Fragment>
   );
 };
 
-export default MangaLayout;
+export default MangasLayout;

@@ -1,0 +1,6 @@
+{
+  "name": "mangawrapper",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "./MangaWrapper.tsx"
+}

@@ -24,7 +24,8 @@ export default function genresReducer(state = initialState, action: types.GenreA
         errors: []
       };
     case types.CREATE_GENRE_FAIL:
-      case types.DELETE_GENRE_FAIL:
+    case types.DELETE_GENRE_FAIL:
+    case types.LOAD_GENRE_FAIL:
     case types.UPDATE_GENRE_FAIL:
       return {
         ...state,

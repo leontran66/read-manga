@@ -1,0 +1,6 @@
+{
+  "name": "genreform",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "./GenreForm.tsx"
+}

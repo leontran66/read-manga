@@ -4,20 +4,29 @@ export type ContainerProps = {
   children: React.ReactNode
 }
 
-export type AuthProps = {
+export type MangaProps = {
   auth: {
     isAuthenticated: boolean,
-    isLoading: boolean
+    isLoading: boolean,
+    user: {
+      accessLevel: string
+    } | null
   },
-  children: React.ReactNode
-}
-
-export type ReadingsProps = {
-  manga: {
+  genres: {
+    isLoading: boolean,
+    genres: Array<{
+      _id: string,
+      name: string,
+      manga: Array<string>
+    }>
+  },
+  mangas: {
     isLoading: boolean,
     manga: Array<{
       _id: string,
       title: string,
+      author: string,
+      synopsis: string,
       chapters: number
     }>
   },
@@ -29,15 +38,4 @@ export type ReadingsProps = {
       chapter: number
     }>
   }
-}
-
-export type SettingsProps = {
-  auth : {
-    isLoading: boolean,
-    user: {
-      email: string,
-      accessLevel: string
-    } | null
-  },
-  children: React.ReactNode
 }

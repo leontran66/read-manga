@@ -51,7 +51,7 @@ export const createGenre = (name: string): AppThunk => async dispatch => {
   }
 }
 
-export const updateGenre = (id: string, name: string, oldName: string): AppThunk => async dispatch => {  const config = {
+export const updateGenre = (id: string, name: string): AppThunk => async dispatch => {  const config = {
     headers: {
       'Content-Type': 'application/json'
     }

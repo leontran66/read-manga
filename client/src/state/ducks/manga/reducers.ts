@@ -30,7 +30,6 @@ export default function mangaReducer(state = initialState, action: types.MangaAc
     case types.UPDATE_MANGA_FAIL:
       return {
         ...state,
-        manga: [],
         isLoading: false,
         errors: action.payload
       };

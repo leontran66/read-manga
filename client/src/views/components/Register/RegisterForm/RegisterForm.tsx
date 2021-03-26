@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { removeAlert } from '../../../../state/ducks/alerts/actions';
 import { registerUser } from '../../../../state/ducks/auth/actions';
 import store, { RootState } from '../../../../state/store';
-import { AlertProps } from '../../../types/Props';
+import { AlertProps } from '../types';
 
 import './RegisterForm.css';
 

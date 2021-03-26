@@ -95,6 +95,10 @@ export const updateReading = async (req: AuthRequest, res: Response): Promise<Re
       }
 
       // check if reading for user already exists
+      /*
+        this is going to cause problems later
+        best to check against current reading to ensure unaltered title
+      */
       let reading = await Reading.findOne({ user: id, manga: manga._id });
       if (!reading) {
         return res.status(400).json({ errors: [{ msg: 'Reading not found' }] });

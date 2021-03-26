@@ -1,0 +1,6 @@
+{
+  "name": "genreswrapper",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "./GenresWrapper.tsx"
+}

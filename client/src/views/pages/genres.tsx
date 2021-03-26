@@ -1,8 +1,9 @@
 import { Fragment } from 'react';
 
-import Genres from '../components/Genres';
-import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
+import Genres from '../components/Genres/Genres';
+import GenresWrapper from '../components/Genres/GenresWrapper';
+import Header from '../components/common/Header';
 import MainContainer from '../components/common/MainContainer';
 
 const GenresLayout = () => {
@@ -10,7 +11,9 @@ const GenresLayout = () => {
     <Fragment>
       <Header />
       <MainContainer>
-        <Genres />
+        <GenresWrapper>
+          <Genres />
+        </GenresWrapper>
       </MainContainer>
       <Footer />
     </Fragment>

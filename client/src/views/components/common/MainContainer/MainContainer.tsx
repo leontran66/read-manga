@@ -1,4 +1,4 @@
-import { ContainerProps } from '../../../types/Props';
+import { ContainerProps } from '../types';
 
 import './MainContainer.css';
 

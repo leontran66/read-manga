@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logoutUser } from '../../../../state/ducks/auth/actions';
 import store, { RootState } from '../../../../state/store';
-import { EnhancedProps } from '../../../types/Props';
+import { HeaderProps } from '../types';
 
-const Header = ({ auth: { isAuthenticated, isLoading }, user }: EnhancedProps) => {
+const Header = ({ auth: { isAuthenticated, isLoading, user } }: HeaderProps) => {
   const onClick = () => {
     store.dispatch<any>(logoutUser());
   };

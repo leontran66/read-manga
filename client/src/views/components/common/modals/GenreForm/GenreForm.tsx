@@ -1,20 +1,25 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { removeAlert } from '../../../../../state/ducks/alerts/actions';
-import { createGenre } from '../../../../../state/ducks/genres/actions';
+import { createGenre, updateGenre } from '../../../../../state/ducks/genres/actions';
 import store, { RootState } from '../../../../../state/store';
-import { AlertProps } from '../../../../types/Props';
+import { GenreFormProps } from '../../types';
 
-import './CreateGenreForm.css';
+import './GenreForm.css';
 
-const CreateGenreForm = ({ alerts }: AlertProps) => {
+const GenreForm = ({ alerts, isNew, genre }: GenreFormProps) => {
   const nameAlert = alerts.find(alert => alert.field === 'name');
 
+  useEffect(() => {
+    setFormData({ id: genre ? genre._id : '', name: genre ? genre.name : '' });
+  }, [genre]);
+
   const [formData, setFormData] = useState({
-    name: ''
+    id: genre ? genre._id :  '',
+    name: genre ? genre.name : ''
   });
 
-  const { name } = formData;
+  const { id, name } = formData;
 
   const onChange = (e: React.FormEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
@@ -25,25 +30,28 @@ const CreateGenreForm = ({ alerts }: AlertProps) => {
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    store.dispatch<any>(createGenre(name));
+    if (isNew) {
+      store.dispatch<any>(createGenre(name));
+    } else {
+      store.dispatch<any>(updateGenre(id, name))
+    }
   }
 
   return (
     <Fragment>
-      <button type="button" className='btn btn-primary mb-3' data-bs-toggle="modal" data-bs-target="#createGenreForm">Add New Genre</button>
-      <div className="create-genre-form modal fade" id="createGenreForm" tabIndex={-1} aria-labelledby="createGenreFormLabel" aria-hidden="true">
+      <div className="genre-form modal fade" id="genreForm" tabIndex={-1} aria-labelledby="genreFormLabel" aria-hidden="true">
         <div className="modal-dialog modal-fullscreen-sm-down">
           <div className='modal-content'>
             <form action='#!' onSubmit={e => onSubmit(e)}>
               <div className='modal-header'>
-                <h5 className='modal-title'>Add New Genre</h5>
+                <h5 className='modal-title'>{isNew ? 'Add New Genre' : 'Edit Genre'}</h5>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className='modal-body'>
                 <label htmlFor='name' className='form-label'>Name</label>
-                <input type='text' className={`form-control ${nameAlert ? 'is-invalid': ''}`} id='name' name='name' value={name} onChange={e => onChange(e)} />
-                <div id={nameAlert ? nameAlert.id : 'chapterInvalid'} className='invalid-feedback'>
-                  {nameAlert ? nameAlert.msg : 'Chapter is invalid.'}
+                <input type='text' className={`text-capitalize form-control ${nameAlert ? 'is-invalid': ''}`} id='name' name='name' value={name} onChange={e => onChange(e)} />
+                <div id={nameAlert ? nameAlert.id : 'nameInvalid'} className='invalid-feedback'>
+                  {nameAlert ? nameAlert.msg : 'Name is invalid.'}
                 </div>
               </div>
               <div className='modal-footer'>
@@ -62,4 +70,4 @@ const mapStateToProps = (state: RootState) => ({
   alerts: state.alerts
 });
 
-export default connect(mapStateToProps)(CreateGenreForm);
+export default connect(mapStateToProps)(GenreForm);
