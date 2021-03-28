@@ -7,8 +7,8 @@ export type ReadingDocument = mongoose.Document & {
 }
 
 const readingSchema = new Schema<ReadingDocument>({
-  user: { type: Schema.Types.ObjectId, required: true },
-  manga: { type: Schema.Types.ObjectId, required: true },
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  manga: { type: Schema.Types.ObjectId, ref: 'Manga', required: true },
   chapter: { type: Number, min: 0 }
 });
 

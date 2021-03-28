@@ -34,6 +34,15 @@ export type HeaderProps = {
   }
 }
 
+export type MangaObjectProps = {
+  id: string,
+  title: string,
+  author: string,
+  genres: Array<string>,
+  synopsis: string,
+  chapters: number
+}
+
 export type MangaFormProps = {
   alerts: Array<{
     id: string,
@@ -53,6 +62,7 @@ export type MangaFormProps = {
     _id: string,
     title: string,
     author: string,
+    genres: Array<string>,
     synopsis: string,
     chapters: number
   }

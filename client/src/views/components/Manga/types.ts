@@ -12,7 +12,7 @@ export type MangaProps = {
       accessLevel: string
     } | null
   },
-  genres: {
+  allGenres: {
     isLoading: boolean,
     genres: Array<{
       _id: string,
@@ -37,5 +37,17 @@ export type MangaProps = {
       manga: string,
       chapter: number
     }>
+  }
+}
+
+export type MangaObjectProps = {
+  isNew: boolean,
+  manga: {
+    _id: string,
+    title: string,
+    author: string,
+    genres: Array<string>,
+    synopsis: string,
+    chapters: number
   }
 }

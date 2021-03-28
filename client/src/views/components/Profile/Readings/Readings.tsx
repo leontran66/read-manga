@@ -61,7 +61,7 @@ const Readings = ({ manga, readings }: ReadingsProps) => {
                   }
                   return (
                     <tr key={reading.manga}>
-                      <td className='profile-manga text-capitalize'><a href='/mangas/id'>{data.title}</a></td>
+                      <td className='profile-manga text-capitalize'><a href={`/manga?q=${data.title}`}>{data.title}</a></td>
                       <td className='profile-chapter'>{data.chapter}/{document!.chapters}</td>
                       <td className='profile-actions'>
                         <button type='button' className='btn btn-primary btn-sm' data-bs-toggle='modal' data-bs-target='#readingForm' onClick={() => prepareForm(false, { manga: data.manga, title: data.title, chapter: data.chapter })}>Edit</button>{' '}<a href='#!' className='btn btn-sm btn-danger' onClick={() => onClick(reading._id)}>Delete</a></td>

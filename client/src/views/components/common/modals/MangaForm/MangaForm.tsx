@@ -1,9 +1,9 @@
-import { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { removeAlert } from '../../../../../state/ducks/alerts/actions';
 import { createManga, updateManga } from '../../../../../state/ducks/manga/actions';
 import store, { RootState } from '../../../../../state/store';
-import { MangaFormProps } from '../../types';
+import { MangaObjectProps, MangaFormProps } from '../../types';
 
 import './MangaForm.css';
 
@@ -17,34 +17,43 @@ const MangaForm = ({ alerts, genres, isNew, manga }: MangaFormProps) => {
       id:  manga ? manga._id : '',
       title: manga ? manga.title : '',
       author: manga ? manga.author : '',
+      genres: manga ? manga.genres: [],
       synopsis: manga ? manga.synopsis : '',
       chapters: manga ? manga.chapters : 0
     });
   }, [manga]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<MangaObjectProps>({
     id: manga ? manga._id : '',
     title: manga ? manga.title : '',
     author: manga ? manga.author: '',
+    genres: manga ? manga.genres: [],
     synopsis: manga ? manga.synopsis : '',
     chapters: manga ? manga.chapters: 0
   });
 
   const { id, title, author, synopsis, chapters } = formData;
+  const mangaGenres = formData.genres;
 
-  const onChange = (e: React.FormEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const onChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
     if (alerts.some(alert => alert.field === e.currentTarget.name)) {
       store.dispatch<any>(removeAlert(e.currentTarget.name));
     }
   }
 
+  const onSelect = (e: React.FormEvent<HTMLSelectElement | HTMLOptionElement>) => {
+    if (!mangaGenres.some(manga => manga === e.currentTarget.value) && e.currentTarget.value !== '') {
+      setFormData({ ...formData, genres: [...mangaGenres, e.currentTarget.value]});
+    }
+  }
+
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (isNew) {
-      store.dispatch<any>(createManga(title, author, synopsis, chapters));
+      store.dispatch<any>(createManga(title, author, mangaGenres, synopsis, chapters));
     } else {
-      store.dispatch<any>(updateManga(id, title, author, synopsis, chapters));
+      store.dispatch<any>(updateManga(id, title, author, mangaGenres, synopsis, chapters));
     }
   }
 
@@ -67,16 +76,6 @@ const MangaForm = ({ alerts, genres, isNew, manga }: MangaFormProps) => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor='genres' className='form-label'>Genres</label>
-                  <select className='text-capitalize form-select mb-2' aria-label='genres' id='genres' name='genres'>
-                    <option key='' value=''>Select a genre...</option>
-                    {
-                      !genres.isLoading && genres.genres.length > 0 &&
-                      genres.genres.map(genre => <option key={genre._id} value={genre._id}>{genre.name}</option>)
-                    }
-                  </select>
-                </div>
-                <div>
                   <label htmlFor='author' className='form-label'>Author</label>
                   <input type='text' className={`text-capitalize form-control mb-2 ${authorAlert ? 'is-invalid': ''}`} id='author' name='author' value={author} onChange={e => onChange(e)} />
                   <div id={authorAlert ? authorAlert.id : 'titleInvalid'} className='invalid-feedback'>
@@ -89,6 +88,25 @@ const MangaForm = ({ alerts, genres, isNew, manga }: MangaFormProps) => {
                   <div id={chaptersAlert ? chaptersAlert.id : 'chaptersInvalid'} className='invalid-feedback'>
                     {chaptersAlert ? chaptersAlert.msg : 'Chapters is invalid.'}
                   </div>
+                </div>
+                <div>
+                  <label htmlFor='genres' className='form-label'>Genres</label>
+                  <select className='text-capitalize form-select mb-3' aria-label='genres' id='genres' name='genres' onChange={e => onSelect(e)}>
+                    <option key='' value=''>Select a genre...</option>
+                    {
+                      !genres.isLoading && genres.genres.length > 0 &&
+                      genres.genres.map(genre => <option key={genre._id} value={genre._id}>{genre.name}</option>)
+                    }
+                  </select>
+                  {
+                    // display currently selected genres
+                    !genres.isLoading && genres.genres.length > 0 &&
+                    mangaGenres.map(genre => {
+                      const genreResult = genres.genres.find(genres => genres._id === genre);
+                      return (
+                      <span key={genre} className='badge rounded-pill bg-primary text-capitalize me-1 mb-2'>{genreResult!.name}</span>)
+                    })
+                  }
                 </div>
                 <div>
                   <label htmlFor='synopsis' className='form-label'>Synopsis</label>

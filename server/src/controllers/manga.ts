@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { Genre } from '../models/Genre';
 import { Manga } from '../models/Manga';
+import { Reading } from '../models/Reading';
 import { AuthRequest } from '../types/authRequest';
 
 // @route GET api/manga
@@ -90,7 +91,7 @@ export const createManga = async (req: AuthRequest, res: Response): Promise<Resp
 
       if (genres.length > 0) {
         genres.forEach(async (genre: string) => {
-          await Genre.findOneAndUpdate({ name: genre.toLowerCase() }, { $push: { manga: manga._id } });
+          await Genre.findOneAndUpdate({ _id: genre }, { $push: { manga: manga._id } });
         });
       }
 
@@ -131,28 +132,22 @@ export const updateManga = async (req: AuthRequest, res: Response): Promise<Resp
         return res.status(400).json({ errors: [{ msg: 'Manga not found' }] });
       }
 
-      // check if manga already exists
-      manga = await Manga.findOne({ title: title.toLowerCase(), author: author.toLowerCase() });
-      if (manga) {
-        return res.status(400).json({ errors: [{ msg: 'Manga already exists.', param: 'title' }, { msg: 'Manga already exists.', param: 'author' }] });
-      }
-
       await Manga.findByIdAndUpdate(id, {
         title: title.toLowerCase(),
         author: author.toLowerCase(),
         synopsis,
         chapters
       });
-
+      
       await Genre.updateMany({ manga: { $in: [id] } }, { $pull : { manga: id } });
 
       if (genres.length > 0) {
         genres.forEach(async (genre: string) => {
-          await Genre.updateMany({ name: genre.toLowerCase() }, { $push: { manga: id } });
+          await Genre.updateMany({ _id: genre }, { $push: { manga: id } });
         });
       }
 
-      return res.status(200).json({ msg: 'Manga updated' });
+      return res.status(200).json({ msg: 'Manga updated.' });
     } catch (err) {
       return res.status(500).json({ errors: [{ msg: 'Manga error' }] });
     }
@@ -181,7 +176,9 @@ export const deleteManga = async (req: AuthRequest, res: Response): Promise<Resp
 
     await Genre.updateMany({ manga: { $in: [id] } }, { $pull: { manga: id } });
 
-    return res.status(200).json({ msg: 'Manga deleted' });
+    await Reading.deleteMany({ manga: id });
+
+    return res.status(200).json({ msg: 'Manga deleted.' });
   } catch (err) {
     return res.status(500).json({ errors: [{ msg: 'Manga error' }] });
   }
