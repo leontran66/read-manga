@@ -26,6 +26,7 @@
 | Dependency   | Usage                                   |
 | ------------ | --------------------------------------- |
 | Axios        | Library to make requests to the API     |
+| Bootstrap    | CSS framework for easy UI creation      |
 | React        | Library for creating the user interface |
 | React Router | Library for declaring routes in react   |
 | Redux        | Library to manage state for React       |
