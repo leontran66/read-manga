@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import { RootState } from '../../../../state/store';
 import { AuthProps } from '../types';
 

@@ -1,4 +1,4 @@
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import './NotFound.css';
 
@@ -18,7 +18,7 @@ const NotFound = () => {
           <p>The page you are looking for doesn't exist or other error occurred.&nbsp;
             <br />
             <a href='#!' onClick={() => goBack()}>Go back</a>, or head over to the{' '}
-            <Link to='/'>Manga Tracker</Link>
+            <a href='/'>Manga Tracker</a>
             {' '}homepage to choose a new direction.
           </p>
         </div>

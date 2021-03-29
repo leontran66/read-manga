@@ -1,13 +1,13 @@
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-};
-
 import compression from 'compression';
+import dotenv from 'dotenv';
 import express from 'express';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
-import { auth } from './util/auth';
+import path from 'path';
 
+dotenv.config();
+
+import { auth } from './util/auth';
 import * as authController from './controllers/auth';
 import * as genreController from './controllers/genre';
 import * as mangaController from './controllers/manga';
@@ -53,5 +53,14 @@ app.delete('/api/readings/:id', auth, readingController.deleteReading);
 app.post('/api/users', userController.registerUser);
 app.patch('/api/users', auth, userController.updateUser);
 app.delete('/api/users', auth, userController.deleteUser);
+
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+
+  app.get('/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
+  });
+}
 
 export default app;
