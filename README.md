@@ -61,9 +61,9 @@
 
 ### Genres
 
-| Field | Additional Info    |
-| ----- | ------------------ |
-| manga | Reference to manga |
+| Field | Additional Info          |
+| ----- | ------------------------ |
+| manga | Array Reference to manga |
 | name  |
 
 ## Routes
@@ -88,7 +88,6 @@
 | Route                    |                |
 | ------------------------ | -------------- |
 | / GET all manga          | Public         |
-| /:id GET manga           | Public         |
 | / POST create manga      | Private, Admin |
 | /:id PATCH update manga  | Private, Admin |
 | /:id DELETE delete manga | Private, Admin |
@@ -106,7 +105,7 @@
 
 | Route                    |                |
 | ------------------------ | -------------- |
-| / GET get all genres     | Private, Admin |
+| / GET get all genres     | Public         |
 | / POST create genre      | Private, Admin |
 | /:id PATCH update genre  | Private, Admin |
 | /:id DELETE delete genre | Private, Admin |
