@@ -1,7 +1,6 @@
 import { Error } from '../../types/Error';
 
 export const LOAD_ALL_MANGA = 'LOAD_ALL_MANGA';
-export const LOAD_MANGA = 'LOAD_MANGA';
 export const LOAD_MANGA_FAIL = 'LOAD_MANGA_FAIL';
 export const CREATE_MANGA = 'CREATE_MANGA';
 export const CREATE_MANGA_FAIL = 'CREATE_MANGA_FAIL';
@@ -25,7 +24,7 @@ export interface MangaState {
 }
 
 interface LoadAction {
-  type: typeof LOAD_ALL_MANGA | typeof LOAD_MANGA,
+  type: typeof LOAD_ALL_MANGA,
   payload: Array<Manga>
 }
 

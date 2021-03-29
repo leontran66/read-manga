@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { removeAlert } from '../../../../state/ducks/alerts/actions';
 import { loadAllGenres } from '../../../../state/ducks/genres/actions';
 import { loadAllManga, deleteManga } from '../../../../state/ducks/manga/actions';
@@ -12,11 +13,13 @@ import MangaForm from '../../common/modals/MangaForm';
 import './Manga.css';
 
 const Manga = ({ auth, allGenres, mangas, readings }: MangaProps) => {
+  const query = new URLSearchParams(useLocation().search).get('q');
+
   useEffect(() => {
     store.dispatch<any>(loadAllGenres());
-    store.dispatch<any>(loadAllManga());
     store.dispatch<any>(loadReadings());
-  }, []);
+    store.dispatch<any>(loadAllManga(query ? query : undefined));
+  }, [query]);
 
   const [formData, setFormData] = useState<MangaObjectProps>({
     isNew: true,
@@ -37,7 +40,7 @@ const Manga = ({ auth, allGenres, mangas, readings }: MangaProps) => {
   }
   
   const removeManga = (id: string) => {
-    store.dispatch<any>(deleteManga(id));
+    store.dispatch<any>(deleteManga(id, query ? query : undefined));
   }
 
   const prepareForm = (isNew: boolean, manga: { _id: string, title: string, author: string, genres: Array<string>, synopsis: string, chapters: number }) => {
@@ -50,7 +53,7 @@ const Manga = ({ auth, allGenres, mangas, readings }: MangaProps) => {
 
   return (
     <Fragment>
-      <MangaForm isNew={isNew} manga={manga} />
+      <MangaForm isNew={isNew} manga={manga} query={query ? query : ''} />
       {!auth.isLoading && auth.user && auth.user.accessLevel === 'admin' &&
         <button type='button' className='btn btn-primary mb-3' data-bs-toggle='modal' data-bs-target='#mangaForm' onClick={() => prepareForm(true, { _id: '', title: '', author: '', genres: [], synopsis: '', chapters: 0})}>Add New Manga</button>
       }
@@ -68,21 +71,20 @@ const Manga = ({ auth, allGenres, mangas, readings }: MangaProps) => {
 
           return (
             <div key={manga._id} className='manga-result mb-3 p-3'>
-              <h3 className='d-block mb-2'>
-                <a className='text-capitalize me-2' href={'/manga/' + manga._id}>{manga.title}</a>
-              </h3>
-              {!auth.isLoading && auth.user && auth.user.accessLevel === 'admin' &&
+              <h3 className='text-capitalize d-block mb-2'>{manga.title}</h3>
+              {
+                !hasReading &&
+                <div>
+                  <button className='btn btn-primary mb-2' onClick={() => addReading(manga.title, 0)}>Add To Reading List</button>
+                </div>
+              }
+              {
+                !auth.isLoading && auth.user && auth.user.accessLevel === 'admin' &&
                 <Fragment>
                   <button type='button' className='btn btn-primary mb-1' data-bs-toggle='modal' data-bs-target='#mangaForm' onClick={() => prepareForm(false, { _id: manga._id, title: manga.title, author: manga.author, genres: genreIDs, synopsis: manga.synopsis, chapters: manga.chapters})}>Edit</button>
                   <a href='#!' className='ms-2 mb-1 btn btn-danger' onClick={() => removeManga(manga._id)}>Delete</a>
                 </Fragment>
-                }
-              <div className='float-end'>
-                {
-                  !hasReading &&
-                  <button className='btn btn-primary' onClick={() => addReading(manga.title, 0)}>Add To Reading List</button>
-                }
-              </div>
+              }
               <div className='accordion mt-2' id={'info-' + manga._id}>
                 <div className='accordion-item'>
                   <h2 className='accordion-header' id={'info-heading-' + manga._id}>

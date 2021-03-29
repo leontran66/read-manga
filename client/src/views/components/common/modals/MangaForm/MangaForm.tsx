@@ -7,7 +7,7 @@ import { MangaObjectProps, MangaFormProps } from '../../types';
 
 import './MangaForm.css';
 
-const MangaForm = ({ alerts, genres, isNew, manga }: MangaFormProps) => {
+const MangaForm = ({ alerts, genres, isNew, manga, query }: MangaFormProps) => {
   const titleAlert = alerts.find(alert => alert.field === 'title');
   const authorAlert = alerts.find(alert => alert.field === 'author');
   const chaptersAlert = alerts.find(alert => alert.field === 'chapters');
@@ -42,18 +42,23 @@ const MangaForm = ({ alerts, genres, isNew, manga }: MangaFormProps) => {
     }
   }
 
-  const onSelect = (e: React.FormEvent<HTMLSelectElement | HTMLOptionElement>) => {
+  const onSelect = (e: React.FormEvent<HTMLSelectElement>) => {
     if (!mangaGenres.some(manga => manga === e.currentTarget.value) && e.currentTarget.value !== '') {
       setFormData({ ...formData, genres: [...mangaGenres, e.currentTarget.value]});
+      e.currentTarget.options[0].selected = true;
     }
+  }
+
+  const removeSelect = (id: string) => {
+    setFormData({ ...formData, genres: mangaGenres.filter(genre => genre !== id) });
   }
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (isNew) {
-      store.dispatch<any>(createManga(title, author, mangaGenres, synopsis, chapters));
+      store.dispatch<any>(createManga(title, author, mangaGenres, synopsis, chapters, query !== '' ? query : undefined));
     } else {
-      store.dispatch<any>(updateManga(id, title, author, mangaGenres, synopsis, chapters));
+      store.dispatch<any>(updateManga(id, title, author, mangaGenres, synopsis, chapters, query !== '' ? query : undefined));
     }
   }
 
@@ -84,7 +89,7 @@ const MangaForm = ({ alerts, genres, isNew, manga }: MangaFormProps) => {
                 </div>
                 <div>
                   <label htmlFor='chapters' className='form-label'>Chapters</label>
-                  <input type='number' className={`text-capitalize form-control mb-2 ${chaptersAlert ? 'is-invalid': ''}`} id='chapters' name='chapters' value={chapters} onChange={e => onChange(e)} />
+                  <input type='number' className={`text-capitalize form-control mb-2 ${chaptersAlert ? 'is-invalid': ''}`} min={0} id='chapters' name='chapters' value={chapters} onChange={e => onChange(e)} />
                   <div id={chaptersAlert ? chaptersAlert.id : 'chaptersInvalid'} className='invalid-feedback'>
                     {chaptersAlert ? chaptersAlert.msg : 'Chapters is invalid.'}
                   </div>
@@ -104,7 +109,7 @@ const MangaForm = ({ alerts, genres, isNew, manga }: MangaFormProps) => {
                     mangaGenres.map(genre => {
                       const genreResult = genres.genres.find(genres => genres._id === genre);
                       return (
-                      <span key={genre} className='badge rounded-pill bg-primary text-capitalize me-1 mb-2'>{genreResult!.name}</span>)
+                      <span key={genre} className='badge rounded-pill bg-primary text-capitalize me-1 mb-2'>{genreResult!.name}<button type="button" className="btn-close btn-close-white ms-1" aria-label="Close" onClick={() => removeSelect(genreResult!._id)}></button></span>)
                     })
                   }
                 </div>

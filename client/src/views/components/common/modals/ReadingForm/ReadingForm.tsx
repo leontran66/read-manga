@@ -12,15 +12,16 @@ const ReadingForm = ({ alerts, isNew, manga, reading }: ReadingFormProps) => {
   const chapterAlert = alerts.find(alert => alert.field === 'chapter');
   
   useEffect(() => {
-    setFormData({ title: reading ? reading.title: '', chapter: reading ? reading.chapter : 0 });
+    setFormData({ id: reading ? reading._id : '', title: reading ? reading.title: '', chapter: reading ? reading.chapter : 0 });
   }, [reading]);
 
   const [formData, setFormData] = useState({
+    id: reading ? reading._id : '',
     title: reading ? reading.title : '',
     chapter: reading ? reading.chapter : 0
   });
 
-  const { title, chapter } = formData;
+  const { id, title, chapter } = formData;
 
   const onChange = (e: React.FormEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
@@ -34,7 +35,7 @@ const ReadingForm = ({ alerts, isNew, manga, reading }: ReadingFormProps) => {
     if (isNew) {
       store.dispatch<any>(createReading(title, chapter));
     } else {
-      store.dispatch<any>(updateReading(title, chapter));
+      store.dispatch<any>(updateReading(id, title, chapter));
     }
   }
 

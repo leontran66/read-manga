@@ -29,27 +29,6 @@ export const getAllManga = async (req: Request, res: Response): Promise<Response
   }
 };
 
-// @route GET api/manga/:id
-// @desc Get Manga
-// @access public
-export const getManga = async (req: Request, res: Response): Promise<Response> => {
-  const { id } = req.params;
-
-  try {
-    // check if manga exists
-    const manga = await Manga.findById(id);
-    if (!manga) {
-      return res.status(400).json({ errors: [{ msg: 'Manga not found' }] });
-    }
-
-    const genres = await Genre.find({ manga: id });
-
-    return res.status(200).json({ manga, genres });
-  } catch (err) {
-    return res.status(500).json({ errors: [{ msg: 'Manga error' }] });
-  }
-};
-
 // @route POST api/manga
 // @desc Create Manga
 // @access private

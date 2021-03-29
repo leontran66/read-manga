@@ -56,13 +56,6 @@ describe('Test the genres route', () => {
       token = response.body.token;
     });
 
-    test('GET /api/genres from user should return 401 Unauthorized', async () => {
-      const res = await request(app).get('/api/genres')
-        .set('x-auth-token', token);
-        expect(res.status).toBe(401);
-        expect(res.body.errors[0].msg).toBe('Authorization denied');
-    });
-
     test('POST /api/genres from user should return 401 Unauthorized', async () => {
       const res = await request(app).post('/api/genres')
         .set('x-auth-token', token)
@@ -94,23 +87,12 @@ describe('Test the genres route', () => {
   });
 
   describe('GET /api/genres', () => {
-    let token: string, response: request.Response;
-
     beforeAll(async () => {
-      response = await request(app).post('/api/auth')
-      .send({
-        email: 'admin@gmail.com',
-        password: 'testing'
-      });
-
-      token = response.body.token;
-
       await Genre.deleteMany({}).exec();
     });
 
     test('No genres should return 400 Bad Request', async () => {
-      const res = await request(app).get('/api/genres')
-        .set('x-auth-token', token);
+      const res = await request(app).get('/api/genres');
       expect(res.status).toBe(400);
       expect(res.body.errors[0].msg).toBe('Couldn\'t find any genres');
     });
@@ -130,8 +112,7 @@ describe('Test the genres route', () => {
   
       await demons.save();
 
-      const res = await request(app).get('/api/genres')
-        .set('x-auth-token', token);
+      const res = await request(app).get('/api/genres');
       expect(res.status).toBe(200);
       expect(res.body.genres[0].name).toBe('adventure');
       expect(res.body.genres[1].name).toBe('demons');
@@ -178,7 +159,7 @@ describe('Test the genres route', () => {
         });
       const genre = await Genre.findOne({ name: 'action' });
       expect(res.status).toBe(200);
-      expect(res.body.msg).toBe('Genre created');
+      expect(res.body.msg).toBe('Genre created.');
       expect(genre).not.toBeNull();
     });
   });
@@ -245,7 +226,7 @@ describe('Test the genres route', () => {
         });
       const genre = await Genre.findById(genreID);
       expect(res.status).toBe(200);
-      expect(res.body.msg).toBe('Genre updated');
+      expect(res.body.msg).toBe('Genre updated.');
       expect(genre.name).toBe('drama');
     });
   });
@@ -283,10 +264,8 @@ describe('Test the genres route', () => {
         .set('x-auth-token', token);
       const genre = await Genre.findById(genreID);
       expect(res.status).toBe(200);
-      expect(res.body.msg).toBe('Genre deleted');
+      expect(res.body.msg).toBe('Genre deleted.');
       expect(genre).toBeNull();
     });
-
-    
   });
 });

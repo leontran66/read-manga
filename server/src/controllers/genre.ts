@@ -7,14 +7,8 @@ import { AuthRequest } from '../types/authRequest';
 // @desc Get All Genres
 // @access private
 export const getAllGenres = async (req: AuthRequest, res: Response): Promise<Response> => {
-  const { accessLevel } = req.user;
 
   try {
-    // check if user is admin
-    if (accessLevel !== 'admin') {
-      return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
-    }
-
     const genres = await Genre.find({}).sort('name');
     if (genres.length <= 0) {
       return res.status(400).json({ errors: [{ msg: 'Couldn\'t find any genres' }] });

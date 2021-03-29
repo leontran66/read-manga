@@ -76,7 +76,8 @@ export const createReading = async (req: AuthRequest, res: Response): Promise<Re
 // @access private
 export const updateReading = async (req: AuthRequest, res: Response): Promise<Response> => {
     const { title, chapter } = req.body;
-    const { id } = req.user;
+    const { id } = req.params;
+    const userID = req.user.id;
 
     try {
       await body('title').not().isEmpty().trim().escape().withMessage('Title must not be empty.').run(req);
@@ -95,17 +96,13 @@ export const updateReading = async (req: AuthRequest, res: Response): Promise<Re
       }
 
       // check if reading for user already exists
-      /*
-        this is going to cause problems later
-        best to check against current reading to ensure unaltered title
-      */
-      let reading = await Reading.findOne({ user: id, manga: manga._id });
+      let reading = await Reading.findById(id);
       if (!reading) {
         return res.status(400).json({ errors: [{ msg: 'Reading not found' }] });
       }
 
       // check if reading belongs to user
-      const user = await User.findById(id);
+      const user = await User.findById(userID);
       if (!user._id.equals(reading.user)) {
         return res.status(401).json({ errors: [{ msg: 'Authorization denied' }] });
       }
@@ -115,7 +112,7 @@ export const updateReading = async (req: AuthRequest, res: Response): Promise<Re
         return res.status(400).json({ errors: [{ msg: 'Chapter cannot be more than number of chapters in manga.', param: 'chapter' }] });
       }
 
-      await Reading.findOneAndUpdate({ user: id, manga: manga._id }, { chapter });
+      await Reading.findByIdAndUpdate(id, { chapter });
 
       return res.status(200).json({ msg: 'Reading updated.' });
     } catch (err) {

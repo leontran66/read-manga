@@ -5,9 +5,11 @@ import { setAlert, setSuccessAlert } from '../alerts/actions';
 import { loadReadings } from '../readings/actions';
 import { loadAllGenres } from '../genres/actions';
 
-export const loadAllManga = (): AppThunk => async dispatch => {
+export const loadAllManga = (query?: string): AppThunk => async dispatch => {
+  let url = '/api/manga?q=';
+
   try {
-    const res = await axios.get('/api/manga');
+    const res = await axios.get(url + (query ? query : ''));
 
     dispatch({
       type: types.LOAD_ALL_MANGA,
@@ -21,23 +23,7 @@ export const loadAllManga = (): AppThunk => async dispatch => {
   }
 }
 
-export const loadManga = (id: string): AppThunk => async dispatch => {
-  try {
-    const res = await axios.get('/api/manga/' + id);
-
-    dispatch({
-      type: types.LOAD_MANGA,
-      payload: [res.data.manga]
-    });
-  } catch (err) {
-    dispatch({
-      type: types.LOAD_MANGA_FAIL,
-      payload: err.response.data.errors
-    });
-  }
-}
-
-export const createManga = (title: string, author: string, genres: Array<string>, synopsis: string, chapters: number): AppThunk => async dispatch => {
+export const createManga = (title: string, author: string, genres: Array<string>, synopsis: string, chapters: number, query?: string): AppThunk => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -53,7 +39,7 @@ export const createManga = (title: string, author: string, genres: Array<string>
       type: types.CREATE_MANGA
     });
 
-    dispatch(loadAllManga());
+    dispatch(loadAllManga(query ? query : undefined));
     
     dispatch(setSuccessAlert(res.data.msg));
   } catch (err) {
@@ -69,7 +55,7 @@ export const createManga = (title: string, author: string, genres: Array<string>
   }
 }
 
-export const updateManga = (id: string, title: string, author: string, genres: Array<string>, synopsis: string, chapters: number): AppThunk => async dispatch => {    
+export const updateManga = (id: string, title: string, author: string, genres: Array<string>, synopsis: string, chapters: number, query?: string): AppThunk => async dispatch => {    
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -85,7 +71,7 @@ export const updateManga = (id: string, title: string, author: string, genres: A
       type: types.UPDATE_MANGA
     });
 
-    dispatch(loadAllManga());
+    dispatch(loadAllManga(query ? query : undefined));
     dispatch(loadAllGenres());
     
     dispatch(setSuccessAlert(res.data.msg));
@@ -102,7 +88,7 @@ export const updateManga = (id: string, title: string, author: string, genres: A
   }
 }
 
-export const deleteManga = (id: string): AppThunk => async dispatch => {
+export const deleteManga = (id: string, query?: string): AppThunk => async dispatch => {
   try {
     const res = await axios.delete('/api/manga/' + id);
 
@@ -110,7 +96,7 @@ export const deleteManga = (id: string): AppThunk => async dispatch => {
       type: types.DELETE_MANGA
     });
 
-    dispatch(loadAllManga());
+    dispatch(loadAllManga(query ? query : undefined));
     dispatch(loadAllGenres());
     dispatch(loadReadings());
 

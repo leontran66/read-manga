@@ -91,6 +91,7 @@ describe('Test the readings route', () => {
     test('PATCH /api/readings while logged out should return 401 Unauthorized', async () => {
       const res = await request(app).patch('/api/readings/' + readingID)
         .send({
+          title: 'One Piece',
           chapter: 1000
         });
         expect(res.status).toBe(401);
@@ -101,6 +102,7 @@ describe('Test the readings route', () => {
       const res = await request(app).patch('/api/readings/' + readingID)
         .set('x-auth-token', token)
         .send({
+          title: 'Berserk',
           chapter: 355
         });
       expect(res.status).toBe(401);
@@ -231,7 +233,7 @@ describe('Test the readings route', () => {
       const manga = await Manga.findOne({ title: 'one piece' });
       const reading = await Reading.findOne({ manga: manga._id });
       expect(res.status).toBe(200);
-      expect(res.body.msg).toBe('Reading created');
+      expect(res.body.msg).toBe('Added One piece to reading list.');
       expect(reading).not.toBeNull();
     });
   });
@@ -261,14 +263,17 @@ describe('Test the readings route', () => {
       const res = await request(app).patch('/api/readings/' + readingID)
         .set('x-auth-token', token);
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Chapter must be a number.');
-      expect(res.body.errors[0].param).toBe('chapter');
+      expect(res.body.errors[0].msg).toBe('Title must not be empty.');
+      expect(res.body.errors[0].param).toBe('title');
+      expect(res.body.errors[1].msg).toBe('Chapter must be a number.');
+      expect(res.body.errors[1].param).toBe('chapter');
     });
     
     test('non-reading id should return 400 Bad Request', async () => {
       const res = await request(app).patch('/api/readings/' + mangaID)
         .set('x-auth-token', token)
         .send({
+          title: 'Berserk',
           chapter: 355
         });
       expect(res.status).toBe(400);
@@ -279,10 +284,11 @@ describe('Test the readings route', () => {
       const res = await request(app).patch('/api/readings/' + readingID)
         .set('x-auth-token', token)
         .send({
+          title: 'Berserk',
           chapter: 400
         });
       expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Chapter cannot be more than number of chapters in manga');
+      expect(res.body.errors[0].msg).toBe('Chapter cannot be more than number of chapters in manga.');
       expect(res.body.errors[0].param).toBe('chapter');
     });
     
@@ -290,11 +296,12 @@ describe('Test the readings route', () => {
       const res = await request(app).patch('/api/readings/' + readingID)
         .set('x-auth-token', token)
         .send({
+          title: 'Berserk',
           chapter: 355
         });
       const reading = await Reading.findOne({ _id: readingID });
       expect(res.status).toBe(200);
-      expect(res.body.msg).toBe('Reading updated');
+      expect(res.body.msg).toBe('Reading updated.');
       expect(reading.chapter).toBe(355);
     });
   });
@@ -332,7 +339,7 @@ describe('Test the readings route', () => {
         .set('x-auth-token', token);
       const reading = await Reading.findOne({ _id: readingID });
       expect(res.status).toBe(200);
-      expect(res.body.msg).toBe('Reading deleted');
+      expect(res.body.msg).toBe('Reading deleted.');
       expect(reading).toBeNull();
     });
   });

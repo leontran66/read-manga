@@ -100,39 +100,6 @@ describe('Test the manga route', () => {
     });
   });
 
-  describe('GET /api/manga/:id', () => {
-    let mangaID: string, genreID: string;
-
-    beforeAll(async () => {
-      const manga = await Manga.findOne({ title: 'one piece' });
-
-      mangaID = manga._id;
-
-      const genre = await Genre.findOne({ name: 'adventure' });
-      genre.manga.push(mangaID);
-
-      await genre.save();
-
-      genreID = genre._id;
-    });
-
-    test('non-manga id should return 400 Bad Request', async () => {
-      const res = await request(app).get('/api/manga/' + genreID);
-      expect(res.status).toBe(400);
-      expect(res.body.errors[0].msg).toBe('Manga not found');
-    });
-
-    test('correct input should return 200 OK', async () => {
-      const res = await request(app).get('/api/manga/' + mangaID);
-      expect(res.status).toBe(200);
-      expect(res.body.manga.title).toBe('one piece');
-      expect(res.body.manga.author).toBe('eiichiro oda');
-      expect(res.body.manga.synopsis).toBe('Gol D. Roger, a man referred to as the "Pirate King," is set to ...');
-      expect(res.body.manga.chapters).toBe(1007);
-      expect(res.body.genres[0].name).toBe('adventure');
-    });
-  });
-
   describe('Test route authorization', () => {
     let token: string, response: request.Response;
 
@@ -313,7 +280,7 @@ describe('Test the manga route', () => {
         });
       const manga = await Manga.findOne({ _id: mangaID });
       expect(res.status).toBe(200);
-      expect(res.body.msg).toBe('Manga updated');
+      expect(res.body.msg).toBe('Manga updated.');
       expect(manga.title).toBe('fullmetal alchemist');
       expect(manga.author).toBe('hiromu arakawa');
       expect(manga.synopsis).toBe('Alchemists are knowledgeable and naturally talented individu...');
@@ -354,7 +321,7 @@ describe('Test the manga route', () => {
       
       const manga = await Manga.findOne({ _id: mangaID });
       expect(res.status).toBe(200);
-      expect(res.body.msg).toBe('Manga deleted');
+      expect(res.body.msg).toBe('Manga deleted.');
       expect(manga).toBeNull();
     });
   });

@@ -51,7 +51,7 @@ export const createReading = (title: string, chapter: number): AppThunk => async
   }
 }
 
-export const updateReading = (title: string, chapter: number): AppThunk => async dispatch => {  const config = {
+export const updateReading = (id: string, title: string, chapter: number): AppThunk => async dispatch => {  const config = {
     headers: {
       'Content-Type': 'application/json'
     }
@@ -60,7 +60,7 @@ export const updateReading = (title: string, chapter: number): AppThunk => async
   const data = { title, chapter };
 
   try {
-    const res = await axios.patch('/api/readings', data, config);
+    const res = await axios.patch('/api/readings/' + id, data, config);
 
     dispatch({
       type: types.UPDATE_READING

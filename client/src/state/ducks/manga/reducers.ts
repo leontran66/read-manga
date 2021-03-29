@@ -9,7 +9,6 @@ const initialState: types.MangaState = {
 export default function mangaReducer(state = initialState, action: types.MangaActionTypes): types.MangaState {
   switch (action.type) {
     case types.LOAD_ALL_MANGA:
-    case types.LOAD_MANGA:
       return {
         ...state,
         manga: action.payload,
@@ -24,9 +23,15 @@ export default function mangaReducer(state = initialState, action: types.MangaAc
         isLoading: false,
         errors: []
       };
+    case types.LOAD_MANGA_FAIL:
+      return {
+        ...state,
+        manga: [],
+        isLoading: false,
+        errors: action.payload
+      }
     case types.CREATE_MANGA_FAIL:
     case types.DELETE_MANGA_FAIL:
-    case types.LOAD_MANGA_FAIL:
     case types.UPDATE_MANGA_FAIL:
       return {
         ...state,

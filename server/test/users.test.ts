@@ -150,7 +150,7 @@ describe('Test the user route', () => {
         });
         const existinguser = await User.findOne({ email: 'existinguser@gmail.com' });
         expect(res.status).toBe(200);
-        expect(res.body.msg).toBe('User updated');
+        expect(res.body.msg).toBe('User updated.');
         expect(await bcrypt.compare('testingg', existinguser.password)).toBe(true);
     });
   });
@@ -179,7 +179,7 @@ describe('Test the user route', () => {
         .set('x-auth-token', token);
         const existinguser = await User.findOne({ email: 'existinguser@gmail.com' });
         expect(res.status).toBe(200);
-        expect(res.body.msg).toBe('User deleted');
+        expect(res.body.msg).toBe('User deleted.');
         expect(existinguser).toBeNull();
     });
   });

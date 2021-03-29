@@ -65,7 +65,8 @@ export type MangaFormProps = {
     genres: Array<string>,
     synopsis: string,
     chapters: number
-  }
+  },
+  query: string
 }
 
 export type ReadingFormProps = {
@@ -84,6 +85,7 @@ export type ReadingFormProps = {
     }>
   },
   reading: {
+    _id: string,
     manga: string,
     title: string,
     chapter: number
