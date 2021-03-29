@@ -53,6 +53,7 @@ describe('Test the readings route', () => {
 
   afterAll(async () => {
     await Manga.deleteMany({}).exec();
+    await Reading.deleteMany({}).exec();
     await User.deleteMany({}).exec();
   });
 
