@@ -2,6 +2,35 @@
 
 ### An app that keeps track of manga you are currently reading
 
+## Installation
+
+1. Copy this repo
+2. Install dependencies for both server and client:
+
+```
+npm install
+```
+
+```
+npm install --prefix client
+```
+
+3. Create production builds for both server and client:
+
+```
+npm run build
+```
+
+```
+npm run build --prefix client
+```
+
+4. Run the app with the following command:
+
+```
+npm start
+```
+
 ## Stack
 
 - NodeJS/Express Backend
