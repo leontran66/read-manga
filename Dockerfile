@@ -1,11 +1,27 @@
-FROM node:current
+FROM node:current-alpine AS INSTALL_MODULES
+RUN apk update --no-cache
+RUN apk add --no-cache python g++ make
 WORKDIR /app
 COPY ["package.json", "package-lock.json*", "./"]
 COPY ["client/package.json", "client/package-lock.json", "./client/"]
-RUN npm install
-RUN npm install --prefix client
+RUN npm install && npm install --prefix client
+
+FROM node:current-alpine AS BUILD_IMAGE
+WORKDIR /app
+COPY --from=INSTALL_MODULES /app/node_modules ./node_modules
+COPY --from=INSTALL_MODULES /app/client/node_modules ./client/node_modules
 COPY . .
 RUN npm run build
-RUN npm run build --prefix client
+RUN npm prune --production && npm prune --prefix client --production
+
+FROM node:current-alpine
+WORKDIR /app
+COPY ["package.json", "package-lock.json*", "./"]
+COPY ["client/package.json", "client/package-lock.json", "./client/"]
+COPY [".env", "./"]
+COPY --from=BUILD_IMAGE /app/dist ./dist
+COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
+COPY --from=BUILD_IMAGE /app/client/build ./client/build
+COPY --from=BUILD_IMAGE /app/client/node_modules ./client/node_modules
 ENV NODE_ENV production
 CMD ["npm", "start"]

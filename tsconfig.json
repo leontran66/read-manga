@@ -19,7 +19,5 @@
   "include": [
       "src/**/*"
   ],
-  "exclude": [
-      "client"
-  ]
+  "exclude": ["client", "node_modules", "dist"]
 }
