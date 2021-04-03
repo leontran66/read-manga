@@ -16,8 +16,6 @@
           ]
       }
   },
-  "include": [
-      "src/**/*"
-  ],
+  "include": ["src/**/*", "test"],
   "exclude": ["client", "node_modules", "dist"]
 }

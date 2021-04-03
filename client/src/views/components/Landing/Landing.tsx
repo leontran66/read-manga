@@ -1,10 +1,12 @@
+import './Landing.css';
+
 const Landing = () => {
   return (
     <div className='container-lg'>
       <div className='landing'>
         <div className='position-absolute top-50 start-50 translate-middle'>
           <h1 className='text-center'>Manga Tracker</h1>
-          <h4 className='text-center'>Keep track of manga you are reading, or manga want to read,<br />all in one place.</h4>
+          <h2 className='sub-heading text-center'>Keep track of manga you are reading, or manga want to read,<br />all in one place.</h2>
           <form className='row row-cols-auto g-2 align-items-center' method='GET' action='/manga'>
             <div className='col-10'>
               <label htmlFor='search' className='form-label'></label>
