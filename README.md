@@ -1,6 +1,8 @@
 # Read Manga
 
-### An app that keeps track of manga you are currently reading
+An app that keeps track of manga you are currently reading.
+
+View the app [here](https://powerful-dawn-92153.herokuapp.com/)
 
 ## Installation
 
