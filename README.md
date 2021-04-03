@@ -4,6 +4,25 @@ An app that keeps track of manga you are currently reading.
 
 View the app [here](https://powerful-dawn-92153.herokuapp.com/)
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Stack](#stack)
+- [Dependencies](#dependencies)
+  - [Server](#server)
+  - [Client](#client)
+- [Database Structure](#database-structure)
+  - [User](#user)
+  - [Manga](#manga)
+  - [Readings](#readings)
+  - [Genres](#genres)
+- [Routes](#routes)
+  - [/auth](#auth)
+  - [/users](#users)
+  - [/manga](#manga-1)
+  - [/readings](#readings-1)
+  - [/genres](#genres-1)
+
 ## Installation
 
 1. Copy this repository
