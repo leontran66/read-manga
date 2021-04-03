@@ -49,6 +49,7 @@ export default function authReducer(state = initialState, action: types.AuthActi
         token: null,
         isAuthenticated: false,
         isLoading: false,
+        user: null,
         errors: action.payload
       };
     case types.DELETE_USER:
@@ -59,6 +60,7 @@ export default function authReducer(state = initialState, action: types.AuthActi
         token: null,
         isAuthenticated: false,
         isLoading: false,
+        user: null,
         errors: []
       };
     default:

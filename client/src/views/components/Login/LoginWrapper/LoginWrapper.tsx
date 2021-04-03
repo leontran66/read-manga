@@ -9,10 +9,8 @@ const LoginWrapper = ({ auth: { isAuthenticated, isLoading }, children }: AuthPr
   if (!isLoading && isAuthenticated) {
     return <Redirect to='/profile' />;
   }
-  
-  return (
-    <div className='login-form mx-auto'>{children}</div>
-  );
+
+  return <div className='login-form mx-auto'>{children}</div>;
 };
 
 const mapStateToProps = (state: RootState) => ({

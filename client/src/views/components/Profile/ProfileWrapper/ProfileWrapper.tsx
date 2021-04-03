@@ -10,9 +10,7 @@ const ProfileWrapper = ({ auth: { isAuthenticated, isLoading }, children }: Auth
     return <Redirect to='/login' />;
   }
   
-  return (
-    <div className='profile mx-auto'>{children}</div>
-  );
+  return <div className='profile mx-auto'>{children}</div>;
 };
 
 const mapStateToProps = (state: RootState) => ({

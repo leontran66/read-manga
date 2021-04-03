@@ -1,12 +1,16 @@
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { logoutUser } from '../../../../state/ducks/auth/actions';
 import store, { RootState } from '../../../../state/store';
 import { HeaderProps } from '../types';
 
 const Header = ({ auth: { isAuthenticated, isLoading, user } }: HeaderProps) => {
+  const history = useHistory();
+
   const onClick = () => {
     store.dispatch<any>(logoutUser());
+    history.push('/login');
   };
   
   const authLinks = (
@@ -49,7 +53,7 @@ const Header = ({ auth: { isAuthenticated, isLoading, user } }: HeaderProps) => 
             <li className='nav-item'>
               <a className='nav-link' href='/manga'>Manga</a>
             </li>
-            <Fragment>{!isLoading && user && user.accessLevel === 'admin' ? genreLink : null }</Fragment>
+            <Fragment>{!isLoading && user && user.accessLevel === 'admin' && genreLink}</Fragment>
           </ul>
           <Fragment>{isAuthenticated && !isLoading ? authLinks : guestLinks}</Fragment>
         </div>
