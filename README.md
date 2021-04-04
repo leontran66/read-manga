@@ -4,8 +4,6 @@ An app that keeps track of manga you are currently reading.
 
 View the app [here](https://powerful-dawn-92153.herokuapp.com/)
 
-![App functionality gif](https://media.giphy.com/media/vSd8nOtnec1QNuzsln/giphy.gif)
-
 ## Table of Contents
 
 - [Installation](#installation)
