@@ -15,9 +15,9 @@ export const getAllManga = async (req: Request, res: Response): Promise<Response
     // check if manga has any documents
     let manga;
     if (q) {
-      manga = await Manga.find({ $text: { $search: q.toString().toLowerCase() } }).sort('name');
+      manga = await Manga.find({ $text: { $search: q.toString().toLowerCase() } }).sort('title');
     } else {
-      manga = await Manga.find({}).sort('name');
+      manga = await Manga.find({}).sort('title');
     }
     if (manga.length <= 0) {
       return res.status(400).json({ errors: [{ msg: 'Couldn\'t find any manga' }] });
@@ -33,7 +33,7 @@ export const getAllManga = async (req: Request, res: Response): Promise<Response
 // @desc Create Manga
 // @access private
 export const createManga = async (req: AuthRequest, res: Response): Promise<Response> => {
-    const { title, author, genres, synopsis, chapters } = req.body;
+    const { title, author, genres, synopsis, chapters, thumbnail } = req.body;
     const { accessLevel } = req.user;
 
     try {
@@ -63,7 +63,8 @@ export const createManga = async (req: AuthRequest, res: Response): Promise<Resp
         title: title.toLowerCase(),
         author: author.toLowerCase(),
         synopsis,
-        chapters
+        chapters,
+        thumbnail
       });
 
       await manga.save();
@@ -84,7 +85,7 @@ export const createManga = async (req: AuthRequest, res: Response): Promise<Resp
 // @desc Update Manga
 // @access private
 export const updateManga = async (req: AuthRequest, res: Response): Promise<Response> => {
-    const { title, author, genres, synopsis, chapters } = req.body;
+    const { title, author, genres, synopsis, chapters, thumbnail } = req.body;
     const { id } = req.params;
     const accessLevel = req.user.accessLevel;
 
@@ -115,7 +116,8 @@ export const updateManga = async (req: AuthRequest, res: Response): Promise<Resp
         title: title.toLowerCase(),
         author: author.toLowerCase(),
         synopsis,
-        chapters
+        chapters,
+        thumbnail
       });
       
       await Genre.updateMany({ manga: { $in: [id] } }, { $pull : { manga: id } });

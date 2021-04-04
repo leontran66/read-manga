@@ -27,7 +27,8 @@ export type MangaProps = {
       title: string,
       author: string,
       synopsis: string,
-      chapters: number
+      chapters: number,
+      thumbnail: string
     }>
   },
   readings: {
@@ -48,6 +49,7 @@ export type MangaObjectProps = {
     author: string,
     genres: Array<string>,
     synopsis: string,
-    chapters: number
+    chapters: number,
+    thumbnail: string
   }
 }

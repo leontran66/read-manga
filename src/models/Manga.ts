@@ -5,13 +5,15 @@ export type MangaDocument = mongoose.Document & {
   author: string;
   synopsis: string;
   chapters: number;
+  thumbnail: string;
 }
 
 const mangaSchema = new Schema<MangaDocument>({
   title: { type: String, required: true },
   author: { type: String, required: true },
   synopsis: { type: String },
-  chapters: { type: Number, min: 0 }
+  chapters: { type: Number, min: 0 },
+  thumbnail: { type: String },
 });
 
 mangaSchema.index({ title: 'text' });

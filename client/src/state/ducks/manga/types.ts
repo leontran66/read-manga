@@ -14,7 +14,8 @@ export type Manga = {
   title: string,
   author: string,
   synopsis: string,
-  chapters: number
+  chapters: number,
+  thumbnail: string
 }
 
 export interface MangaState {

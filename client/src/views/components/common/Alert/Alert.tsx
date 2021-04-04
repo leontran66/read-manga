@@ -13,7 +13,7 @@ const Alert = ({ alerts }: AlertProps) => {
     { 
       successAlerts &&
       successAlerts.map(alert =>
-        (<div className="position-absolute alert-container">
+        (<div key={alert.id} className="position-absolute alert-container">
           <div className={`text-center px-5 alert alert-success fade ${alert ? 'show' : 'hide'}`} role='alert'>
             {alert ? alert.msg : ''}
           </div>

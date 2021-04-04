@@ -40,7 +40,8 @@ export type MangaObjectProps = {
   author: string,
   genres: Array<string>,
   synopsis: string,
-  chapters: number
+  chapters: number,
+  thumbnail: string
 }
 
 export type MangaFormProps = {
@@ -64,7 +65,8 @@ export type MangaFormProps = {
     author: string,
     genres: Array<string>,
     synopsis: string,
-    chapters: number
+    chapters: number,
+    thumbnail: string
   },
   query: string
 }

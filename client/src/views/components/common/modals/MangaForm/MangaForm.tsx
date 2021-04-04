@@ -19,7 +19,8 @@ const MangaForm = ({ alerts, genres, isNew, manga, query }: MangaFormProps) => {
       author: manga ? manga.author : '',
       genres: manga ? manga.genres: [],
       synopsis: manga ? manga.synopsis : '',
-      chapters: manga ? manga.chapters : 0
+      chapters: manga ? manga.chapters : 0,
+      thumbnail: manga ? manga.thumbnail : ''
     });
   }, [manga]);
 
@@ -29,10 +30,11 @@ const MangaForm = ({ alerts, genres, isNew, manga, query }: MangaFormProps) => {
     author: manga ? manga.author: '',
     genres: manga ? manga.genres: [],
     synopsis: manga ? manga.synopsis : '',
-    chapters: manga ? manga.chapters: 0
+    chapters: manga ? manga.chapters: 0,
+    thumbnail: manga ? manga.thumbnail : ''
   });
 
-  const { id, title, author, synopsis, chapters } = formData;
+  const { id, title, author, synopsis, chapters, thumbnail } = formData;
   const mangaGenres = formData.genres;
 
   const onChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -56,9 +58,9 @@ const MangaForm = ({ alerts, genres, isNew, manga, query }: MangaFormProps) => {
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (isNew) {
-      store.dispatch<any>(createManga(title, author, mangaGenres, synopsis, chapters, query !== '' ? query : undefined));
+      store.dispatch<any>(createManga(title, author, mangaGenres, synopsis, chapters, thumbnail, query !== '' ? query : undefined));
     } else {
-      store.dispatch<any>(updateManga(id, title, author, mangaGenres, synopsis, chapters, query !== '' ? query : undefined));
+      store.dispatch<any>(updateManga(id, title, author, mangaGenres, synopsis, chapters, thumbnail, query !== '' ? query : undefined));
     }
   }
 
@@ -79,6 +81,10 @@ const MangaForm = ({ alerts, genres, isNew, manga, query }: MangaFormProps) => {
                   <div id={titleAlert ? titleAlert.id : 'titleInvalid'} className='invalid-feedback'>
                     {titleAlert ? titleAlert.msg : 'Title is invalid.'}
                   </div>
+                </div>
+                <div>
+                  <label htmlFor='thumbnail' className='form-label'>Thumbnail</label>
+                  <input type='text' className='form-control mb-2' id='thumbnail' name='thumbnail' value={thumbnail} onChange={e => onChange(e)} />
                 </div>
                 <div>
                   <label htmlFor='author' className='form-label'>Author</label>
