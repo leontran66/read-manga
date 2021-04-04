@@ -36,25 +36,30 @@ const Genres = ({ genres }: GenresProps) => {
 
   return (
     <Fragment>
-      <GenreForm isNew={isNew} genre={genre} />
-      <button type='button' className='btn btn-primary mb-3' data-bs-toggle='modal' data-bs-target='#genreForm' onClick={() => prepareForm(true, { _id: '', name: '', manga: []})}>Add New Genre</button>
-      <br />
-      {
-        !genres.isLoading && genres.genres.length > 0 ?
-        genres.genres.map(genre => {
-          return (
-            <div key={genre._id} className='genre d-inline-block mb-3 p-2 me-3'>
-              <h3 className='d-inline'>
-                <p className='d-inline align-middle text-capitalize'>{genre.name}</p>
-                <div className='float-end'>
-                  <button type='button' className='btn btn-primary ms-2' data-bs-toggle='modal' data-bs-target='#genreForm' onClick={() => prepareForm(false, { _id: genre._id, name: genre.name, manga: genre.manga })}>Edit</button>
-                  <a href='#!' className='ms-2 btn btn-danger' onClick={() => onClick(genre._id)}>Delete</a>
-                </div>
-              </h3>
-            </div>
-          );
-        }) : (<p className='text-center mt-5'>No Genres Found.</p>)
-      }
+    {
+      !genres.isLoading &&
+      <Fragment>
+        <GenreForm isNew={isNew} genre={genre} />
+        <button type='button' className='btn btn-primary mb-3' data-bs-toggle='modal' data-bs-target='#genreForm' onClick={() => prepareForm(true, { _id: '', name: '', manga: []})}>Add New Genre</button>
+        <br />
+        {
+          !genres.isLoading && genres.genres.length > 0 ?
+          genres.genres.map(genre => {
+            return (
+              <div key={genre._id} className='genre d-inline-block mb-3 p-2 me-3'>
+                <h3 className='d-inline'>
+                  <p className='d-inline align-middle text-capitalize'>{genre.name}</p>
+                  <div className='float-end'>
+                    <button type='button' className='btn btn-primary ms-2' data-bs-toggle='modal' data-bs-target='#genreForm' onClick={() => prepareForm(false, { _id: genre._id, name: genre.name, manga: genre.manga })}>Edit</button>
+                    <a href='#!' className='ms-2 btn btn-danger' onClick={() => onClick(genre._id)}>Delete</a>
+                  </div>
+                </h3>
+              </div>
+            );
+          }) : (<p className='text-center mt-5'>No Genres Found.</p>)
+        }
+      </Fragment>
+    }
     </Fragment>
   );
 };

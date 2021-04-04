@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { removeAlert } from '../../../../state/ducks/alerts/actions';
 import { loadAllManga } from '../../../../state/ducks/manga/actions';
@@ -38,43 +38,48 @@ const Readings = ({ manga, readings }: ReadingsProps) => {
   };
 
   return (
-    <div className="tab-pane fade show active" id="pills-reading" role="tabpanel" aria-labelledby="pills-reading-tab">
-      <ReadingForm isNew={isNew} reading={reading} />
-      <button type='button' className='btn btn-primary mb-3' data-bs-toggle='modal' data-bs-target='#readingForm' onClick={() => prepareForm(true, { _id: '', manga: '', title: '', chapter: 0})}>Add New Manga</button>
-      <div className='table-responsive'>
-        <table className='table table-bordered align-middle'>
-          <thead className='table-dark'>
-            <tr>
-              <th className='profile-manga'>Manga</th>
-              <th className='profile-chapter'>Chapter</th>
-              <th className='profile-actions'>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-              {
-                !manga.isLoading && !readings.isLoading && readings.readings.length > 0 ?
-                readings.readings.map(reading => {
-                  const document = manga.manga.find(manga => reading.manga === manga._id);
-                  const data = {
-                    _id: reading._id,
-                    manga: reading.manga,
-                    title: document ? document.title : '',
-                    chapter: reading.chapter
-                  }
-                  return (
-                    <tr key={reading.manga}>
-                      <td className='profile-manga text-capitalize'><a href={`/manga?q=${data.title}`}>{data.title}</a></td>
-                      <td className='profile-chapter'>{data.chapter}/{document ? document.chapters : 0}</td>
-                      <td className='profile-actions'>
-                        <button type='button' className='btn btn-primary btn-sm' data-bs-toggle='modal' data-bs-target='#readingForm' onClick={() => prepareForm(false, { _id: data._id, manga: data.manga, title: data.title, chapter: data.chapter })}>Edit</button>{' '}<a href='#!' className='btn btn-sm btn-danger' onClick={() => onClick(reading._id)}>Delete</a></td>
-                    </tr>
-                  )
-                }) : (<tr><td colSpan={3}>No readings found.</td></tr>)
-              }
-          </tbody>
-        </table>
+    <Fragment>
+    {
+      !manga.isLoading && !readings.isLoading &&
+      <div className="tab-pane fade show active" id="pills-reading" role="tabpanel" aria-labelledby="pills-reading-tab">
+        <ReadingForm isNew={isNew} reading={reading} />
+        <button type='button' className='btn btn-primary mb-3' data-bs-toggle='modal' data-bs-target='#readingForm' onClick={() => prepareForm(true, { _id: '', manga: '', title: '', chapter: 0})}>Add New Manga</button>
+        <div className='table-responsive'>
+          <table className='table table-bordered align-middle'>
+            <thead className='table-dark'>
+              <tr>
+                <th className='profile-manga'>Manga</th>
+                <th className='profile-chapter'>Chapter</th>
+                <th className='profile-actions'>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                {
+                  !manga.isLoading && !readings.isLoading && readings.readings.length > 0 ?
+                  readings.readings.map(reading => {
+                    const document = manga.manga.find(manga => reading.manga === manga._id);
+                    const data = {
+                      _id: reading._id,
+                      manga: reading.manga,
+                      title: document ? document.title : '',
+                      chapter: reading.chapter
+                    }
+                    return (
+                      <tr key={reading.manga}>
+                        <td className='profile-manga text-capitalize'><a href={`/manga?q=${data.title}`}>{data.title}</a></td>
+                        <td className='profile-chapter'>{data.chapter}/{document ? document.chapters : 0}</td>
+                        <td className='profile-actions'>
+                          <button type='button' className='btn btn-primary btn-sm' data-bs-toggle='modal' data-bs-target='#readingForm' onClick={() => prepareForm(false, { _id: data._id, manga: data.manga, title: data.title, chapter: data.chapter })}>Edit</button>{' '}<a href='#!' className='btn btn-sm btn-danger' onClick={() => onClick(reading._id)}>Delete</a></td>
+                      </tr>
+                    )
+                  }) : (<tr><td colSpan={3}>No readings found.</td></tr>)
+                }
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    }
+    </Fragment>
   );
 };
 
