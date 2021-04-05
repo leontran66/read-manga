@@ -3,7 +3,7 @@ import './Landing.css';
 const Landing = () => {
   return (
     <div className='container-lg'>
-      <div className='landing'>
+      <div className='landing position-relative'>
         <div className='position-absolute top-50 start-50 translate-middle'>
           <img className='mx-auto d-block mb-2' src='https://www.streamscheme.com/wp-content/uploads/2020/10/ayaya-emote.png' alt='ayaya' />
           <h1 className='text-center'>Manga Tracker</h1>

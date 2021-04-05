@@ -1,10 +1,36 @@
-.genres {
-  margin: 0 auto;
-  width: 60%;
-}
-
 .genre {
-  min-width: 30%;
   border-radius: 0.25em;
   background-color: #dddddd;
+}
+
+@media only screen and (max-width: 768px) {
+  .genre {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .genres {
+    width: 100%;
+  }
+
+  .genre {
+    width: 47%;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .genres {
+    width: 80%;
+  }
+}
+
+@media only screen and (min-width: 1441px) {
+  .genres {
+    width: 60%;
+  }
+
+  .genre {
+    width: 30%;
+  }
 }

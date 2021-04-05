@@ -2,3 +2,34 @@
   margin: 0 auto;
   width: 50%;
 }
+
+@media only screen and (max-width: 768px) {
+  .manga img {
+    display: block;
+    width: 100%;
+    margin: auto;
+    margin-bottom: 0.5em;
+  }
+  .manga .col-3,
+  .manga .col-9 {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .manga {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  .manga {
+    width: 66%;
+  }
+}
+
+@media only screen and (min-width: 1441px) {
+  .manga {
+    width: 50%;
+  }
+}
