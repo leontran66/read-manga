@@ -39,17 +39,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: [ "'self'" ],
-      baseUri: [ "'self'" ],
+      baseUri: ['self'],
       blockAllMixedContent: [],
-      fontSrc: [ "'self'", 'https:', 'data:' ],
-      frameAncestors: [ "'self'" ],
-      imgSrc: [ 'https:', 'data:' ],
-      objectSrc: [ "'none'" ],
-      scriptSrc: [ "'self'" ],
-      scriptSrcAttr: [ "'none'" ],
-      styleSrc: [ "'self'", 'https:', "'unsafe-inline'" ],
-      upgradeInsecureRequests: []
+      defaultSrc: ['self', 'http:', 'https:'],
+      fontSrc: ['self', 'https:', 'data:'],
+      frameAncestors: ['self'],
+      imgSrc: ['self', 'http:', 'https:', 'data:'],
+      objectSrc: ['none'],
+      scriptSrc: ['self', 'http:', 'https:'],
+      scriptSrcAttr: ['none'],
+      styleSrc: ['self', 'https:', 'unsafe-inline'],
+      upgradeInsecureRequests: [],
     }
   }
 }));
