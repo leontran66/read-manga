@@ -2,7 +2,7 @@
 
 An app that keeps track of manga you are currently reading.
 
-View the app [here](https://powerful-dawn-92153.herokuapp.com/)
+View the app [here](https://shielded-falls-51177.herokuapp.com/)
 
 ## Table of Contents
 
